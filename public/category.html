@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category - Qari Webstore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="top-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>Qari Webstore</h1>
+                    </div>
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="index.html#categories">Categories</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search products..." id="search-input">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="user-actions">
+                            <a href="account.html" class="user-icon"><i class="fas fa-user"></i></a>
+                            <a href="cart.html" class="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol>
+                    <li><a href="index.html">Home</a></li>
+                    <li><span id="category-name">Category</span></li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Category Banner -->
+    <section class="category-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1 id="category-title">Category Name</h1>
+                <p id="category-description">Explore our premium selection of category products</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="category-content">
+        <div class="container">
+            <div class="content-wrapper">
+                <!-- Sidebar Filters -->
+                <aside class="sidebar-filters">
+                    <div class="filter-section">
+                        <h3>Price Range</h3>
+                        <div class="price-filter">
+                            <input type="range" id="price-min" min="0" max="500" value="0">
+                            <input type="range" id="price-max" min="0" max="500" value="500">
+                            <div class="price-values">
+                                <span>$<span id="min-value">0</span></span>
+                                <span>$<span id="max-value">500</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Subcategories</h3>
+                        <ul id="subcategory-list">
+                            <!-- Subcategories will be populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Sort By</h3>
+                        <select id="sort-options">
+                            <option value="featured">Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="newest">Newest Arrivals</option>
+                            <option value="rating">Top Rated</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Brand</h3>
+                        <ul class="brand-filter">
+                            <li><label><input type="checkbox" value="brand1"> Brand 1</label></li>
+                            <li><label><input type="checkbox" value="brand2"> Brand 2</label></li>
+                            <li><label><input type="checkbox" value="brand3"> Brand 3</label></li>
+                            <li><label><input type="checkbox" value="brand4"> Brand 4</label></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Products Grid -->
+                <main class="products-main">
+                    <div class="products-header">
+                        <div class="results-count">
+                            <span id="results-count">12</span> products found
+                        </div>
+                        <div class="view-options">
+                            <button class="view-grid active"><i class="fas fa-th"></i></button>
+                            <button class="view-list"><i class="fas fa-list"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="category-products">
+                        <!-- Products will be loaded dynamically -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <button class="prev-page"><i class="fas fa-chevron-left"></i> Previous</button>
+                        <div class="page-numbers">
+                            <button class="page active">1</button>
+                            <button class="page">2</button>
+                            <button class="page">3</button>
+                            <button class="page">4</button>
+                        </div>
+                        <button class="next-page">Next <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Qari Webstore</h3>
+                    <p>Premium products for every need. Quality guaranteed.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get special offers and updates</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Qari Webstore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/category.js"></script>
+</body>
+</html>

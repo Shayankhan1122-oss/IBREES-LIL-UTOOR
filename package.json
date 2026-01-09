@@ -1,0 +1,26 @@
+{
+  "name": "qari-webstore",
+  "version": "1.0.0",
+  "description": "Complete e-commerce website for selling products across four main categories: Fragrances, Clothes, Agricultural Products, and Home Textiles.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "webstore",
+    "fragrances",
+    "clothes",
+    "agricultural",
+    "home-textiles"
+  ],
+  "author": "Qari Webstore",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
