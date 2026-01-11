@@ -1,25 +1,22 @@
 {
-  "name": "qari-webstore",
+  "name": "ibrees-lil-utoor",
   "version": "1.0.0",
-  "description": "Complete e-commerce website for selling products across four main categories: Fragrances, Clothes, Agricultural Products, and Home Textiles.",
-  "main": "server.js",
+  "description": "E-commerce website for IBREES LIL UTOOR",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "echo 'Deployed on Vercel'"
   },
   "keywords": [
     "ecommerce",
     "webstore",
-    "fragrances",
-    "clothes",
-    "agricultural",
-    "home-textiles"
+    "vercel",
+    "serverless"
   ],
-  "author": "Qari Webstore",
+  "author": "IBREES LIL UTOOR",
   "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">=14.0.0"
   }
