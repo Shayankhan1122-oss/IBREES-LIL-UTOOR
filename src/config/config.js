@@ -1,4 +1,4 @@
-// Configuration for Qari Webstore
+// Configuration for IBREES-LIL-UTOOR
 
 // Environment variables
 require('dotenv').config();

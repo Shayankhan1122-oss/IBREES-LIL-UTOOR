@@ -1,4 +1,4 @@
-// Main JavaScript file for Qari Webstore
+// Main JavaScript file for IBREES-LIL-UTOOR
 
 // Sample product data
 const products = [

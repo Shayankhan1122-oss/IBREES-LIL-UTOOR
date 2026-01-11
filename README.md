@@ -1,8 +1,8 @@
-# Qari Webstore - Complete E-Commerce Solution
+# IBREES-LIL-UTOOR - Complete E-Commerce Solution
 
 ## Project Overview
 
-Qari Webstore is a complete e-commerce website for selling products across four main categories: Fragrances, Clothes, Agricultural Products, and Home Textiles.
+IBREES-LIL-UTOOR is a complete e-commerce website for selling products across four main categories: Fragrances, Clothes, Agricultural Products, and Home Textiles.
 
 ## Features
 

@@ -1,4 +1,4 @@
-// Authentication Middleware for Qari Webstore
+// Authentication Middleware for IBREES-LIL-UTOOR
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');

@@ -1,4 +1,4 @@
-# Admin Setup Guide for Qari Webstore
+# Admin Setup Guide for IBREES-LIL-UTOOR
 
 ## Single Admin Feature
 

@@ -1,4 +1,4 @@
-// Database Schema for Qari Webstore
+// Database Schema for IBREES-LIL-UTOOR
 // This is a conceptual schema for MongoDB using Mongoose
 
 const mongoose = require('mongoose');

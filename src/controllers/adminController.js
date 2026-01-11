@@ -1,4 +1,4 @@
-// Admin Management for Qari Webstore
+// Admin Management for IBREES-LIL-UTOOR
 // Ensures only one admin can be registered
 
 const User = require('../models/User');

@@ -1,4 +1,4 @@
-// Payment Integration for Qari Webstore
+// Payment Integration for IBREES-LIL-UTOOR
 // This is a simplified version for demonstration purposes
 
 // Stripe payment integration
