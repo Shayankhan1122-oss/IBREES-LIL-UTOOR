@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBREES-LIL-UTOOR - Premium Products for Every Need</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="top-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>IBREES-LIL-UTOOR</h1>
+                    </div>
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="#categories">Categories</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search products..." id="search-input">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="user-actions">
+                            <a href="account.html" class="user-icon"><i class="fas fa-user"></i></a>
+                            <a href="cart.html" class="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Discover Premium Products</h2>
+                <p>Quality fragrances, clothing, agricultural products, and home textiles at competitive prices</p>
+                <a href="shop.html" class="btn btn-primary">Shop Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories Section -->
+    <section class="featured-categories">
+        <div class="container">
+            <h2>Shop by Category</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <img src="images/categories/fragrances.jpg" alt="Fragrances">
+                    <h3>Fragrances</h3>
+                    <p>Attar & Perfumes</p>
+                    <a href="category.html?cat=fragrances">Shop Now</a>
+                </div>
+                <div class="category-card">
+                    <img src="images/categories/clothes.jpg" alt="Clothes">
+                    <h3>Clothes</h3>
+                    <p>Male & Female</p>
+                    <a href="category.html?cat=clothes">Shop Now</a>
+                </div>
+                <div class="category-card">
+                    <img src="images/categories/agricultural.jpg" alt="Agricultural Products">
+                    <h3>Agricultural Products</h3>
+                    <p>Desi Ghee, Honey, Eggs</p>
+                    <a href="category.html?cat=agricultural">Shop Now</a>
+                </div>
+                <div class="category-card">
+                    <img src="images/categories/home-textiles.jpg" alt="Home Textiles">
+                    <h3>Home Textiles</h3>
+                    <p>Blankets, Prayer Mats</p>
+                    <a href="category.html?cat=home-textiles">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products">
+        <div class="container">
+            <h2>Best Sellers</h2>
+            <div class="products-grid" id="featured-products">
+                <!-- Products will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h2>Why Choose Us</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Free Shipping</h3>
+                    <p>On orders over $50</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Quality Guarantee</h3>
+                    <p>100% authentic products</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <h3>Secure Payment</h3>
+                    <p>Safe and encrypted</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-headset"></i>
+                    <h3>24/7 Support</h3>
+                    <p>Dedicated customer service</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBREES-LIL-UTOOR</h3>
+                    <p>Premium products for every need. Quality guaranteed.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <!-- ✅ ADMIN LINK ADDED HERE - Links to LOGIN page, not dashboard directly -->
+                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get special offers and updates</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 IBREES-LIL-UTOOR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

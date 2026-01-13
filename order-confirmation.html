@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - IBREES-LIL-UTOOR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/order-confirmation.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="top-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>IBREES-LIL-UTOOR</h1>
+                    </div>
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="index.html#categories">Categories</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search products..." id="search-input">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="user-actions">
+                            <a href="account.html" class="user-icon"><i class="fas fa-user"></i></a>
+                            <a href="cart.html" class="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                    <li><span>Order Confirmation</span></li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Order Confirmation Page -->
+    <section class="order-confirmation">
+        <div class="container">
+            <div class="confirmation-content">
+                <!-- Confirmation Message -->
+                <div class="confirmation-message">
+                    <div class="checkmark">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h1>Order Confirmed!</h1>
+                    <p>Thank you for your purchase</p>
+                    <div class="order-number">
+                        <p>Order Number:</p>
+                        <h2>#QWS-2025-001234</h2>
+                    </div>
+                    <p class="expected-delivery">Expected delivery: <strong>Jan 10, 2025</strong></p>
+                </div>
+                
+                <!-- Order Details -->
+                <div class="order-details">
+                    <h2>Order Details</h2>
+                    
+                    <!-- Items Ordered -->
+                    <div class="order-section">
+                        <h3>Items Ordered</h3>
+                        <div class="order-items" id="order-items">
+                            <!-- Items will be loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- Shipping Address -->
+                    <div class="order-section">
+                        <h3>Shipping Address</h3>
+                        <div class="shipping-address" id="shipping-address">
+                            <!-- Address will be loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Method -->
+                    <div class="order-section">
+                        <h3>Payment Method</h3>
+                        <div class="payment-method" id="payment-method">
+                            <!-- Payment method will be loaded dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- Order Summary -->
+                    <div class="order-section">
+                        <h3>Order Summary</h3>
+                        <div class="order-summary" id="order-summary">
+                            <!-- Summary will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Next Steps -->
+                <div class="next-steps">
+                    <h2>Next Steps</h2>
+                    <div class="steps-content">
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Order Processing</h3>
+                                <p>Your order is being processed and will be shipped soon.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Shipping</h3>
+                                <p>You'll receive a shipping confirmation email with tracking information.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="step-content">
+                                <h3>Delivery</h3>
+                                <p>Your package will be delivered to your specified address.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="confirmation-actions">
+                    <a href="order-tracking.html" class="btn btn-primary">
+                        <i class="fas fa-map-marker-alt"></i> Track Order
+                    </a>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-shopping-bag"></i> Continue Shopping
+                    </a>
+                </div>
+                
+                <!-- Email Confirmation -->
+                <div class="email-confirmation">
+                    <p><i class="fas fa-envelope"></i> A confirmation email has been sent to <strong>customer@example.com</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Support -->
+    <section class="customer-support">
+        <div class="container">
+            <div class="support-content">
+                <div class="support-info">
+                    <h3>Need help?</h3>
+                    <p>Our customer support team is here to assist you with your order.</p>
+                </div>
+                <div class="support-actions">
+                    <a href="contact.html" class="btn btn-secondary">
+                        <i class="fas fa-headset"></i> Contact Support
+                    </a>
+                    <a href="faq.html" class="btn btn-outline">
+                        <i class="fas fa-question-circle"></i> Visit FAQ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBREES-LIL-UTOOR</h3>
+                    <p>Premium products for every need. Quality guaranteed.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get special offers and updates</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 IBREES-LIL-UTOOR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/order-confirmation.js"></script>
+</body>
+</html>

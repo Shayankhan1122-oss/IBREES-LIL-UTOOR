@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - IBREES-LIL-UTOOR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/product-detail.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="top-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>IBREES-LIL-UTOOR</h1>
+                    </div>
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="index.html#categories">Categories</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search products..." id="search-input">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="user-actions">
+                            <a href="account.html" class="user-icon"><i class="fas fa-user"></i></a>
+                            <a href="cart.html" class="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="category.html?cat=fragrances">Fragrances</a></li>
+                    <li><span id="product-name">Premium Perfume</span></li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-content">
+                <!-- Product Images Section -->
+                <div class="product-images">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/products/perfume1.jpg" alt="Premium Perfume" zoom-src="images/products/perfume1-large.jpg">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <div class="thumbnail active" data-src="images/products/perfume1.jpg">
+                            <img src="images/products/perfume1-thumb.jpg" alt="Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-src="images/products/perfume1-2.jpg">
+                            <img src="images/products/perfume1-2-thumb.jpg" alt="Thumbnail 2">
+                        </div>
+                        <div class="thumbnail" data-src="images/products/perfume1-3.jpg">
+                            <img src="images/products/perfume1-3-thumb.jpg" alt="Thumbnail 3">
+                        </div>
+                        <div class="thumbnail" data-src="images/products/perfume1-4.jpg">
+                            <img src="images/products/perfume1-4-thumb.jpg" alt="Thumbnail 4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Information Section -->
+                <div class="product-info">
+                    <h1 id="product-title">Premium Perfume</h1>
+                    <div class="product-meta">
+                        <span class="sku">SKU: PR-001</span>
+                        <div class="product-rating">
+                            <span id="product-rating">4.5</span>
+                            <div class="stars">
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star-half-alt" style="color: #ffc107;"></i>
+                                <span>(128 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">$49.99</span>
+                        <span class="original-price">$59.99</span>
+                        <span class="discount">17% off</span>
+                    </div>
+                    <div class="stock-status">
+                        <span class="in-stock">In Stock</span>
+                        <span class="items-left">Only 5 left in stock</span>
+                    </div>
+                    <p class="short-description">
+                        Experience the finest fragrance with our premium perfume. Made with natural ingredients and long-lasting scent.
+                    </p>
+
+                    <!-- Product Options -->
+                    <div class="product-options">
+                        <div class="option">
+                            <h3>Size:</h3>
+                            <div class="size-selector">
+                                <button class="size-option active" data-value="50ml">50ml</button>
+                                <button class="size-option" data-value="100ml">100ml</button>
+                                <button class="size-option" data-value="150ml">150ml</button>
+                            </div>
+                        </div>
+                        
+                        <div class="option">
+                            <h3>Color:</h3>
+                            <div class="color-selector">
+                                <button class="color-option active" style="background-color: #f0f0f0;" data-value="clear"></button>
+                                <button class="color-option" style="background-color: #d4af37;" data-value="gold"></button>
+                                <button class="color-option" style="background-color: #c0c0c0;" data-value="silver"></button>
+                            </div>
+                        </div>
+                        
+                        <div class="option">
+                            <h3>Quantity:</h3>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="10">
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="product-actions">
+                        <button class="btn btn-primary add-to-cart" data-id="1">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-secondary add-to-wishlist">
+                            <i class="fas fa-heart"></i> Add to Wishlist
+                        </button>
+                        <div class="share-buttons">
+                            <button class="share-btn"><i class="fab fa-facebook"></i></button>
+                            <button class="share-btn"><i class="fab fa-twitter"></i></button>
+                            <button class="share-btn"><i class="fab fa-pinterest"></i></button>
+                            <button class="share-btn"><i class="fas fa-link"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs Section -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <ul class="tab-nav">
+                    <li class="tab active" data-tab="description">Description</li>
+                    <li class="tab" data-tab="specifications">Specifications</li>
+                    <li class="tab" data-tab="reviews">Reviews (128)</li>
+                    <li class="tab" data-tab="shipping">Shipping & Returns</li>
+                </ul>
+                
+                <div class="tab-content">
+                    <div class="tab-pane active" id="description">
+                        <h3>Product Description</h3>
+                        <p>Our Premium Perfume is crafted with the finest natural ingredients to provide a long-lasting, captivating scent. This luxurious fragrance combines top notes of bergamot and lemon with middle notes of jasmine and rose, resting on a base of vanilla and musk.</p>
+                        <p>Perfect for any occasion, this perfume is designed to make you feel confident and elegant throughout the day. The sophisticated blend of scents creates a unique olfactory experience that is both memorable and alluring.</p>
+                        <h4>Key Features:</h4>
+                        <ul>
+                            <li>Long-lasting fragrance (up to 12 hours)</li>
+                            <li>Made with natural ingredients</li>
+                            <li>Available in multiple sizes</li>
+                            <li>Eco-friendly packaging</li>
+                            <li>Cruelty-free and vegan</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="specifications">
+                        <h3>Product Specifications</h3>
+                        <table class="spec-table">
+                            <tr>
+                                <td>Brand</td>
+                                <td>Qari Fragrances</td>
+                            </tr>
+                            <tr>
+                                <td>Scent Type</td>
+                                <td>Floral, Citrus</td>
+                            </tr>
+                            <tr>
+                                <td>Top Notes</td>
+                                <td>Bergamot, Lemon</td>
+                            </tr>
+                            <tr>
+                                <td>Middle Notes</td>
+                                <td>Jasmine, Rose</td>
+                            </tr>
+                            <tr>
+                                <td>Base Notes</td>
+                                <td>Vanilla, Musk</td>
+                            </tr>
+                            <tr>
+                                <td>Volume</td>
+                                <td>50ml, 100ml, 150ml</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td>Unisex</td>
+                            </tr>
+                            <tr>
+                                <td>Occasion</td>
+                                <td>Daily, Evening, Special Occasions</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="tab-pane" id="reviews">
+                        <h3>Customer Reviews</h3>
+                        <div class="reviews-summary">
+                            <div class="rating-overview">
+                                <div class="overall-rating">4.5</div>
+                                <div class="stars-large">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <p>Based on 128 reviews</p>
+                            </div>
+                            <div class="rating-breakdown">
+                                <div class="rating-bar">
+                                    <span>5 stars</span>
+                                    <div class="bar">
+                                        <div class="fill" style="width: 70%;"></div>
+                                    </div>
+                                    <span>89</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>4 stars</span>
+                                    <div class="bar">
+                                        <div class="fill" style="width: 15%;"></div>
+                                    </div>
+                                    <span>19</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>3 stars</span>
+                                    <div class="bar">
+                                        <div class="fill" style="width: 8%;"></div>
+                                    </div>
+                                    <span>10</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>2 stars</span>
+                                    <div class="bar">
+                                        <div class="fill" style="width: 3%;"></div>
+                                    </div>
+                                    <span>4</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>1 star</span>
+                                    <div class="bar">
+                                        <div class="fill" style="width: 2%;"></div>
+                                    </div>
+                                    <span>3</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="reviews-list">
+                            <div class="review">
+                                <div class="review-header">
+                                    <div class="reviewer">John D.</div>
+                                    <div class="review-date">October 15, 2024</div>
+                                    <div class="review-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <h4>Amazing fragrance!</h4>
+                                <p>This perfume is absolutely wonderful. The scent lasts all day and the quality is exceptional. Will definitely buy again.</p>
+                            </div>
+                            
+                            <div class="review">
+                                <div class="review-header">
+                                    <div class="reviewer">Sarah M.</div>
+                                    <div class="review-date">October 10, 2024</div>
+                                    <div class="review-rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <h4>Great value for money</h4>
+                                <p>I've tried many perfumes but this one stands out. The scent is unique and not overpowering. Perfect for daily use.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="add-review">
+                            <h3>Add Your Review</h3>
+                            <form class="review-form">
+                                <div class="form-group">
+                                    <label for="review-rating">Your Rating</label>
+                                    <div class="rating-input">
+                                        <i class="far fa-star" data-rating="1"></i>
+                                        <i class="far fa-star" data-rating="2"></i>
+                                        <i class="far fa-star" data-rating="3"></i>
+                                        <i class="far fa-star" data-rating="4"></i>
+                                        <i class="far fa-star" data-rating="5"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-title">Review Title</label>
+                                    <input type="text" id="review-title" placeholder="Give your review a title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-text">Your Review</label>
+                                    <textarea id="review-text" rows="5" placeholder="Share your experience with this product"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Review</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane" id="shipping">
+                        <h3>Shipping Information</h3>
+                        <p>We offer multiple shipping options to meet your needs:</p>
+                        <ul>
+                            <li><strong>Standard Shipping:</strong> 3-5 business days, FREE on orders over $50</li>
+                            <li><strong>Express Shipping:</strong> 1-2 business days, $10</li>
+                            <li><strong>Same Day Delivery:</strong> Available in select areas, $20</li>
+                        </ul>
+                        
+                        <h3>Return Policy</h3>
+                        <p>You may return most new, unopened items within 30 days of delivery for a full refund. Items must be in original packaging and in the same condition as received.</p>
+                        <p>To initiate a return, please contact our customer service team with your order number and reason for return.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products Section -->
+    <section class="related-products">
+        <div class="container">
+            <h2>You May Also Like</h2>
+            <div class="products-grid" id="related-products">
+                <!-- Related products will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>IBREES-LIL-UTOOR</h3>
+                    <p>Premium products for every need. Quality guaranteed.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get special offers and updates</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 IBREES-LIL-UTOOR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/product-detail.js"></script>
+</body>
+</html>
