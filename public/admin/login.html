@@ -175,8 +175,8 @@
             const errorMessage = document.getElementById('error-message');
             const loginBtn = document.getElementById('login-btn');
 
-            // Check if already logged in as admin
-            checkIfAlreadyLoggedIn();
+            // DISABLED: Auto-login check so form always shows
+            // checkIfAlreadyLoggedIn();
 
             loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -259,6 +259,8 @@
                 errorMessage.textContent = '';
             }
             
+            // DISABLED: This function was causing auto-login
+            /*
             function checkIfAlreadyLoggedIn() {
                 const adminData = localStorage.getItem('admin');
                 if (!adminData) return;
@@ -274,6 +276,7 @@
                     localStorage.removeItem('admin');
                 }
             }
+            */
         });
     </script>
 </body>
