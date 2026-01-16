@@ -67,6 +67,17 @@
             border-color: #667eea;
         }
 
+        .form-group input.error {
+            border-color: #e74c3c;
+        }
+
+        .error-hint {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
         .required {
             color: #e74c3c;
         }
@@ -126,6 +137,11 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-place-order:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .guest-notice {
             background: #e8f4f8;
             padding: 15px;
@@ -176,7 +192,7 @@
             
             <div class="guest-notice">
                 <h4>📦 Guest Checkout</h4>
-                <p>No account needed! Just fill in your details below and we'll send you an order tracking link via email.</p>
+                <p>No account needed! Fill in your details and we'll send you a tracking link via email.</p>
             </div>
 
             <form id="checkout-form">
@@ -186,15 +202,18 @@
                     <div class="form-group">
                         <label for="fullName">Full Name <span class="required">*</span></label>
                         <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                        <span class="error-hint" id="fullName-error">Please enter letters only</span>
                     </div>
                     <div class="form-group">
                         <label for="email">Email Address <span class="required">*</span></label>
                         <input type="email" id="email" name="email" required placeholder="your.email@example.com">
                         <small style="color: #666;">You'll receive order confirmation and tracking link here</small>
+                        <span class="error-hint" id="email-error">Please enter a valid email address</span>
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number <span class="required">*</span></label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+92 300 1234567">
+                        <input type="text" id="phone" name="phone" required placeholder="+92 300 1234567" maxlength="15">
+                        <span class="error-hint" id="phone-error">Please enter numbers only (+ allowed)</span>
                     </div>
                 </div>
 
@@ -208,14 +227,17 @@
                     <div class="form-group">
                         <label for="city">City <span class="required">*</span></label>
                         <input type="text" id="city" name="city" required placeholder="City">
+                        <span class="error-hint" id="city-error">Please enter letters only</span>
                     </div>
                     <div class="form-group">
                         <label for="state">Province/State <span class="required">*</span></label>
                         <input type="text" id="state" name="state" required placeholder="Province">
+                        <span class="error-hint" id="state-error">Please enter letters only</span>
                     </div>
                     <div class="form-group">
                         <label for="postalCode">Postal Code <span class="required">*</span></label>
-                        <input type="text" id="postalCode" name="postalCode" required placeholder="54000">
+                        <input type="text" id="postalCode" name="postalCode" required placeholder="54000" maxlength="5">
+                        <span class="error-hint" id="postalCode-error">Please enter 5 numbers only</span>
                     </div>
                 </div>
 
@@ -259,6 +281,86 @@
     </div>
 
     <script>
+        // Real-time input validation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Full Name - Letters and spaces only
+            const fullName = document.getElementById('fullName');
+            fullName.addEventListener('input', function(e) {
+                const value = e.target.value;
+                const valid = /^[a-zA-Z\s]*$/.test(value);
+                if (!valid) {
+                    e.target.value = value.replace(/[^a-zA-Z\s]/g, '');
+                    document.getElementById('fullName-error').style.display = 'block';
+                    e.target.classList.add('error');
+                } else {
+                    document.getElementById('fullName-error').style.display = 'none';
+                    e.target.classList.remove('error');
+                }
+            });
+
+            // Phone - Numbers, +, -, and spaces only
+            const phone = document.getElementById('phone');
+            phone.addEventListener('input', function(e) {
+                const value = e.target.value;
+                const valid = /^[0-9+\s\-]*$/.test(value);
+                if (!valid) {
+                    e.target.value = value.replace(/[^0-9+\s\-]/g, '');
+                    document.getElementById('phone-error').style.display = 'block';
+                    e.target.classList.add('error');
+                } else {
+                    document.getElementById('phone-error').style.display = 'none';
+                    e.target.classList.remove('error');
+                }
+            });
+
+            // City - Letters and spaces only
+            const city = document.getElementById('city');
+            city.addEventListener('input', function(e) {
+                const value = e.target.value;
+                const valid = /^[a-zA-Z\s]*$/.test(value);
+                if (!valid) {
+                    e.target.value = value.replace(/[^a-zA-Z\s]/g, '');
+                    document.getElementById('city-error').style.display = 'block';
+                    e.target.classList.add('error');
+                } else {
+                    document.getElementById('city-error').style.display = 'none';
+                    e.target.classList.remove('error');
+                }
+            });
+
+            // State - Letters and spaces only
+            const state = document.getElementById('state');
+            state.addEventListener('input', function(e) {
+                const value = e.target.value;
+                const valid = /^[a-zA-Z\s]*$/.test(value);
+                if (!valid) {
+                    e.target.value = value.replace(/[^a-zA-Z\s]/g, '');
+                    document.getElementById('state-error').style.display = 'block';
+                    e.target.classList.add('error');
+                } else {
+                    document.getElementById('state-error').style.display = 'none';
+                    e.target.classList.remove('error');
+                }
+            });
+
+            // Postal Code - Numbers only, exactly 5 digits
+            const postalCode = document.getElementById('postalCode');
+            postalCode.addEventListener('input', function(e) {
+                const value = e.target.value;
+                const valid = /^[0-9]*$/.test(value);
+                if (!valid) {
+                    e.target.value = value.replace(/[^0-9]/g, '');
+                    document.getElementById('postalCode-error').style.display = 'block';
+                    e.target.classList.add('error');
+                } else {
+                    document.getElementById('postalCode-error').style.display = 'none';
+                    e.target.classList.remove('error');
+                }
+            });
+
+            loadCartSummary();
+        });
+
         // Load cart items
         function loadCartSummary() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -314,6 +416,20 @@
                 form.reportValidity();
                 return;
             }
+
+            // Additional validation
+            const phone = document.getElementById('phone').value;
+            const postalCode = document.getElementById('postalCode').value;
+
+            if (!/^[0-9+\s\-]+$/.test(phone)) {
+                alert('Phone number must contain only numbers, +, -, and spaces');
+                return;
+            }
+
+            if (!/^[0-9]{5}$/.test(postalCode)) {
+                alert('Postal code must be exactly 5 digits');
+                return;
+            }
             
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             
@@ -321,6 +437,11 @@
                 alert('Your cart is empty!');
                 return;
             }
+            
+            // Disable button to prevent double submission
+            const orderBtn = document.querySelector('.btn-place-order');
+            orderBtn.disabled = true;
+            orderBtn.textContent = 'Processing Order...';
             
             // Calculate total
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -378,15 +499,16 @@
                     window.location.href = `order-confirmation.html?order=${orderId}&token=${trackingToken}`;
                 } else {
                     alert('Failed to place order. Please try again.');
+                    orderBtn.disabled = false;
+                    orderBtn.textContent = 'Place Order';
                 }
             } catch (error) {
                 console.error('Order error:', error);
                 alert('Connection error. Please try again.');
+                orderBtn.disabled = false;
+                orderBtn.textContent = 'Place Order';
             }
         }
-        
-        // Load cart on page load
-        document.addEventListener('DOMContentLoaded', loadCartSummary);
     </script>
 </body>
 </html>
