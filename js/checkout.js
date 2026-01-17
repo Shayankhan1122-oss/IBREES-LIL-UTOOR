@@ -1,22 +1,12 @@
 // Checkout Page JavaScript
 
-// Sample cart data for checkout
-const cart = [
-    {
-        id: 1,
-        name: "Premium Perfume",
-        price: 49.99,
-        quantity: 1,
-        image: "images/products/perfume1.jpg"
-    },
-    {
-        id: 2,
-        name: "Cotton Kurta",
-        price: 29.99,
-        quantity: 2,
-        image: "images/products/kurta1.jpg"
-    }
-];
+// Get cart data from localStorage
+function getCartData() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+}
+
+// Use real cart data
+const cart = getCartData();
 
 // Checkout state
 let checkoutState = {
@@ -47,7 +37,7 @@ function loadCartItemsInSidebar() {
     sidebarItemsContainer.innerHTML = cart.map(item => `
         <div class="sidebar-item">
             <span>${item.name} x${item.quantity}</span>
-            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+            <span>Rs. ${(item.price * item.quantity).toFixed(2)}</span>
         </div>
     `).join('');
     
@@ -58,8 +48,8 @@ function loadCartItemsInSidebar() {
 // Calculate and display totals
 function calculateAndDisplayTotals() {
     const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const shipping = checkoutState.shippingMethod === 'standard' ? (subtotal > 50 ? 0 : 0) : 
-                    checkoutState.shippingMethod === 'express' ? 10 : 20;
+    const shipping = checkoutState.shippingMethod === 'standard' ? (subtotal > 2500 ? 0 : 0) :
+                    checkoutState.shippingMethod === 'express' ? 200 : 400;
     const tax = subtotal * 0.08; // 8% tax
     const total = subtotal + shipping + tax;
     
@@ -69,19 +59,19 @@ function calculateAndDisplayTotals() {
     totalsContainer.innerHTML = `
         <div class="summary-row">
             <span>Subtotal</span>
-            <span>$${subtotal.toFixed(2)}</span>
+            <span>Rs. ${subtotal.toFixed(2)}</span>
         </div>
         <div class="summary-row">
             <span>Shipping</span>
-            <span>$${shipping.toFixed(2)}</span>
+            <span>Rs. ${shipping.toFixed(2)}</span>
         </div>
         <div class="summary-row">
             <span>Tax</span>
-            <span>$${tax.toFixed(2)}</span>
+            <span>Rs. ${tax.toFixed(2)}</span>
         </div>
         <div class="summary-row total">
             <span>Total</span>
-            <span>$${total.toFixed(2)}</span>
+            <span>Rs. ${total.toFixed(2)}</span>
         </div>
     `;
 }
@@ -153,7 +143,7 @@ function loadReviewData() {
                 </div>
                 <div class="order-item-details">
                     <div class="order-item-name">${item.name}</div>
-                    <div class="order-item-price">$${item.price.toFixed(2)}</div>
+                    <div class="order-item-price">Rs. ${item.price.toFixed(2)}</div>
                     <div class="order-item-quantity">Quantity: ${item.quantity}</div>
                 </div>
             </div>
@@ -198,27 +188,27 @@ function loadReviewData() {
     const reviewSummaryContainer = document.getElementById('review-order-summary');
     if (reviewSummaryContainer) {
         const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        const shipping = checkoutState.shippingMethod === 'standard' ? (subtotal > 50 ? 0 : 0) : 
-                        checkoutState.shippingMethod === 'express' ? 10 : 20;
+        const shipping = checkoutState.shippingMethod === 'standard' ? (subtotal > 2500 ? 0 : 0) :
+                        checkoutState.shippingMethod === 'express' ? 200 : 400;
         const tax = subtotal * 0.08; // 8% tax
         const total = subtotal + shipping + tax;
         
         reviewSummaryContainer.innerHTML = `
             <div class="summary-row">
                 <span>Subtotal</span>
-                <span>$${subtotal.toFixed(2)}</span>
+                <span>Rs. ${subtotal.toFixed(2)}</span>
             </div>
             <div class="summary-row">
                 <span>Shipping</span>
-                <span>$${shipping.toFixed(2)}</span>
+                <span>Rs. ${shipping.toFixed(2)}</span>
             </div>
             <div class="summary-row">
                 <span>Tax</span>
-                <span>$${tax.toFixed(2)}</span>
+                <span>Rs. ${tax.toFixed(2)}</span>
             </div>
             <div class="summary-row total">
                 <span>Total</span>
-                <span>$${total.toFixed(2)}</span>
+                <span>Rs. ${total.toFixed(2)}</span>
             </div>
         `;
     }

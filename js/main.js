@@ -98,7 +98,7 @@ function loadFeaturedProducts() {
             </div>
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
+                <div class="product-price">Rs. ${product.price.toFixed(2)}</div>
                 <div class="product-rating">
                     ${generateStars(product.rating)}
                 </div>

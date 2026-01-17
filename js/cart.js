@@ -42,7 +42,7 @@ function loadCartItems() {
             </div>
             <div class="cart-item-details">
                 <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                <div class="cart-item-price">Rs. ${item.price.toFixed(2)}</div>
             </div>
             <div class="cart-item-actions">
                 <div class="quantity-selector">
@@ -70,10 +70,10 @@ function updateCartSummary(cart) {
     const total = subtotal + shipping + tax;
     
     // Update summary elements
-    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('shipping').textContent = `$${shipping.toFixed(2)}`;
-    document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-    document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    document.getElementById('subtotal').textContent = `Rs. ${subtotal.toFixed(2)}`;
+    document.getElementById('shipping').textContent = `Rs. ${shipping.toFixed(2)}`;
+    document.getElementById('tax').textContent = `Rs. ${tax.toFixed(2)}`;
+    document.getElementById('total').textContent = `Rs. ${total.toFixed(2)}`;
 }
 
 // Setup cart event listeners
