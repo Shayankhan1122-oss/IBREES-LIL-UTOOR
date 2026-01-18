@@ -7,9 +7,9 @@ let products = [
     {
         id: 1,
         name: "Premium Perfume",
-        price: 49.99,
+        price: 2499.99,
         category: "fragrances",
-        image: "images/products/perfume1.jpg",
+        image: "https://via.placeholder.com/300x300/3498db/ffffff?text=Premium+Perfume",
         rating: 4.5,
         description: "Luxury perfume with long-lasting fragrance",
         stock: 25,
@@ -19,9 +19,9 @@ let products = [
     {
         id: 2,
         name: "Cotton Kurta",
-        price: 29.99,
+        price: 1499.99,
         category: "clothes",
-        image: "images/products/kurta1.jpg",
+        image: "https://via.placeholder.com/300x300/2ecc71/ffffff?text=Cotton+Kurta",
         rating: 4.2,
         description: "Comfortable cotton kurta for daily wear",
         stock: 15,
@@ -31,9 +31,9 @@ let products = [
     {
         id: 3,
         name: "Pure Desi Ghee",
-        price: 19.99,
+        price: 999.99,
         category: "agricultural",
-        image: "images/products/ghee1.jpg",
+        image: "https://via.placeholder.com/300x300/f39c12/ffffff?text=Desi+Ghee",
         rating: 4.8,
         description: "Pure desi ghee made from cow milk",
         stock: 40,
@@ -43,13 +43,37 @@ let products = [
     {
         id: 4,
         name: "Prayer Mat",
-        price: 39.99,
+        price: 1999.99,
         category: "home-textiles",
-        image: "images/products/mat1.jpg",
+        image: "https://via.placeholder.com/300x300/9b59b6/ffffff?text=Prayer+Mat",
         rating: 4.3,
         description: "Soft and comfortable prayer mat",
         stock: 8,
         sku: "HT-001",
+        status: "active"
+    },
+    {
+        id: 5,
+        name: "Rose Attar",
+        price: 899.99,
+        category: "fragrances",
+        image: "https://via.placeholder.com/300x300/e74c3c/ffffff?text=Rose+Attar",
+        rating: 4.6,
+        description: "Natural rose attar for a refreshing fragrance",
+        stock: 30,
+        sku: "PR-002",
+        status: "active"
+    },
+    {
+        id: 6,
+        name: "Embroidered Shawl",
+        price: 3499.99,
+        category: "clothes",
+        image: "https://via.placeholder.com/300x300/1abc9c/ffffff?text=Embroidered+Shawl",
+        rating: 4.7,
+        description: "Beautiful hand-embroidered shawl",
+        stock: 12,
+        sku: "CL-002",
         status: "active"
     }
 ];
