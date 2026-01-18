@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - IBREES-LIL-UTOOR</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background: #34495e;
+        }
+
+        .sidebar a.active {
+            background: #3498db;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .settings-section h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>IBREES-LIL-UTOOR</h2>
+            <a href="dashboard.html">📊 Dashboard</a>
+            <a href="products.html">📦 Products</a>
+            <a href="orders.html">🛒 Orders</a>
+            <a href="customers.html">👥 Customers</a>
+            <a href="settings.html" class="active">⚙️ Settings</a>
+            <a href="#" onclick="logout()">🚪 Logout</a>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>Settings</h1>
+                <span id="admin-name">Admin</span>
+            </div>
+
+            <!-- Store Settings -->
+            <div class="settings-section">
+                <h2>Store Information</h2>
+                <div class="form-group">
+                    <label>Store Name</label>
+                    <input type="text" id="store-name" value="IBREES LIL UTOOR">
+                </div>
+                <div class="form-group">
+                    <label>Store Email</label>
+                    <input type="email" id="store-email" value="support@ibreeslilutoor.com">
+                </div>
+                <div class="form-group">
+                    <label>Store Phone</label>
+                    <input type="text" id="store-phone" value="+92 300 1234567">
+                </div>
+                <div class="form-group">
+                    <label>Store Address</label>
+                    <textarea id="store-address">Peshawar, Khyber Pakhtunkhwa, Pakistan</textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveStoreSettings()">Save Store Settings</button>
+            </div>
+
+            <!-- Admin Account -->
+            <div class="settings-section">
+                <h2>Admin Account</h2>
+                <div class="info-box">
+                    <p><strong>Current Admin:</strong> huzaifamadani95@gmail.com</p>
+                    <p><strong>Role:</strong> Super Administrator</p>
+                </div>
+                <div class="form-group">
+                    <label>Change Password</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm new password">
+                </div>
+                <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+            </div>
+
+            <!-- Email Notifications -->
+            <div class="settings-section">
+                <h2>Email Notifications</h2>
+                <div class="info-box">
+                    <p>📧 <strong>Order notifications will be sent to:</strong> huzaifamadani95@gmail.com</p>
+                    <p>⚠️ Email functionality requires backend email service configuration</p>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-section">
+                <h2 style="color: #e74c3c; border-bottom-color: #e74c3c;">Danger Zone</h2>
+                <div class="form-group">
+                    <label>Clear All Orders</label>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">⚠️ This action cannot be undone. All order data will be permanently deleted.</p>
+                    <button class="btn btn-danger" onclick="clearOrders()">Clear All Orders</button>
+                </div>
+                <div class="form-group" style="margin-top: 30px;">
+                    <label>Clear All Products</label>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">⚠️ This action cannot be undone. All product data will be permanently deleted.</p>
+                    <button class="btn btn-danger" onclick="clearProducts()">Clear All Products</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            if (confirm('Logout?')) {
+                localStorage.removeItem('admin');
+                window.location.href = '/admin/login.html';
+            }
+        }
+
+        function saveStoreSettings() {
+            const storeName = document.getElementById('store-name').value;
+            const storeEmail = document.getElementById('store-email').value;
+            const storePhone = document.getElementById('store-phone').value;
+            const storeAddress = document.getElementById('store-address').value;
+            
+            // In production, this would save to backend
+            localStorage.setItem('storeSettings', JSON.stringify({
+                name: storeName,
+                email: storeEmail,
+                phone: storePhone,
+                address: storeAddress
+            }));
+            
+            alert('✅ Store settings saved successfully!\n\nNote: These settings are stored locally. For production, implement backend storage.');
+        }
+
+        function changePassword() {
+            const newPass = document.getElementById('new-password').value;
+            const confirmPass = document.getElementById('confirm-password').value;
+            
+            if (!newPass || !confirmPass) {
+                alert('❌ Please enter both password fields');
+                return;
+            }
+            
+            if (newPass !== confirmPass) {
+                alert('❌ Passwords do not match');
+                return;
+            }
+            
+            if (newPass.length < 8) {
+                alert('❌ Password must be at least 8 characters long');
+                return;
+            }
+            
+            // In production, this would update via backend API
+            alert('✅ Password updated successfully!\n\nNote: For production, implement proper password change via backend API.');
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+        }
+
+        function clearOrders() {
+            if (!confirm('⚠️ WARNING!\n\nThis will permanently delete ALL orders.\n\nThis action CANNOT be undone.\n\nAre you absolutely sure?')) {
+                return;
+            }
+            
+            if (!confirm('🚨 FINAL CONFIRMATION\n\nAll order data will be PERMANENTLY DELETED.\n\nClick OK to proceed or Cancel to abort.')) {
+                return;
+            }
+            
+            alert('⚠️ This feature requires backend implementation.\n\nIn production, this would clear all orders from the database.');
+        }
+
+        function clearProducts() {
+            if (!confirm('⚠️ WARNING!\n\nThis will permanently delete ALL products.\n\nThis action CANNOT be undone.\n\nAre you absolutely sure?')) {
+                return;
+            }
+            
+            if (!confirm('🚨 FINAL CONFIRMATION\n\nAll product data will be PERMANENTLY DELETED.\n\nClick OK to proceed or Cancel to abort.')) {
+                return;
+            }
+            
+            alert('⚠️ This feature requires backend implementation.\n\nIn production, this would clear all products from the database.');
+        }
+
+        // Load saved settings
+        try {
+            const saved = localStorage.getItem('storeSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                document.getElementById('store-name').value = settings.name || 'IBREES LIL UTOOR';
+                document.getElementById('store-email').value = settings.email || 'support@ibreeslilutoor.com';
+                document.getElementById('store-phone').value = settings.phone || '+92 300 1234567';
+                document.getElementById('store-address').value = settings.address || 'Peshawar, Khyber Pakhtunkhwa, Pakistan';
+            }
+        } catch (e) {}
+
+        // Load admin name
+        try {
+            const admin = JSON.parse(localStorage.getItem('admin'));
+            if (admin && admin.username) {
+                document.getElementById('admin-name').textContent = admin.username;
+            }
+        } catch (e) {}
+    </script>
+</body>
+</html> 
