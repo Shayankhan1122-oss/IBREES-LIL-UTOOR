@@ -19,7 +19,6 @@
             color: #2c3e50;
         }
 
-        /* Horizontal scrollable container */
         .category-scroll-container {
             overflow-x: auto;
             overflow-y: hidden;
@@ -42,11 +41,6 @@
             border-radius: 10px;
         }
 
-        .category-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Horizontal grid layout */
         .category-grid {
             display: flex;
             gap: 15px;
@@ -54,7 +48,6 @@
             min-width: min-content;
         }
 
-        /* Smaller category cards for mobile */
         .category-card {
             flex: 0 0 auto;
             width: 160px;
@@ -63,13 +56,11 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+            transition: transform 0.3s;
         }
 
         .category-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .category-card h3 {
@@ -81,7 +72,6 @@
             font-size: 13px;
             color: #666;
             margin-bottom: 12px;
-            line-height: 1.4;
         }
 
         .category-card a {
@@ -92,33 +82,9 @@
             border-radius: 6px;
             text-decoration: none;
             font-size: 13px;
-            font-weight: 500;
-            transition: background 0.3s;
         }
 
-        .category-card a:hover {
-            background: #2980b9;
-        }
-
-        /* Tablet and larger screens */
-        @media (min-width: 768px) {
-            .category-grid {
-                justify-content: center;
-                flex-wrap: wrap;
-                padding: 0 40px;
-            }
-
-            .category-card {
-                width: 180px;
-            }
-        }
-
-        /* Desktop screens */
         @media (min-width: 1024px) {
-            .category-scroll-container {
-                overflow-x: visible;
-            }
-
             .category-grid {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
@@ -126,43 +92,9 @@
                 max-width: 1200px;
                 margin: 0 auto;
             }
-
-            .category-card {
-                width: 100%;
-            }
+            .category-card { width: 100%; }
         }
 
-        /* Mobile-friendly navbar */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 15px 0;
-            }
-
-            .navbar .container {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-menu {
-                flex-direction: row;
-                gap: 20px;
-                font-size: 14px;
-            }
-
-            .logo h1 {
-                font-size: 20px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-        }
-
-        /* Mobile-friendly product grid */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -174,7 +106,6 @@
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
                 gap: 20px;
-                padding: 0;
             }
         }
 
@@ -184,11 +115,6 @@
             padding: 15px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
         }
 
         .product-card img {
@@ -199,23 +125,11 @@
             margin-bottom: 10px;
         }
 
-        @media (min-width: 768px) {
-            .product-card img {
-                height: 200px;
-            }
-        }
-
-        .product-card h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-
         .product-card .price {
             font-size: 18px;
             font-weight: bold;
             color: #3498db;
-            margin-bottom: 10px;
+            margin: 10px 0;
         }
 
         .product-card .btn-view {
@@ -226,11 +140,6 @@
             border-radius: 6px;
             text-decoration: none;
             font-size: 13px;
-            transition: background 0.3s;
-        }
-
-        .product-card .btn-view:hover {
-            background: #2980b9;
         }
     </style>
 </head>
@@ -258,7 +167,7 @@
         </div>
     </section>
 
-    <!-- Categories Section - Horizontal Scroll -->
+    <!-- Categories Section -->
     <section class="categories">
         <div class="container">
             <h2>Our Categories</h2>
@@ -294,7 +203,7 @@
         <div class="container">
             <h2>Featured Products</h2>
             <div id="featured-products-grid" class="products-grid">
-                <!-- Products will be loaded dynamically -->
+                <p>Loading products...</p>
             </div>
         </div>
     </section>
@@ -336,7 +245,7 @@
                         <li>📧 support@ibreeslilutoor.com</li>
                         <li>📱 +92 300 1234567</li>
                         <li>📍 Peshawar, Pakistan</li>
-                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                        <li><a href="/admin/" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
                     </ul>
                 </div>
             </div>
@@ -349,43 +258,37 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Load featured products
         async function loadFeaturedProducts() {
             try {
-                const response = await fetch('/api/products');
+                const response = await fetch('/api/admin/products');
                 const data = await response.json();
                 
+                let products = [];
                 if (data.success && data.products) {
-                    // Get first 4 products
-                    const featured = data.products.slice(0, 4);
-                    displayProducts(featured);
+                    products = data.products.slice(0, 4);
                 } else if (Array.isArray(data)) {
-                    // Fallback if API returns array directly
-                    const featured = data.slice(0, 4);
-                    displayProducts(featured);
+                    products = data.slice(0, 4);
+                }
+                
+                const grid = document.getElementById('featured-products-grid');
+                if (products.length > 0) {
+                    grid.innerHTML = products.map(product => `
+                        <div class="product-card">
+                            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                            <h3>${product.name}</h3>
+                            <p class="price">Rs ${product.price.toFixed(2)}</p>
+                            <a href="product.html?id=${product.id}" class="btn-view">View Details</a>
+                        </div>
+                    `).join('');
+                } else {
+                    grid.innerHTML = '<p>No products available</p>';
                 }
             } catch (error) {
                 console.error('Error loading products:', error);
-                // Show placeholder message
-                document.getElementById('featured-products-grid').innerHTML = 
-                    '<p style="text-align: center; color: #666;">Loading products...</p>';
+                document.getElementById('featured-products-grid').innerHTML = '<p>Error loading products</p>';
             }
         }
 
-        function displayProducts(products) {
-            const grid = document.getElementById('featured-products-grid');
-            
-            grid.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='images/products/placeholder.jpg'">
-                    <h3>${product.name}</h3>
-                    <p class="price">Rs ${product.price.toFixed(2)}</p>
-                    <a href="product.html?id=${product.id}" class="btn-view">View Details</a>
-                </div>
-            `).join('');
-        }
-
-        // Load on page load
         document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
     </script>
 </body>
