@@ -5,6 +5,234 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IBREES LIL UTOOR - Premium Products</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Mobile-Friendly Horizontal Categories */
+        .categories {
+            padding: 40px 0;
+            background: #f8f9fa;
+        }
+
+        .categories h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #2c3e50;
+        }
+
+        /* Horizontal scrollable container */
+        .category-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            padding: 10px 0;
+        }
+
+        .category-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .category-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .category-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        .category-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Horizontal grid layout */
+        .category-grid {
+            display: flex;
+            gap: 15px;
+            padding: 0 20px;
+            min-width: min-content;
+        }
+
+        /* Smaller category cards for mobile */
+        .category-card {
+            flex: 0 0 auto;
+            width: 160px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .category-card h3 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .category-card p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .category-card a {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .category-card a:hover {
+            background: #2980b9;
+        }
+
+        /* Tablet and larger screens */
+        @media (min-width: 768px) {
+            .category-grid {
+                justify-content: center;
+                flex-wrap: wrap;
+                padding: 0 40px;
+            }
+
+            .category-card {
+                width: 180px;
+            }
+        }
+
+        /* Desktop screens */
+        @media (min-width: 1024px) {
+            .category-scroll-container {
+                overflow-x: visible;
+            }
+
+            .category-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .category-card {
+                width: 100%;
+            }
+        }
+
+        /* Mobile-friendly navbar */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 0;
+            }
+
+            .navbar .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                flex-direction: row;
+                gap: 20px;
+                font-size: 14px;
+            }
+
+            .logo h1 {
+                font-size: 20px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+        }
+
+        /* Mobile-friendly product grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+                padding: 0;
+            }
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .product-card img {
+                height: 200px;
+            }
+        }
+
+        .product-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .product-card .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .product-card .btn-view {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background 0.3s;
+        }
+
+        .product-card .btn-view:hover {
+            background: #2980b9;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -30,30 +258,32 @@
         </div>
     </section>
 
-    <!-- Categories Section -->
+    <!-- Categories Section - Horizontal Scroll -->
     <section class="categories">
         <div class="container">
             <h2>Our Categories</h2>
-            <div class="category-grid">
-                <div class="category-card">
-                    <h3>🌸 Fragrances</h3>
-                    <p>Premium Attar & Perfumes</p>
-                    <a href="category.html?cat=fragrances">Browse</a>
-                </div>
-                <div class="category-card">
-                    <h3>👔 Clothes</h3>
-                    <p>Male & Female Fashion</p>
-                    <a href="category.html?cat=clothes">Browse</a>
-                </div>
-                <div class="category-card">
-                    <h3>🌾 Agricultural</h3>
-                    <p>Fresh Agricultural Products</p>
-                    <a href="category.html?cat=agricultural">Browse</a>
-                </div>
-                <div class="category-card">
-                    <h3>🏠 Home Textiles</h3>
-                    <p>Quality Home Essentials</p>
-                    <a href="category.html?cat=home-textiles">Browse</a>
+            <div class="category-scroll-container">
+                <div class="category-grid">
+                    <div class="category-card">
+                        <h3>🌸</h3>
+                        <p>Premium Attar & Perfumes</p>
+                        <a href="category.html?cat=fragrances">Fragrances</a>
+                    </div>
+                    <div class="category-card">
+                        <h3>👔</h3>
+                        <p>Male & Female Fashion</p>
+                        <a href="category.html?cat=clothes">Clothes</a>
+                    </div>
+                    <div class="category-card">
+                        <h3>🌾</h3>
+                        <p>Fresh Agricultural Products</p>
+                        <a href="category.html?cat=agricultural">Agricultural</a>
+                    </div>
+                    <div class="category-card">
+                        <h3>🏠</h3>
+                        <p>Quality Home Essentials</p>
+                        <a href="category.html?cat=home-textiles">Home Textiles</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -129,9 +359,16 @@
                     // Get first 4 products
                     const featured = data.products.slice(0, 4);
                     displayProducts(featured);
+                } else if (Array.isArray(data)) {
+                    // Fallback if API returns array directly
+                    const featured = data.slice(0, 4);
+                    displayProducts(featured);
                 }
             } catch (error) {
                 console.error('Error loading products:', error);
+                // Show placeholder message
+                document.getElementById('featured-products-grid').innerHTML = 
+                    '<p style="text-align: center; color: #666;">Loading products...</p>';
             }
         }
 
@@ -140,9 +377,9 @@
             
             grid.innerHTML = products.map(product => `
                 <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='images/products/placeholder.jpg'">
                     <h3>${product.name}</h3>
-                    <p class="price">Rs. ${product.price.toFixed(2)}</p>
+                    <p class="price">Rs ${product.price.toFixed(2)}</p>
                     <a href="product.html?id=${product.id}" class="btn-view">View Details</a>
                 </div>
             `).join('');

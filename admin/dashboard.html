@@ -429,7 +429,7 @@
                 const stats = statsData.success ? statsData : statsData;
                 
                 // Update stats with safe fallbacks
-                document.getElementById('total-sales').textContent = '$' + (stats.totalRevenue || 0).toFixed(2);
+                document.getElementById('total-sales').textContent = 'Rs ' + (stats.totalRevenue || 0).toFixed(2);
                 document.getElementById('total-orders').textContent = stats.totalOrders || 0;
                 document.getElementById('total-products').textContent = stats.totalProducts || 0;
                 document.getElementById('low-stock').textContent = stats.lowStockProducts || 0;
@@ -442,7 +442,7 @@
                         <div class="order-item">
                             <span><strong>Order #${order.id}</strong></span>
                             <span style="color: #3498db;">${order.status}</span>
-                            <span><strong>$${order.total.toFixed(2)}</strong></span>
+                            <span><strong>Rs ${order.total.toFixed(2)}</strong></span>
                         </div>
                     `).join('');
                 } else {

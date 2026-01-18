@@ -36,15 +36,18 @@
             min-width: 200px;
         }
         
+        /* Enable horizontal scrolling for table */
         .table-container {
             background: white;
             border-radius: 8px;
             overflow-x: auto;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            -webkit-overflow-scrolling: touch;
         }
         
         .products-table {
             width: 100%;
+            min-width: 900px; /* Forces horizontal scroll on small screens */
             border-collapse: collapse;
         }
         
@@ -53,12 +56,16 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
+            white-space: nowrap;
         }
         
         .products-table th {
             background-color: #f8f9fa;
             font-weight: 600;
             color: #2c3e50;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         .products-table img {
@@ -73,6 +80,7 @@
             border-radius: 12px;
             font-size: 12px;
             font-weight: 500;
+            display: inline-block;
         }
         
         .status-active {
@@ -234,6 +242,23 @@
         .btn-secondary:hover {
             background-color: #7f8c8d;
         }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .search-filter input,
+            .search-filter select {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -308,7 +333,7 @@
                             <th>Product Name</th>
                             <th>SKU</th>
                             <th>Category</th>
-                            <th>Price</th>
+                            <th>Price (PKR)</th>
                             <th>Stock</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -359,7 +384,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="product-price">Price *</label>
+                        <label for="product-price">Price (PKR) *</label>
                         <input type="number" id="product-price" name="price" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
@@ -393,6 +418,7 @@
         let currentPage = 1;
         const itemsPerPage = 10;
         let editingProductId = null;
+        let isLoading = false; // Prevent multiple renders
 
         // Logout function
         function adminLogout() {
@@ -412,8 +438,11 @@
             console.error('Error loading admin name');
         }
 
-        // Load products
+        // Load products (only once)
         async function loadProducts() {
+            if (isLoading) return; // Prevent duplicate calls
+            isLoading = true;
+
             try {
                 const response = await fetch('/api/admin/products');
                 const data = await response.json();
@@ -421,7 +450,7 @@
                 if (data.success && data.products) {
                     allProducts = data.products;
                 } else {
-                    allProducts = data; // Fallback if API returns array directly
+                    allProducts = Array.isArray(data) ? data : [];
                 }
                 
                 filterProducts();
@@ -429,26 +458,32 @@
                 console.error('Error loading products:', error);
                 document.getElementById('products-table-body').innerHTML = 
                     '<tr><td colspan="8" style="text-align: center; color: #e74c3c;">Error loading products</td></tr>';
+            } finally {
+                isLoading = false;
             }
         }
 
-        // Filter products
+        // Filter products (debounced to prevent blinking)
+        let filterTimeout;
         function filterProducts() {
-            const searchTerm = document.getElementById('product-search').value.toLowerCase();
-            const categoryFilter = document.getElementById('category-filter').value;
-            const statusFilter = document.getElementById('status-filter').value;
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(() => {
+                const searchTerm = document.getElementById('product-search').value.toLowerCase();
+                const categoryFilter = document.getElementById('category-filter').value;
+                const statusFilter = document.getElementById('status-filter').value;
 
-            filteredProducts = allProducts.filter(product => {
-                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
-                                     product.sku.toLowerCase().includes(searchTerm);
-                const matchesCategory = !categoryFilter || product.category === categoryFilter;
-                const matchesStatus = !statusFilter || product.status === statusFilter;
+                filteredProducts = allProducts.filter(product => {
+                    const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                         product.sku.toLowerCase().includes(searchTerm);
+                    const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                    const matchesStatus = !statusFilter || product.status === statusFilter;
 
-                return matchesSearch && matchesCategory && matchesStatus;
-            });
+                    return matchesSearch && matchesCategory && matchesStatus;
+                });
 
-            currentPage = 1;
-            renderProducts();
+                currentPage = 1;
+                renderProducts();
+            }, 300); // 300ms delay to prevent rapid re-renders
         }
 
         // Render products table
@@ -468,7 +503,7 @@
                         <td>${product.name}</td>
                         <td>${product.sku}</td>
                         <td>${product.category}</td>
-                        <td>$${product.price.toFixed(2)}</td>
+                        <td>Rs ${product.price.toFixed(2)}</td>
                         <td>${product.stock}</td>
                         <td><span class="status-badge status-${product.status}">${product.status}</span></td>
                         <td>
@@ -509,7 +544,7 @@
             }
         });
 
-        // Search and filter
+        // Search and filter with debouncing
         document.getElementById('product-search').addEventListener('input', filterProducts);
         document.getElementById('category-filter').addEventListener('change', filterProducts);
         document.getElementById('status-filter').addEventListener('change', filterProducts);
@@ -625,8 +660,10 @@
             }
         });
 
-        // Initialize
-        window.addEventListener('DOMContentLoaded', loadProducts);
+        // Initialize - load products only once
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+        });
     </script>
 </body>
 </html>
