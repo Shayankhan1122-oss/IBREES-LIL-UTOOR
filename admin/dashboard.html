@@ -417,36 +417,47 @@
             try {
                 // Load stats
                 const statsResponse = await fetch('/api/admin/stats');
-                if (statsResponse.ok) {
-                    const stats = await statsResponse.json();
-                    
-                    document.getElementById('total-sales').textContent = '$' + stats.totalRevenue.toFixed(2);
-                    document.getElementById('total-orders').textContent = stats.totalOrders;
-                    document.getElementById('total-products').textContent = stats.totalProducts;
-                    document.getElementById('low-stock').textContent = stats.lowStockProducts;
+                
+                if (!statsResponse.ok) {
+                    throw new Error(`Stats API returned ${statsResponse.status}`);
                 }
+                
+                const statsData = await statsResponse.json();
+                console.log('Stats data received:', statsData);
+                
+                // Handle the response - check if data is wrapped in success object
+                const stats = statsData.success ? statsData : statsData;
+                
+                // Update stats with safe fallbacks
+                document.getElementById('total-sales').textContent = '$' + (stats.totalRevenue || 0).toFixed(2);
+                document.getElementById('total-orders').textContent = stats.totalOrders || 0;
+                document.getElementById('total-products').textContent = stats.totalProducts || 0;
+                document.getElementById('low-stock').textContent = stats.lowStockProducts || 0;
 
-                // Load recent orders
-                const ordersResponse = await fetch('/api/admin/orders');
-                if (ordersResponse.ok) {
-                    const orders = await ordersResponse.json();
-                    
-                    const ordersList = document.getElementById('orders-list');
-                    if (orders.length === 0) {
-                        ordersList.innerHTML = '<p>No orders yet</p>';
-                    } else {
-                        ordersList.innerHTML = orders.slice(0, 5).map(order => `
-                            <div class="order-item">
-                                <span><strong>${order.orderNumber}</strong></span>
-                                <span style="color: #3498db;">${order.status}</span>
-                                <span><strong>$${order.total.toFixed(2)}</strong></span>
-                            </div>
-                        `).join('');
-                    }
+                // Load recent orders from stats API (which includes recentOrders)
+                const ordersList = document.getElementById('orders-list');
+                
+                if (stats.recentOrders && Array.isArray(stats.recentOrders) && stats.recentOrders.length > 0) {
+                    ordersList.innerHTML = stats.recentOrders.map(order => `
+                        <div class="order-item">
+                            <span><strong>Order #${order.id}</strong></span>
+                            <span style="color: #3498db;">${order.status}</span>
+                            <span><strong>$${order.total.toFixed(2)}</strong></span>
+                        </div>
+                    `).join('');
+                } else {
+                    ordersList.innerHTML = '<p>No recent orders</p>';
                 }
+                
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
                 document.getElementById('orders-list').innerHTML = '<p style="color: #e74c3c;">Error loading data. Please refresh the page.</p>';
+                
+                // Set default values on error
+                document.getElementById('total-sales').textContent = '$0.00';
+                document.getElementById('total-orders').textContent = '0';
+                document.getElementById('total-products').textContent = '0';
+                document.getElementById('low-stock').textContent = '0';
             }
         }
 
