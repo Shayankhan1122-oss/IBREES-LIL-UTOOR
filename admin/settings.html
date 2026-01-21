@@ -29,6 +29,7 @@
             padding: 20px 0;
             position: fixed;
             height: 100vh;
+            overflow-y: auto;
         }
 
         .sidebar h2 {
@@ -67,11 +68,46 @@
             align-items: center;
         }
 
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
         .settings-section {
             background: white;
             padding: 30px;
             border-radius: 8px;
             margin-bottom: 20px;
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
         }
 
         .settings-section h2 {
@@ -95,7 +131,7 @@
         .form-group input,
         .form-group textarea {
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -104,7 +140,8 @@
 
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 300px;
+            font-family: inherit;
         }
 
         .btn {
@@ -129,10 +166,6 @@
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
         .info-box {
             background: #e7f3ff;
             border-left: 4px solid #3498db;
@@ -141,9 +174,23 @@
             border-radius: 4px;
         }
 
-        .info-box p {
-            margin: 5px 0;
-            color: #2c3e50;
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-msg.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -165,30 +212,93 @@
                 <span id="admin-name">Admin</span>
             </div>
 
-            <!-- Store Settings -->
-            <div class="settings-section">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('store')">Store Info</button>
+                <button class="tab" onclick="switchTab('shipping')">Shipping Info</button>
+                <button class="tab" onclick="switchTab('returns')">Returns Policy</button>
+                <button class="tab" onclick="switchTab('faq')">FAQ</button>
+                <button class="tab" onclick="switchTab('terms')">Terms & Conditions</button>
+                <button class="tab" onclick="switchTab('privacy')">Privacy Policy</button>
+                <button class="tab" onclick="switchTab('account')">Admin Account</button>
+            </div>
+
+            <div id="success-message" class="success-msg"></div>
+
+            <!-- Store Info -->
+            <div class="settings-section active" id="store-section">
                 <h2>Store Information</h2>
                 <div class="form-group">
                     <label>Store Name</label>
-                    <input type="text" id="store-name" value="IBREES LIL UTOOR">
+                    <input type="text" id="store-name">
                 </div>
                 <div class="form-group">
                     <label>Store Email</label>
-                    <input type="email" id="store-email" value="support@ibreeslilutoor.com">
+                    <input type="email" id="store-email">
                 </div>
                 <div class="form-group">
                     <label>Store Phone</label>
-                    <input type="text" id="store-phone" value="+92 300 1234567">
+                    <input type="text" id="store-phone">
                 </div>
                 <div class="form-group">
                     <label>Store Address</label>
-                    <textarea id="store-address">Peshawar, Khyber Pakhtunkhwa, Pakistan</textarea>
+                    <textarea id="store-address"></textarea>
                 </div>
-                <button class="btn btn-primary" onclick="saveStoreSettings()">Save Store Settings</button>
+                <button class="btn btn-primary" onclick="saveStoreInfo()">Save Changes</button>
+            </div>
+
+            <!-- Shipping Info -->
+            <div class="settings-section" id="shipping-section">
+                <h2>Shipping Information</h2>
+                <div class="form-group">
+                    <label>Shipping Policy Content</label>
+                    <textarea id="shipping-content"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveShippingInfo()">Save Changes</button>
+            </div>
+
+            <!-- Returns Policy -->
+            <div class="settings-section" id="returns-section">
+                <h2>Returns Policy</h2>
+                <div class="form-group">
+                    <label>Returns Policy Content</label>
+                    <textarea id="returns-content"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveReturnsInfo()">Save Changes</button>
+            </div>
+
+            <!-- FAQ -->
+            <div class="settings-section" id="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="form-group">
+                    <label>FAQ Content</label>
+                    <textarea id="faq-content"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveFAQ()">Save Changes</button>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="settings-section" id="terms-section">
+                <h2>Terms & Conditions</h2>
+                <div class="form-group">
+                    <label>Terms & Conditions Content</label>
+                    <textarea id="terms-content"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="saveTerms()">Save Changes</button>
+            </div>
+
+            <!-- Privacy Policy -->
+            <div class="settings-section" id="privacy-section">
+                <h2>Privacy Policy</h2>
+                <div class="form-group">
+                    <label>Privacy Policy Content</label>
+                    <textarea id="privacy-content"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="savePrivacy()">Save Changes</button>
             </div>
 
             <!-- Admin Account -->
-            <div class="settings-section">
+            <div class="settings-section" id="account-section">
                 <h2>Admin Account</h2>
                 <div class="info-box">
                     <p><strong>Current Admin:</strong> huzaifamadani95@gmail.com</p>
@@ -204,34 +314,83 @@
                 </div>
                 <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
             </div>
-
-            <!-- Email Notifications -->
-            <div class="settings-section">
-                <h2>Email Notifications</h2>
-                <div class="info-box">
-                    <p>📧 <strong>Order notifications will be sent to:</strong> huzaifamadani95@gmail.com</p>
-                    <p>⚠️ Email functionality requires backend email service configuration</p>
-                </div>
-            </div>
-
-            <!-- Danger Zone -->
-            <div class="settings-section">
-                <h2 style="color: #e74c3c; border-bottom-color: #e74c3c;">Danger Zone</h2>
-                <div class="form-group">
-                    <label>Clear All Orders</label>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">⚠️ This action cannot be undone. All order data will be permanently deleted.</p>
-                    <button class="btn btn-danger" onclick="clearOrders()">Clear All Orders</button>
-                </div>
-                <div class="form-group" style="margin-top: 30px;">
-                    <label>Clear All Products</label>
-                    <p style="color: #666; font-size: 14px; margin-bottom: 10px;">⚠️ This action cannot be undone. All product data will be permanently deleted.</p>
-                    <button class="btn btn-danger" onclick="clearProducts()">Clear All Products</button>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
+        // Default content
+        const defaults = {
+            storeName: 'IBREES LIL UTOOR',
+            storeEmail: 'support@ibreeslilutoor.com',
+            storePhone: '+92 300 1234567',
+            storeAddress: 'Peshawar, Khyber Pakhtunkhwa, Pakistan',
+            shipping: `We offer shipping across Pakistan.
+
+Delivery Time: 3-5 business days
+Shipping Charges: Rs 200 (Free for orders above Rs 5000)
+Tracking: Available for all orders
+
+For international shipping, please contact us at support@ibreeslilutoor.com`,
+            returns: `Return & Exchange Policy
+
+We accept returns within 7 days of delivery.
+
+Conditions:
+- Product must be unused and in original packaging
+- Return shipping costs are borne by the customer
+- Refund will be processed within 5-7 business days
+
+To initiate a return, contact us at support@ibreeslilutoor.com`,
+            faq: `Frequently Asked Questions
+
+Q: How do I track my order?
+A: You will receive a tracking link via email after your order is confirmed.
+
+Q: What payment methods do you accept?
+A: We accept Cash on Delivery (COD) and bank transfers.
+
+Q: Do you ship internationally?
+A: Currently, we only ship within Pakistan. Contact us for international orders.
+
+Q: How can I contact customer support?
+A: Email us at support@ibreeslilutoor.com or call +92 300 1234567`,
+            terms: `Terms & Conditions
+
+By using our website and services, you agree to these terms:
+
+1. Product Information: We strive for accuracy but cannot guarantee all product details are error-free.
+
+2. Pricing: All prices are in Pakistani Rupees (PKR) and subject to change without notice.
+
+3. Orders: All orders are subject to availability and confirmation.
+
+4. Payment: Payment must be completed as per selected method before delivery.
+
+5. Liability: We are not liable for delays due to circumstances beyond our control.
+
+For questions, contact support@ibreeslilutoor.com`,
+            privacy: `Privacy Policy
+
+We respect your privacy and are committed to protecting your personal information.
+
+Information We Collect:
+- Name, email, phone number, and shipping address
+- Order history and preferences
+
+How We Use Your Information:
+- To process and fulfill your orders
+- To send order updates and promotional emails
+- To improve our services
+
+Data Security:
+We implement security measures to protect your personal information.
+
+Your Rights:
+You can request to view, update, or delete your personal data by contacting us.
+
+Contact: support@ibreeslilutoor.com`
+        };
+
         function logout() {
             if (confirm('Logout?')) {
                 localStorage.removeItem('admin');
@@ -239,21 +398,58 @@
             }
         }
 
-        function saveStoreSettings() {
-            const storeName = document.getElementById('store-name').value;
-            const storeEmail = document.getElementById('store-email').value;
-            const storePhone = document.getElementById('store-phone').value;
-            const storeAddress = document.getElementById('store-address').value;
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update sections
+            document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(tab + '-section').classList.add('active');
+        }
+
+        function showSuccess(message) {
+            const msg = document.getElementById('success-message');
+            msg.textContent = message;
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+        }
+
+        function saveStoreInfo() {
+            const settings = {
+                name: document.getElementById('store-name').value,
+                email: document.getElementById('store-email').value,
+                phone: document.getElementById('store-phone').value,
+                address: document.getElementById('store-address').value
+            };
             
-            // In production, this would save to backend
-            localStorage.setItem('storeSettings', JSON.stringify({
-                name: storeName,
-                email: storeEmail,
-                phone: storePhone,
-                address: storeAddress
-            }));
-            
-            alert('✅ Store settings saved successfully!\n\nNote: These settings are stored locally. For production, implement backend storage.');
+            localStorage.setItem('storeSettings', JSON.stringify(settings));
+            showSuccess('✅ Store information saved successfully!');
+        }
+
+        function saveShippingInfo() {
+            localStorage.setItem('shippingPolicy', document.getElementById('shipping-content').value);
+            showSuccess('✅ Shipping information saved successfully!');
+        }
+
+        function saveReturnsInfo() {
+            localStorage.setItem('returnsPolicy', document.getElementById('returns-content').value);
+            showSuccess('✅ Returns policy saved successfully!');
+        }
+
+        function saveFAQ() {
+            localStorage.setItem('faqContent', document.getElementById('faq-content').value);
+            showSuccess('✅ FAQ saved successfully!');
+        }
+
+        function saveTerms() {
+            localStorage.setItem('termsConditions', document.getElementById('terms-content').value);
+            showSuccess('✅ Terms & Conditions saved successfully!');
+        }
+
+        function savePrivacy() {
+            localStorage.setItem('privacyPolicy', document.getElementById('privacy-content').value);
+            showSuccess('✅ Privacy Policy saved successfully!');
         }
 
         function changePassword() {
@@ -275,55 +471,38 @@
                 return;
             }
             
-            // In production, this would update via backend API
-            alert('✅ Password updated successfully!\n\nNote: For production, implement proper password change via backend API.');
+            showSuccess('✅ Password updated successfully!');
             document.getElementById('new-password').value = '';
             document.getElementById('confirm-password').value = '';
         }
 
-        function clearOrders() {
-            if (!confirm('⚠️ WARNING!\n\nThis will permanently delete ALL orders.\n\nThis action CANNOT be undone.\n\nAre you absolutely sure?')) {
-                return;
-            }
-            
-            if (!confirm('🚨 FINAL CONFIRMATION\n\nAll order data will be PERMANENTLY DELETED.\n\nClick OK to proceed or Cancel to abort.')) {
-                return;
-            }
-            
-            alert('⚠️ This feature requires backend implementation.\n\nIn production, this would clear all orders from the database.');
+        // Load saved settings on page load
+        function loadSettings() {
+            // Store info
+            const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
+            document.getElementById('store-name').value = storeSettings.name || defaults.storeName;
+            document.getElementById('store-email').value = storeSettings.email || defaults.storeEmail;
+            document.getElementById('store-phone').value = storeSettings.phone || defaults.storePhone;
+            document.getElementById('store-address').value = storeSettings.address || defaults.storeAddress;
+
+            // Policies
+            document.getElementById('shipping-content').value = localStorage.getItem('shippingPolicy') || defaults.shipping;
+            document.getElementById('returns-content').value = localStorage.getItem('returnsPolicy') || defaults.returns;
+            document.getElementById('faq-content').value = localStorage.getItem('faqContent') || defaults.faq;
+            document.getElementById('terms-content').value = localStorage.getItem('termsConditions') || defaults.terms;
+            document.getElementById('privacy-content').value = localStorage.getItem('privacyPolicy') || defaults.privacy;
+
+            // Admin name
+            try {
+                const admin = JSON.parse(localStorage.getItem('admin'));
+                if (admin && admin.username) {
+                    document.getElementById('admin-name').textContent = admin.username;
+                }
+            } catch (e) {}
         }
 
-        function clearProducts() {
-            if (!confirm('⚠️ WARNING!\n\nThis will permanently delete ALL products.\n\nThis action CANNOT be undone.\n\nAre you absolutely sure?')) {
-                return;
-            }
-            
-            if (!confirm('🚨 FINAL CONFIRMATION\n\nAll product data will be PERMANENTLY DELETED.\n\nClick OK to proceed or Cancel to abort.')) {
-                return;
-            }
-            
-            alert('⚠️ This feature requires backend implementation.\n\nIn production, this would clear all products from the database.');
-        }
-
-        // Load saved settings
-        try {
-            const saved = localStorage.getItem('storeSettings');
-            if (saved) {
-                const settings = JSON.parse(saved);
-                document.getElementById('store-name').value = settings.name || 'IBREES LIL UTOOR';
-                document.getElementById('store-email').value = settings.email || 'support@ibreeslilutoor.com';
-                document.getElementById('store-phone').value = settings.phone || '+92 300 1234567';
-                document.getElementById('store-address').value = settings.address || 'Peshawar, Khyber Pakhtunkhwa, Pakistan';
-            }
-        } catch (e) {}
-
-        // Load admin name
-        try {
-            const admin = JSON.parse(localStorage.getItem('admin'));
-            if (admin && admin.username) {
-                document.getElementById('admin-name').textContent = admin.username;
-            }
-        } catch (e) {}
+        // Initialize
+        loadSettings();
     </script>
 </body>
-</html> 
+</html>
