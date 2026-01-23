@@ -470,10 +470,47 @@ Contact: support@ibreeslilutoor.com`
                 alert('❌ Password must be at least 8 characters long');
                 return;
             }
-            
-            showSuccess('✅ Password updated successfully!');
-            document.getElementById('new-password').value = '';
-            document.getElementById('confirm-password').value = '';
+
+            // Get current admin email
+            const admin = JSON.parse(localStorage.getItem('admin'));
+            if (!admin || !admin.username) {
+                alert('❌ Not logged in');
+                return;
+            }
+
+            // Show loading
+            const originalText = event.target.textContent;
+            event.target.textContent = 'Updating...';
+            event.target.disabled = true;
+
+            // Call API to change password
+            fetch('/api/auth/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: admin.username,
+                    currentPassword: prompt('Enter your current password to confirm:'),
+                    newPassword: newPass
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                event.target.textContent = originalText;
+                event.target.disabled = false;
+
+                if (data.success) {
+                    showSuccess('✅ Password updated successfully!');
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                } else {
+                    alert('❌ ' + (data.error || 'Failed to update password'));
+                }
+            })
+            .catch(error => {
+                event.target.textContent = originalText;
+                event.target.disabled = false;
+                alert('❌ Error updating password: ' + error.message);
+            });
         }
 
         // Load saved settings on page load
