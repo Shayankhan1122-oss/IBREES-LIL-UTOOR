@@ -1,80 +1,13 @@
 // Main JavaScript file for IBREES-LIL-UTOOR
 
-// Sample product data
-const products = [
-    {
-        id: 1,
-        name: "Premium Perfume",
-        price: 49.99,
-        category: "fragrances",
-        image: "images/products/perfume1.jpg",
-        rating: 4.5
-    },
-    {
-        id: 2,
-        name: "Cotton Kurta",
-        price: 29.99,
-        category: "clothes",
-        image: "images/products/kurta1.jpg",
-        rating: 4.2
-    },
-    {
-        id: 3,
-        name: "Pure Desi Ghee",
-        price: 19.99,
-        category: "agricultural",
-        image: "images/products/ghee1.jpg",
-        rating: 4.8
-    },
-    {
-        id: 4,
-        name: "Prayer Mat",
-        price: 39.99,
-        category: "home-textiles",
-        image: "images/products/mat1.jpg",
-        rating: 4.3
-    },
-    {
-        id: 5,
-        name: "Attar Oil",
-        price: 24.99,
-        category: "fragrances",
-        image: "images/products/attar1.jpg",
-        rating: 4.7
-    },
-    {
-        id: 6,
-        name: "Women's Dupatta",
-        price: 15.99,
-        category: "clothes",
-        image: "images/products/dupatta1.jpg",
-        rating: 4.0
-    },
-    {
-        id: 7,
-        name: "Raw Honey",
-        price: 12.99,
-        category: "agricultural",
-        image: "images/products/honey1.jpg",
-        rating: 4.9
-    },
-    {
-        id: 8,
-        name: "Winter Blanket",
-        price: 59.99,
-        category: "home-textiles",
-        image: "images/products/blanket1.jpg",
-        rating: 4.6
-    }
-];
-
 // Cart functionality
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let allProducts = [];
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Load featured products
-    loadFeaturedProducts();
+    // Load products from API
+    loadProductsFromAPI();
     
     // Initialize cart count
     updateCartCount();
@@ -83,84 +16,74 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 });
 
+// Load products from API
+async function loadProductsFromAPI() {
+    try {
+        const response = await fetch('/api/admin/products');
+        const data = await response.json();
+        
+        if (data.success && data.products) {
+            allProducts = data.products;
+        } else if (Array.isArray(data)) {
+            allProducts = data;
+        }
+        
+        // Load featured products if on homepage
+        loadFeaturedProducts();
+        
+    } catch (error) {
+        console.error('Error loading products:', error);
+    }
+}
+
 // Load featured products
 function loadFeaturedProducts() {
-    const featuredProductsContainer = document.getElementById('featured-products');
+    const featuredProductsContainer = document.getElementById('featured-products-grid');
     if (!featuredProductsContainer) return;
     
-    // Get 8 featured products (or all if less than 8)
-    const featuredProducts = products.slice(0, 8);
+    // Get 4 featured products
+    const featuredProducts = allProducts.slice(0, 4);
+    
+    if (featuredProducts.length === 0) {
+        featuredProductsContainer.innerHTML = '<p>No products available</p>';
+        return;
+    }
     
     featuredProductsContainer.innerHTML = featuredProducts.map(product => `
         <div class="product-card">
-            <div class="product-image">
-                <img src="${product.image}" alt="${product.name}">
-            </div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <div class="product-price">Rs. ${product.price.toFixed(2)}</div>
-                <div class="product-rating">
-                    ${generateStars(product.rating)}
-                </div>
-                <div class="product-actions">
-                    <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
-                    <button class="add-to-wishlist" data-id="${product.id}"><i class="fas fa-heart"></i></button>
-                </div>
-            </div>
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+            <h3>${product.name}</h3>
+            <p class="price">Rs ${product.price.toFixed(2)}</p>
+            <a href="product.html?id=${product.id}" class="btn-view">View Details</a>
         </div>
     `).join('');
-    
-    // Add event listeners to the new buttons
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.getAttribute('data-id'));
-            addToCart(productId);
-        });
-    });
-    
-    document.querySelectorAll('.add-to-wishlist').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.getAttribute('data-id'));
-            toggleWishlist(productId);
-        });
-    });
 }
 
-// Generate star rating HTML
-function generateStars(rating) {
-    let stars = '';
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    
-    for (let i = 0; i < fullStars; i++) {
-        stars += '<i class="fas fa-star" style="color: #ffc107;"></i>';
-    }
-    
-    if (hasHalfStar) {
-        stars += '<i class="fas fa-star-half-alt" style="color: #ffc107;"></i>';
-    }
-    
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-        stars += '<i class="far fa-star" style="color: #ffc107;"></i>';
-    }
-    
-    return stars;
+// Get product by ID
+function getProductById(id) {
+    return allProducts.find(p => p.id === parseInt(id));
 }
 
 // Add to cart function
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
+function addToCart(productId, quantity = 1) {
+    const product = getProductById(productId);
+    if (!product) {
+        console.error('Product not found:', productId);
+        showNotification('Product not found!', 'error');
+        return;
+    }
     
     // Check if product is already in cart
     const existingItem = cart.find(item => item.id === productId);
     if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += quantity;
     } else {
         cart.push({
-            ...product,
-            quantity: 1
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: quantity
         });
     }
     
@@ -171,35 +94,21 @@ function addToCart(productId) {
     updateCartCount();
     
     // Show notification
-    showNotification(`${product.name} added to cart!`);
-}
-
-// Toggle wishlist function
-function toggleWishlist(productId) {
-    // For demo purposes, just show notification
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    
-    showNotification(`${product.name} ${isInWishlist(productId) ? 'removed from' : 'added to'} wishlist!`);
-}
-
-// Check if product is in wishlist
-function isInWishlist(productId) {
-    // For demo purposes, return random result
-    return Math.random() > 0.5;
+    showNotification(`${product.name} added to cart!`, 'success');
 }
 
 // Update cart count
 function updateCartCount() {
-    const cartCountElement = document.querySelector('.cart-count');
-    if (!cartCountElement) return;
-    
+    const cartCountElements = document.querySelectorAll('.cart-count');
     const count = cart.reduce((total, item) => total + item.quantity, 0);
-    cartCountElement.textContent = count;
+    
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+    });
 }
 
 // Show notification
-function showNotification(message) {
+function showNotification(message, type = 'success') {
     // Create notification element
     const notification = document.createElement('div');
     notification.className = 'notification';
@@ -208,7 +117,7 @@ function showNotification(message) {
         position: fixed;
         top: 20px;
         right: 20px;
-        background: #28a745;
+        background: ${type === 'success' ? '#28a745' : '#dc3545'};
         color: white;
         padding: 15px 20px;
         border-radius: 4px;
@@ -226,6 +135,10 @@ function showNotification(message) {
                 from { transform: translateX(100%); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
             }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
         `;
         document.head.appendChild(style);
     }
@@ -234,7 +147,8 @@ function showNotification(message) {
     
     // Remove notification after 3 seconds
     setTimeout(() => {
-        notification.remove();
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
@@ -251,32 +165,45 @@ function setupEventListeners() {
     }
     
     // Newsletter form
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
+    const newsletterForms = document.querySelectorAll('.newsletter-form');
+    newsletterForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
             const email = this.querySelector('input[type="email"]').value;
             showNotification(`Thank you for subscribing with ${email}!`);
             this.reset();
         });
-    }
+    });
+    
+    // Add to cart buttons (delegate event)
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
+            const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
+            const productId = parseInt(button.getAttribute('data-id'));
+            const quantityInput = document.getElementById('quantity');
+            const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+            
+            addToCart(productId, quantity);
+        }
+    });
 }
 
 // Perform search
 function performSearch(query) {
     if (query.trim() === '') return;
     
-    // For demo purposes, just show an alert
-    alert(`Searching for: ${query}`);
-    
-    // In a real implementation, this would redirect to a search results page
-    // window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+    // Redirect to category page with search query
+    window.location.href = `category.html?search=${encodeURIComponent(query)}`;
 }
 
 // Additional utility functions
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-    }).format(amount);
+    return `Rs ${amount.toFixed(2)}`;
 }
+
+// Export functions for use in other scripts
+window.getProductById = getProductById;
+window.addToCart = addToCart;
+window.updateCartCount = updateCartCount;
+window.showNotification = showNotification;
+window.allProducts = allProducts;

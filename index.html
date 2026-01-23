@@ -231,20 +231,20 @@
                 <div class="footer-section">
                     <h4>Customer Service</h4>
                     <ul>
-                        <li><a href="#shipping">Shipping Info</a></li>
-                        <li><a href="#returns">Returns Policy</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                        <li><a href="#terms">Terms & Conditions</a></li>
-                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns Policy</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h4>Contact Us</h4>
                     <ul>
-                        <li>📧 support@ibreeslilutoor.com</li>
-                        <li>📱 +92 300 1234567</li>
-                        <li>📍 Peshawar, Pakistan</li>
+                        <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
+                        <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
+                        <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
                         <li><a href="/admin/" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
                     </ul>
                 </div>
@@ -258,6 +258,26 @@
 
     <script src="js/main.js"></script>
     <script>
+        // Load footer contact info from settings
+        function loadFooterSettings() {
+            try {
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings'));
+                if (storeSettings) {
+                    if (storeSettings.email) {
+                        document.querySelector('#footer-email span').textContent = storeSettings.email;
+                    }
+                    if (storeSettings.phone) {
+                        document.querySelector('#footer-phone span').textContent = storeSettings.phone;
+                    }
+                    if (storeSettings.address) {
+                        document.querySelector('#footer-address span').textContent = storeSettings.address;
+                    }
+                }
+            } catch (e) {
+                console.log('Using default footer settings');
+            }
+        }
+
         async function loadFeaturedProducts() {
             try {
                 const response = await fetch('/api/admin/products');
@@ -289,7 +309,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadFeaturedProducts);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeaturedProducts();
+            loadFooterSettings();
+        });
     </script>
 </body>
 </html>

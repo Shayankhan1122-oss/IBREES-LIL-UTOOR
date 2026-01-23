@@ -1,363 +1,169 @@
-// Category page JavaScript
+// Category Page JavaScript
 
-// Sample category data
-const categories = {
-    fragrances: {
-        name: "Fragrances",
-        title: "Premium Fragrances",
-        description: "Discover our collection of premium attars and perfumes",
-        subcategories: ["Attar", "Perfumes", "Deodorants", "Body Mists"],
-        products: [
-            {
-                id: 1,
-                name: "Premium Perfume",
-                price: 49.99,
-                image: "images/products/perfume1.jpg",
-                rating: 4.5,
-                discount: 10
-            },
-            {
-                id: 5,
-                name: "Attar Oil",
-                price: 24.99,
-                image: "images/products/attar1.jpg",
-                rating: 4.7,
-                discount: 5
-            },
-            {
-                id: 9,
-                name: "Rose Perfume",
-                price: 34.99,
-                image: "images/products/rose-perfume.jpg",
-                rating: 4.3,
-                discount: 0
-            },
-            {
-                id: 10,
-                name: "Jasmine Attar",
-                price: 29.99,
-                image: "images/products/jasmine-attar.jpg",
-                rating: 4.6,
-                discount: 15
-            }
-        ]
-    },
-    clothes: {
-        name: "Clothes",
-        title: "Fashionable Clothes",
-        description: "Explore our trendy collection of male and female clothing",
-        subcategories: ["Male", "Female", "Kids", "Accessories"],
-        products: [
-            {
-                id: 2,
-                name: "Cotton Kurta",
-                price: 29.99,
-                image: "images/products/kurta1.jpg",
-                rating: 4.2,
-                discount: 0
-            },
-            {
-                id: 6,
-                name: "Women's Dupatta",
-                price: 15.99,
-                image: "images/products/dupatta1.jpg",
-                rating: 4.0,
-                discount: 20
-            },
-            {
-                id: 11,
-                name: "Men's Sherwani",
-                price: 89.99,
-                image: "images/products/sherwani.jpg",
-                rating: 4.8,
-                discount: 0
-            },
-            {
-                id: 12,
-                name: "Women's Abaya",
-                price: 59.99,
-                image: "images/products/abaya.jpg",
-                rating: 4.4,
-                discount: 25
-            }
-        ]
-    },
-    agricultural: {
-        name: "Agricultural Products",
-        title: "Fresh Agricultural Products",
-        description: "Pure and organic agricultural products including desi ghee, honey, and eggs",
-        subcategories: ["Desi Ghee", "Honey", "Eggs", "Spices"],
-        products: [
-            {
-                id: 3,
-                name: "Pure Desi Ghee",
-                price: 19.99,
-                image: "images/products/ghee1.jpg",
-                rating: 4.8,
-                discount: 0
-            },
-            {
-                id: 7,
-                name: "Raw Honey",
-                price: 12.99,
-                image: "images/products/honey1.jpg",
-                rating: 4.9,
-                discount: 0
-            },
-            {
-                id: 13,
-                name: "Organic Eggs",
-                price: 8.99,
-                image: "images/products/eggs.jpg",
-                rating: 4.5,
-                discount: 0
-            },
-            {
-                id: 14,
-                name: "Pure Spices",
-                price: 14.99,
-                image: "images/products/spices.jpg",
-                rating: 4.3,
-                discount: 10
-            }
-        ]
-    },
-    'home-textiles': {
-        name: "Home Textiles",
-        title: "Comfortable Home Textiles",
-        description: "Quality blankets, prayer mats, and other home textiles",
-        subcategories: ["Blankets", "Prayer Mats", "Cushions", "Carpets"],
-        products: [
-            {
-                id: 4,
-                name: "Prayer Mat",
-                price: 39.99,
-                image: "images/products/mat1.jpg",
-                rating: 4.3,
-                discount: 0
-            },
-            {
-                id: 8,
-                name: "Winter Blanket",
-                price: 59.99,
-                image: "images/products/blanket1.jpg",
-                rating: 4.6,
-                discount: 12
-            },
-            {
-                id: 15,
-                name: "Silk Cushions",
-                price: 24.99,
-                image: "images/products/cushions.jpg",
-                rating: 4.1,
-                discount: 0
-            },
-            {
-                id: 16,
-                name: "Persian Carpet",
-                price: 199.99,
-                image: "images/products/carpet.jpg",
-                rating: 4.9,
-                discount: 0
-            }
-        ]
-    }
-};
+let allProducts = [];
+let filteredProducts = [];
+let currentCategory = '';
 
-// DOM Content Loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Get category from URL parameter
+document.addEventListener('DOMContentLoaded', async function() {
+    // Get category from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('cat') || 'fragrances';
+    currentCategory = urlParams.get('cat') || '';
+    const searchQuery = urlParams.get('search') || '';
     
-    // Load category data
-    loadCategoryData(category);
-    
-    // Initialize cart count
-    updateCartCount();
+    // Load products
+    await loadCategoryProducts(currentCategory, searchQuery);
     
     // Setup event listeners
-    setupCategoryEventListeners();
+    setupCategoryListeners();
 });
 
-// Load category data
-function loadCategoryData(categoryKey) {
-    const category = categories[categoryKey];
-    if (!category) {
-        console.error('Category not found');
+async function loadCategoryProducts(category, search = '') {
+    try {
+        const response = await fetch('/api/admin/products');
+        const data = await response.json();
+        
+        if (data.success && data.products) {
+            allProducts = data.products;
+        } else if (Array.isArray(data)) {
+            allProducts = data;
+        }
+        
+        // Filter by category
+        if (category) {
+            filteredProducts = allProducts.filter(p => p.category === category);
+        } else if (search) {
+            filteredProducts = allProducts.filter(p => 
+                p.name.toLowerCase().includes(search.toLowerCase())
+            );
+        } else {
+            filteredProducts = allProducts;
+        }
+        
+        // Update page title
+        updateCategoryInfo(category);
+        
+        // Display products
+        displayProducts(filteredProducts);
+        
+    } catch (error) {
+        console.error('Error loading products:', error);
+        document.getElementById('category-products').innerHTML = 
+            '<p>Error loading products. Please try again.</p>';
+    }
+}
+
+function updateCategoryInfo(category) {
+    const categoryMap = {
+        'fragrances': { name: 'Fragrances', desc: 'Premium Attar & Perfumes' },
+        'clothes': { name: 'Clothes', desc: 'Male & Female Fashion' },
+        'agricultural': { name: 'Agricultural Products', desc: 'Fresh Agricultural Products' },
+        'home-textiles': { name: 'Home Textiles', desc: 'Quality Home Essentials' }
+    };
+    
+    const info = categoryMap[category] || { name: 'All Products', desc: 'Browse our complete collection' };
+    
+    const titleEl = document.getElementById('category-title');
+    const nameEl = document.getElementById('category-name');
+    const descEl = document.getElementById('category-description');
+    
+    if (titleEl) titleEl.textContent = info.name;
+    if (nameEl) nameEl.textContent = info.name;
+    if (descEl) descEl.textContent = info.desc;
+}
+
+function displayProducts(products) {
+    const container = document.getElementById('category-products');
+    const resultsCount = document.getElementById('results-count');
+    
+    if (!container) return;
+    
+    if (resultsCount) {
+        resultsCount.textContent = products.length;
+    }
+    
+    if (products.length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: 40px;">No products found</p>';
         return;
     }
     
-    // Update category information
-    document.getElementById('category-name').textContent = category.name;
-    document.getElementById('category-title').textContent = category.title;
-    document.getElementById('category-description').textContent = category.description;
-    
-    // Load subcategories
-    loadSubcategories(category.subcategories);
-    
-    // Load products
-    loadCategoryProducts(category.products);
-}
-
-// Load subcategories
-function loadSubcategories(subcategories) {
-    const subcategoryList = document.getElementById('subcategory-list');
-    if (!subcategoryList) return;
-    
-    subcategoryList.innerHTML = subcategories.map(subcat => `
-        <li><label><input type="checkbox" value="${subcat.toLowerCase()}"> ${subcat}</label></li>
-    `).join('');
-}
-
-// Load category products
-function loadCategoryProducts(products) {
-    const productsContainer = document.getElementById('category-products');
-    if (!productsContainer) return;
-    
-    productsContainer.innerHTML = products.map(product => `
+    container.innerHTML = products.map(product => `
         <div class="product-card">
             <div class="product-image">
-                <img src="${product.image}" alt="${product.name}">
-                ${product.discount > 0 ? `<div class="discount-badge">-${product.discount}%</div>` : ''}
-                <div class="quick-view">
-                    <button class="btn-quick-view" data-id="${product.id}">Quick View</button>
-                </div>
+                <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect fill=%22%23ddd%22 width=%22300%22 height=%22300%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${product.name}%3C/text%3E%3C/svg%3E'">
             </div>
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <div class="product-price">
-                    ${product.discount > 0 ? `<span class="original-price">$${(product.price / (1 - product.discount/100)).toFixed(2)}</span>` : ''}
-                    <span class="current-price">$${product.price.toFixed(2)}</span>
-                </div>
-                <div class="product-rating">
-                    ${generateStars(product.rating)}
-                </div>
+                <p class="product-price">Rs ${product.price.toFixed(2)}</p>
                 <div class="product-actions">
-                    <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
-                    <button class="add-to-wishlist" data-id="${product.id}"><i class="fas fa-heart"></i></button>
+                    <button class="btn add-to-cart" data-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                    <a href="product.html?id=${product.id}" class="btn btn-secondary">View Details</a>
                 </div>
             </div>
         </div>
     `).join('');
-    
-    // Add event listeners to the new buttons
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.getAttribute('data-id'));
-            addToCart(productId);
-        });
-    });
-    
-    document.querySelectorAll('.add-to-wishlist').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.getAttribute('data-id'));
-            toggleWishlist(productId);
-        });
-    });
-    
-    // Update results count
-    document.getElementById('results-count').textContent = products.length;
 }
 
-// Setup category page event listeners
-function setupCategoryEventListeners() {
-    // Price range sliders
-    const minPriceSlider = document.getElementById('price-min');
-    const maxPriceSlider = document.getElementById('price-max');
-    const minValueDisplay = document.getElementById('min-value');
-    const maxValueDisplay = document.getElementById('max-value');
-    
-    if (minPriceSlider && maxPriceSlider) {
-        minPriceSlider.addEventListener('input', function() {
-            if (parseInt(this.value) > parseInt(maxPriceSlider.value)) {
-                this.value = maxPriceSlider.value;
-            }
-            minValueDisplay.textContent = this.value;
-        });
-        
-        maxPriceSlider.addEventListener('input', function() {
-            if (parseInt(this.value) < parseInt(minPriceSlider.value)) {
-                this.value = minPriceSlider.value;
-            }
-            maxValueDisplay.textContent = this.value;
-        });
-    }
-    
+function setupCategoryListeners() {
     // Sort options
     const sortSelect = document.getElementById('sort-options');
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
-            // In a real implementation, this would sort the products
-            console.log('Sorting by:', this.value);
+            sortProducts(this.value);
         });
     }
     
-    // View options
-    const gridViewBtn = document.querySelector('.view-grid');
-    const listViewBtn = document.querySelector('.view-list');
+    // Price range filters
+    const priceMin = document.getElementById('price-min');
+    const priceMax = document.getElementById('price-max');
     
-    if (gridViewBtn && listViewBtn) {
-        gridViewBtn.addEventListener('click', function() {
-            this.classList.add('active');
-            listViewBtn.classList.remove('active');
-            document.querySelector('.products-grid').classList.remove('list-view');
+    if (priceMin && priceMax) {
+        priceMin.addEventListener('input', function() {
+            document.getElementById('min-value').textContent = this.value;
+            filterByPrice();
         });
         
-        listViewBtn.addEventListener('click', function() {
-            this.classList.add('active');
-            gridViewBtn.classList.remove('active');
-            document.querySelector('.products-grid').classList.add('list-view');
+        priceMax.addEventListener('input', function() {
+            document.getElementById('max-value').textContent = this.value;
+            filterByPrice();
         });
     }
+}
+
+function sortProducts(sortBy) {
+    let sorted = [...filteredProducts];
     
-    // Pagination
-    const pageButtons = document.querySelectorAll('.page');
-    pageButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            pageButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-        });
+    switch(sortBy) {
+        case 'price-low':
+            sorted.sort((a, b) => a.price - b.price);
+            break;
+        case 'price-high':
+            sorted.sort((a, b) => b.price - a.price);
+            break;
+        case 'newest':
+            sorted.sort((a, b) => b.id - a.id);
+            break;
+        case 'rating':
+            sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            break;
+        default:
+            // Featured - keep original order
+            break;
+    }
+    
+    displayProducts(sorted);
+}
+
+function filterByPrice() {
+    const min = parseInt(document.getElementById('price-min').value);
+    const max = parseInt(document.getElementById('price-max').value);
+    
+    const filtered = allProducts.filter(p => {
+        const matchesCategory = !currentCategory || p.category === currentCategory;
+        const matchesPrice = p.price >= min && p.price <= max;
+        return matchesCategory && matchesPrice;
     });
-}
-
-// Generate star rating HTML
-function generateStars(rating) {
-    let stars = '';
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
     
-    for (let i = 0; i < fullStars; i++) {
-        stars += '<i class="fas fa-star" style="color: #ffc107;"></i>';
-    }
-    
-    if (hasHalfStar) {
-        stars += '<i class="fas fa-star-half-alt" style="color: #ffc107;"></i>';
-    }
-    
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-        stars += '<i class="far fa-star" style="color: #ffc107;"></i>';
-    }
-    
-    return stars;
-}
-
-// Add to cart function (inherited from main.js)
-function addToCart(productId) {
-    // This function would be implemented in main.js
-    // For now, just show an alert
-    alert(`Product ${productId} added to cart!`);
-}
-
-// Toggle wishlist function (inherited from main.js)
-function toggleWishlist(productId) {
-    // This function would be implemented in main.js
-    // For now, just show an alert
-    alert(`Product ${productId} toggled in wishlist!`);
-}
-
-// Update cart count (inherited from main.js)
-function updateCartCount() {
-    // This function would be implemented in main.js
+    displayProducts(filtered);
 }
