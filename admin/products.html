@@ -275,10 +275,10 @@
                 <input type="text" id="search" placeholder="Search products..." onkeyup="filterProducts()">
                 <select id="category-filter" onchange="filterProducts()">
                     <option value="">All Categories</option>
-                    <option value="fragrances">Fragrances</option>
-                    <option value="clothes">Clothes</option>
-                    <option value="agricultural">Agricultural</option>
-                    <option value="home-textiles">Home Textiles</option>
+                    <option value="fragrances">Premium Attar & Perfumes</option>
+                    <option value="clothes">Male & Female Fashion</option>
+                    <option value="agricultural">Fresh Agricultural Products</option>
+                    <option value="home-textiles">Quality Home Essentials</option>
                 </select>
             </div>
 
@@ -337,10 +337,11 @@
                 <div class="form-group">
                     <label>Category *</label>
                     <select id="category" required>
-                        <option value="fragrances">Fragrances</option>
-                        <option value="clothes">Clothes</option>
-                        <option value="agricultural">Agricultural</option>
-                        <option value="home-textiles">Home Textiles</option>
+                        <option value="">Select Category</option>
+                        <option value="fragrances">Premium Attar & Perfumes</option>
+                        <option value="clothes">Male & Female Fashion</option>
+                        <option value="agricultural">Fresh Agricultural Products</option>
+                        <option value="home-textiles">Quality Home Essentials</option>
                     </select>
                 </div>
                 
@@ -380,6 +381,14 @@
         let filteredProducts = [];
         let currentPage = 1;
         const perPage = 10;
+
+        // Category mapping - display names
+        const categoryNames = {
+            'fragrances': 'Premium Attar & Perfumes',
+            'clothes': 'Male & Female Fashion',
+            'agricultural': 'Fresh Agricultural Products',
+            'home-textiles': 'Quality Home Essentials'
+        };
 
         // Logout
         function logout() {
@@ -433,7 +442,7 @@
                         <td><img src="${p.image}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect fill=%22%23ddd%22 width=%2250%22 height=%2250%22/%3E%3C/svg%3E'"></td>
                         <td>${p.name}</td>
                         <td>${p.sku}</td>
-                        <td>${p.category}</td>
+                        <td>${categoryNames[p.category] || p.category}</td>
                         <td>Rs ${p.price.toFixed(2)}</td>
                         <td>${p.stock}</td>
                         <td><span class="status-active">${p.status}</span></td>
@@ -517,13 +526,13 @@
             
             const id = document.getElementById('edit-id').value;
             const product = {
-                name: document.getElementById('name').value,
-                sku: document.getElementById('sku').value,
+                name: document.getElementById('name').value.trim(),
+                sku: document.getElementById('sku').value.trim(),
                 category: document.getElementById('category').value,
-                price: document.getElementById('price').value,
-                stock: document.getElementById('stock').value,
+                price: parseFloat(document.getElementById('price').value),
+                stock: parseInt(document.getElementById('stock').value),
                 status: document.getElementById('status').value,
-                description: document.getElementById('description').value
+                description: document.getElementById('description').value.trim()
             };
             
             try {
@@ -545,14 +554,14 @@
                 const data = await res.json();
                 
                 if (data.success) {
-                    alert(id ? 'Updated!' : 'Added!');
+                    alert(id ? 'Product updated successfully!' : 'Product added successfully!');
                     closeModal();
                     loadProducts();
                 } else {
                     alert('Error: ' + data.error);
                 }
             } catch (e) {
-                alert('Failed to save');
+                alert('Failed to save product');
             }
         }
 

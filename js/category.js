@@ -56,10 +56,10 @@ async function loadCategoryProducts(category, search = '') {
 
 function updateCategoryInfo(category, search) {
     const categoryMap = {
-        'fragrances': { name: 'Fragrances', desc: 'Premium Attar & Perfumes Collection' },
-        'clothes': { name: 'Clothes', desc: 'Stylish Male & Female Fashion' },
-        'agricultural': { name: 'Agricultural Products', desc: 'Fresh & Quality Agricultural Products' },
-        'home-textiles': { name: 'Home Textiles', desc: 'Premium Quality Home Essentials' }
+        'fragrances': { name: 'Premium Attar & Perfumes', desc: 'Discover our exclusive fragrance collection' },
+        'clothes': { name: 'Male & Female Fashion', desc: 'Stylish clothing for everyone' },
+        'agricultural': { name: 'Fresh Agricultural Products', desc: 'Quality farm-fresh products' },
+        'home-textiles': { name: 'Quality Home Essentials', desc: 'Premium textiles for your home' }
     };
     
     let info;
@@ -172,10 +172,10 @@ function generateStars(rating) {
 
 function getCategoryName(category) {
     const names = {
-        'fragrances': 'Fragrances',
-        'clothes': 'Clothes',
-        'agricultural': 'Agricultural',
-        'home-textiles': 'Home Textiles'
+        'fragrances': 'Premium Attar & Perfumes',
+        'clothes': 'Male & Female Fashion',
+        'agricultural': 'Fresh Agricultural Products',
+        'home-textiles': 'Quality Home Essentials'
     };
     return names[category] || 'Products';
 }
