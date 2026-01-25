@@ -242,7 +242,7 @@
                 </div>
                 <div class="form-group">
                     <label>Store Address</label>
-                    <textarea id="store-address"></textarea>
+                    <textarea id="store-address" rows="3"></textarea>
                 </div>
                 <button class="btn btn-primary" onclick="saveStoreInfo()">Save Changes</button>
             </div>
@@ -312,7 +312,7 @@
                     <label>Confirm Password</label>
                     <input type="password" id="confirm-password" placeholder="Confirm new password">
                 </div>
-                <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+                <button class="btn btn-primary" id="change-password-btn" onclick="changePassword(this)">Update Password</button>
             </div>
         </div>
     </div>
@@ -452,9 +452,9 @@ Contact: support@ibreeslilutoor.com`
             showSuccess('✅ Privacy Policy saved successfully!');
         }
 
-        function changePassword() {
-            const newPass = document.getElementById('new-password').value;
-            const confirmPass = document.getElementById('confirm-password').value;
+        function changePassword(buttonElement) {
+            const newPass = document.getElementById('new-password').value.trim();
+            const confirmPass = document.getElementById('confirm-password').value.trim();
             
             if (!newPass || !confirmPass) {
                 alert('❌ Please enter both password fields');
@@ -466,50 +466,58 @@ Contact: support@ibreeslilutoor.com`
                 return;
             }
             
-            if (newPass.length < 8) {
-                alert('❌ Password must be at least 8 characters long');
+            if (newPass.length < 6) {
+                alert('❌ Password must be at least 6 characters long');
                 return;
             }
 
-            // Get current admin email
-            const admin = JSON.parse(localStorage.getItem('admin'));
+            const admin = JSON.parse(localStorage.getItem('admin') || '{}');
             if (!admin || !admin.username) {
                 alert('❌ Not logged in');
                 return;
             }
 
-            // Show loading
-            const originalText = event.target.textContent;
-            event.target.textContent = 'Updating...';
-            event.target.disabled = true;
+            const currentPassword = prompt('Enter your current password to confirm:');
+            if (!currentPassword) {
+                alert('❌ Current password required');
+                return;
+            }
 
-            // Call API to change password
+            // Disable button and show loading state
+            const originalText = buttonElement.textContent;
+            buttonElement.textContent = 'Updating...';
+            buttonElement.disabled = true;
+
             fetch('/api/auth/change-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: admin.username,
-                    currentPassword: prompt('Enter your current password to confirm:'),
+                    currentPassword: currentPassword,
                     newPassword: newPass
                 })
             })
             .then(res => res.json())
             .then(data => {
-                event.target.textContent = originalText;
-                event.target.disabled = false;
+                buttonElement.textContent = originalText;
+                buttonElement.disabled = false;
 
                 if (data.success) {
                     showSuccess('✅ Password updated successfully!');
                     document.getElementById('new-password').value = '';
                     document.getElementById('confirm-password').value = '';
+                    alert('✅ Password updated successfully! Please login again with your new password.');
+                    setTimeout(() => {
+                        logout();
+                    }, 1000);
                 } else {
                     alert('❌ ' + (data.error || 'Failed to update password'));
                 }
             })
             .catch(error => {
-                event.target.textContent = originalText;
-                event.target.disabled = false;
-                alert('❌ Error updating password: ' + error.message);
+                buttonElement.textContent = originalText;
+                buttonElement.disabled = false;
+                alert('❌ Error: ' + error.message);
             });
         }
 
