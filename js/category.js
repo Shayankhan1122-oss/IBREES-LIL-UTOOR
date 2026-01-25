@@ -30,9 +30,17 @@ async function loadCategoryProducts(category, search = '') {
             allProducts = data;
         }
         
+        console.log('All products loaded:', allProducts.length);
+        console.log('Filtering by category:', category);
+        
         // Filter by category
         if (category) {
-            filteredProducts = allProducts.filter(p => p.category === category);
+            filteredProducts = allProducts.filter(p => {
+                const matches = p.category === category;
+                console.log(`Product "${p.name}" - category: "${p.category}" - matches: ${matches}`);
+                return matches;
+            });
+            console.log('Filtered products:', filteredProducts.length);
         } else if (search) {
             filteredProducts = allProducts.filter(p => 
                 p.name.toLowerCase().includes(search.toLowerCase()) ||
