@@ -170,7 +170,9 @@
                             <button class="btn add-to-cart" data-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
                                 <i class="fas fa-shopping-cart"></i> ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
                             </button>
-                            <a href="product.html?id=${product.id}" class="btn btn-secondary">View</a>
+                            <button class="btn btn-order-now" data-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-bolt"></i> ${product.stock === 0 ? 'Out of Stock' : 'Order Now'}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -185,6 +187,15 @@
             btn.addEventListener('click', function() {
                 if (!this.disabled) {
                     addToCart(parseInt(this.dataset.id));
+                }
+            });
+        });
+        
+        // Add event listeners to Order Now buttons
+        document.querySelectorAll('.btn-order-now').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.disabled) {
+                    orderNow(parseInt(this.dataset.id));
                 }
             });
         });
@@ -376,6 +387,36 @@
         
         // Show success message
         showSuccessMessage(`${product.name} added to cart!`);
+    }
+
+    function orderNow(productId) {
+        const product = allProducts.find(p => p.id === productId);
+        if (!product) {
+            console.error('Product not found:', productId);
+            return;
+        }
+        
+        // Add to cart
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingItem = cart.find(item => item.id === productId);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                quantity: 1
+            });
+        }
+        
+        // Save cart
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Redirect to checkout
+        window.location.href = 'checkout.html';
     }
 
     function updateCartCount() {

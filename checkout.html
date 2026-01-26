@@ -9,40 +9,19 @@
     <link rel="stylesheet" href="css/checkout.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="top-header">
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">
-                        <h1>IBREES-LIL-UTOOR</h1>
-                    </div>
-                    <nav class="main-nav">
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="shop.html">Shop</a></li>
-                            <li><a href="index.html#categories">Categories</a></li>
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </nav>
-                    <div class="header-actions">
-                        <div class="search-bar">
-                            <input type="text" placeholder="Search products..." id="search-input">
-                            <button><i class="fas fa-search"></i></button>
-                        </div>
-                        <div class="user-actions">
-                            <a href="account.html" class="user-icon"><i class="fas fa-user"></i></a>
-                            <a href="cart.html" class="cart-icon">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span class="cart-count">0</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html">IBREES LIL UTOOR</a></h1>
             </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="category.html">Shop</a></li>
+                <li><a href="cart.html">🛒 Cart</a></li>
+            </ul>
         </div>
-    </header>
+    </nav>
 
     <!-- Breadcrumb -->
     <section class="breadcrumb">
@@ -71,14 +50,10 @@
                     </div>
                     <div class="step" data-step="2">
                         <span class="step-number">2</span>
-                        <span class="step-text">Shipping Method</span>
+                        <span class="step-text">Payment</span>
                     </div>
                     <div class="step" data-step="3">
                         <span class="step-number">3</span>
-                        <span class="step-text">Payment</span>
-                    </div>
-                    <div class="step" data-step="4">
-                        <span class="step-number">4</span>
                         <span class="step-text">Review</span>
                     </div>
                 </div>
@@ -91,179 +66,114 @@
                         <form id="shipping-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="first-name">First Name</label>
+                                    <label for="first-name">First Name *</label>
                                     <input type="text" id="first-name" name="firstName" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="last-name">Last Name</label>
+                                    <label for="last-name">Last Name *</label>
                                     <input type="text" id="last-name" name="lastName" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email Address</label>
+                                <label for="email">Email Address *</label>
                                 <input type="email" id="email" name="email" required>
                             </div>
                             <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" required>
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+92 300 1234567" required>
                             </div>
                             <div class="form-group">
-                                <label for="address">Street Address</label>
-                                <input type="text" id="address" name="address" required>
+                                <label for="address">Complete Address *</label>
+                                <textarea id="address" name="address" rows="3" placeholder="House/Flat No, Street, Area" required></textarea>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="city">City</label>
-                                    <input type="text" id="city" name="city" required>
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" name="city" placeholder="e.g., Peshawar, Lahore, Karachi" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="state">State/Province</label>
-                                    <input type="text" id="state" name="state" required>
+                                    <label for="state">Province *</label>
+                                    <select id="state" name="state" required>
+                                        <option value="">Select Province</option>
+                                        <option value="Punjab">Punjab</option>
+                                        <option value="Sindh">Sindh</option>
+                                        <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+                                        <option value="Balochistan">Balochistan</option>
+                                        <option value="Gilgit-Baltistan">Gilgit-Baltistan</option>
+                                        <option value="Azad Kashmir">Azad Jammu & Kashmir</option>
+                                        <option value="Islamabad">Islamabad Capital Territory</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="zip">ZIP/Postal Code</label>
-                                    <input type="text" id="zip" name="zip" required>
+                                    <label for="zip">Postal Code</label>
+                                    <input type="text" id="zip" name="zip" placeholder="Optional">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="country">Country</label>
-                                <select id="country" name="country" required>
-                                    <option value="">Select Country</option>
-                                    <option value="US">United States</option>
-                                    <option value="CA">Canada</option>
-                                    <option value="UK">United Kingdom</option>
-                                    <option value="AU">Australia</option>
-                                    <option value="DE">Germany</option>
-                                    <option value="FR">France</option>
-                                </select>
+                            <input type="hidden" id="country" name="country" value="Pakistan">
+                            
+                            <div class="shipping-info-box">
+                                <i class="fas fa-shipping-fast"></i>
+                                <div>
+                                    <strong>Free Shipping</strong>
+                                    <p>We deliver across Pakistan in 3-5 business days</p>
+                                </div>
                             </div>
-                            <div class="form-group checkbox-group">
-                                <input type="checkbox" id="save-address" name="saveAddress">
-                                <label for="save-address">Save this address for future orders</label>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="continue-to-shipping">Continue to Shipping</button>
+                            
+                            <button type="button" class="btn btn-primary" id="continue-to-payment">Continue to Payment</button>
                         </form>
                     </div>
                     
-                    <!-- Step 2: Shipping Method -->
+                    <!-- Step 2: Payment Method -->
                     <div class="checkout-step" id="step-2">
-                        <h2>Shipping Method</h2>
-                        <form id="shipping-method-form">
-                            <div class="shipping-options">
-                                <div class="shipping-option">
-                                    <input type="radio" id="standard" name="shipping" value="standard" checked>
-                                    <label for="standard">
-                                        <div class="shipping-header">
-                                            <h3>Standard Shipping</h3>
-                                            <span class="shipping-price">$0.00</span>
-                                        </div>
-                                        <p>3-5 business days</p>
-                                        <p class="shipping-description">Free shipping on orders over $50</p>
-                                    </label>
-                                </div>
-                                <div class="shipping-option">
-                                    <input type="radio" id="express" name="shipping" value="express">
-                                    <label for="express">
-                                        <div class="shipping-header">
-                                            <h3>Express Shipping</h3>
-                                            <span class="shipping-price">$10.00</span>
-                                        </div>
-                                        <p>1-2 business days</p>
-                                        <p class="shipping-description">Faster delivery option</p>
-                                    </label>
-                                </div>
-                                <div class="shipping-option">
-                                    <input type="radio" id="same-day" name="shipping" value="same-day">
-                                    <label for="same-day">
-                                        <div class="shipping-header">
-                                            <h3>Same Day Delivery</h3>
-                                            <span class="shipping-price">$20.00</span>
-                                        </div>
-                                        <p>Delivery within 24 hours</p>
-                                        <p class="shipping-description">Available in select areas</p>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="button" class="btn btn-secondary" id="back-to-shipping">Back</button>
-                                <button type="button" class="btn btn-primary" id="continue-to-payment">Continue to Payment</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- Step 3: Payment Method -->
-                    <div class="checkout-step" id="step-3">
                         <h2>Payment Method</h2>
                         <form id="payment-form">
                             <div class="payment-options">
                                 <div class="payment-option">
-                                    <input type="radio" id="credit-card" name="payment" value="credit-card" checked>
-                                    <label for="credit-card">
-                                        <div class="payment-header">
-                                            <h3>Credit/Debit Card</h3>
-                                            <div class="payment-icons">
-                                                <i class="fab fa-cc-visa"></i>
-                                                <i class="fab fa-cc-mastercard"></i>
-                                                <i class="fab fa-cc-amex"></i>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="payment-option">
-                                    <input type="radio" id="paypal" name="payment" value="paypal">
-                                    <label for="paypal">
-                                        <div class="payment-header">
-                                            <h3>PayPal</h3>
-                                            <i class="fab fa-paypal"></i>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="payment-option">
-                                    <input type="radio" id="cash-on-delivery" name="payment" value="cash-on-delivery">
+                                    <input type="radio" id="cash-on-delivery" name="payment" value="cash-on-delivery" checked>
                                     <label for="cash-on-delivery">
                                         <div class="payment-header">
+                                            <i class="fas fa-money-bill-wave"></i>
                                             <h3>Cash on Delivery</h3>
                                         </div>
+                                        <p>Pay when you receive your order</p>
                                     </label>
                                 </div>
-                            </div>
-                            
-                            <!-- Credit Card Form -->
-                            <div class="payment-form" id="credit-card-form">
-                                <div class="form-group">
-                                    <label for="card-number">Card Number</label>
-                                    <input type="text" id="card-number" name="cardNumber" placeholder="1234 5678 9012 3456" required>
+                                <div class="payment-option">
+                                    <input type="radio" id="bank-transfer" name="payment" value="bank-transfer">
+                                    <label for="bank-transfer">
+                                        <div class="payment-header">
+                                            <i class="fas fa-university"></i>
+                                            <h3>Bank Transfer</h3>
+                                        </div>
+                                        <p>Direct bank transfer (details will be provided)</p>
+                                    </label>
                                 </div>
-                                <div class="form-group">
-                                    <label for="card-name">Cardholder Name</label>
-                                    <input type="text" id="card-name" name="cardName" placeholder="John Doe" required>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="expiry-date">Expiry Date</label>
-                                        <input type="text" id="expiry-date" name="expiryDate" placeholder="MM/YY" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cvv">CVV</label>
-                                        <input type="text" id="cvv" name="cvv" placeholder="123" required>
-                                    </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="jazzcash" name="payment" value="jazzcash">
+                                    <label for="jazzcash">
+                                        <div class="payment-header">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <h3>JazzCash / EasyPaisa</h3>
+                                        </div>
+                                        <p>Mobile wallet payment</p>
+                                    </label>
                                 </div>
                             </div>
                             
                             <div class="secure-payment">
                                 <i class="fas fa-lock"></i>
-                                <span>Your payment information is secure and encrypted</span>
+                                <span>Your order information is secure</span>
                             </div>
                             
                             <div class="form-actions">
-                                <button type="button" class="btn btn-secondary" id="back-to-shipping-method">Back</button>
+                                <button type="button" class="btn btn-secondary" id="back-to-shipping">Back</button>
                                 <button type="button" class="btn btn-primary" id="continue-to-review">Review Order</button>
                             </div>
                         </form>
                     </div>
                     
-                    <!-- Step 4: Order Review -->
-                    <div class="checkout-step" id="step-4">
+                    <!-- Step 3: Order Review -->
+                    <div class="checkout-step" id="step-3">
                         <h2>Order Review</h2>
                         <div class="review-content">
                             <!-- Order Items -->
@@ -276,7 +186,7 @@
                             
                             <!-- Shipping Address -->
                             <div class="review-section">
-                                <h3>Shipping Address</h3>
+                                <h3>Delivery Address</h3>
                                 <div class="shipping-address" id="review-shipping-address">
                                     <!-- Address will be loaded dynamically -->
                                 </div>
@@ -301,12 +211,14 @@
                         
                         <div class="form-group checkbox-group">
                             <input type="checkbox" id="terms" name="terms" required>
-                            <label for="terms">I agree to the <a href="#" target="_blank">Terms & Conditions</a> and <a href="#" target="_blank">Privacy Policy</a></label>
+                            <label for="terms">I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
                         </div>
                         
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" id="back-to-payment">Back</button>
-                            <button type="button" class="btn btn-primary" id="place-order">Place Order</button>
+                            <button type="button" class="btn btn-primary btn-place-order" id="place-order">
+                                <i class="fas fa-check-circle"></i> Place Order
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -332,46 +244,92 @@
                 <div class="footer-section">
                     <h3>IBREES-LIL-UTOOR</h3>
                     <p>Premium products for every need. Quality guaranteed.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Return Policy</a></li>
-                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="category.html">Shop</a></li>
+                        <li><a href="cart.html">Cart</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Contact Info</h4>
-                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
-                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns Policy</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Newsletter</h4>
-                    <p>Subscribe to get special offers and updates</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your email address" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
+                        <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
+                        <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
+                        <li><a href="/admin/" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 IBREES-LIL-UTOOR. All rights reserved.</p>
+                <p>&copy; 2026 IBREES LIL UTOOR. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <style>
+        .shipping-info-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .shipping-info-box i {
+            font-size: 32px;
+            color: #3498db;
+        }
+        
+        .shipping-info-box strong {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .shipping-info-box p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        .btn-place-order {
+            font-size: 16px;
+            padding: 15px 30px;
+        }
+        
+        .btn-place-order i {
+            margin-right: 8px;
+        }
+    </style>
+
     <script src="js/main.js"></script>
     <script src="js/checkout.js"></script>
+    <script>
+        // Load footer settings
+        try {
+            const storeSettings = JSON.parse(localStorage.getItem('storeSettings'));
+            if (storeSettings) {
+                if (storeSettings.email) document.querySelector('#footer-email span').textContent = storeSettings.email;
+                if (storeSettings.phone) document.querySelector('#footer-phone span').textContent = storeSettings.phone;
+                if (storeSettings.address) document.querySelector('#footer-address span').textContent = storeSettings.address;
+            }
+        } catch (e) {}
+    </script>
 </body>
 </html>
