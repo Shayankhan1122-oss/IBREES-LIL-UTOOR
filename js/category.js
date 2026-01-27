@@ -25,6 +25,9 @@
         console.log('Current category:', currentCategory);
         console.log('Search query:', searchQuery);
         
+        // Initialize cart count
+        updateCartCount();
+        
         // Load products
         await loadCategoryProducts(currentCategory, searchQuery);
         
