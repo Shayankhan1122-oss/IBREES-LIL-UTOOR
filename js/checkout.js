@@ -333,7 +333,8 @@
                 localStorage.setItem('lastOrder', JSON.stringify({
                     orderId: orderData.orderId,
                     trackingToken: orderData.trackingToken,
-                    total: total
+                    total: total,
+                    paymentMethod: checkoutState.paymentMethod
                 }));
                 
                 // Clear cart

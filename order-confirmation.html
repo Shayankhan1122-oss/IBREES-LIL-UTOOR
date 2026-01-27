@@ -3,182 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation - IBREES-LIL-UTOOR</title>
+    <title>Order Confirmed - IBREES LIL UTOOR</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/order-confirmation.css">
+    <style>
+        .confirmation-page {
+            padding: 60px 0;
+            min-height: 70vh;
+            background: #f8f9fa;
+        }
+
+        .confirmation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .success-icon {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .success-icon i {
+            font-size: 80px;
+            color: #28a745;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confirmation-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .confirmation-header h1 {
+            color: #28a745;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .confirmation-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .order-details {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .order-details h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .order-id {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .order-id strong {
+            font-size: 18px;
+        }
+
+        .next-steps {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .next-steps h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .next-steps li {
+            color: #856404;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-steps li i {
+            color: #ffc107;
+            font-size: 18px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .contact-info p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .contact-info a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .confirmation-container {
+                padding: 20px;
+            }
+
+            .success-icon i {
+                font-size: 60px;
+            }
+
+            .confirmation-header h1 {
+                font-size: 24px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="top-header">
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">
-                        <h1>IBREES-LIL-UTOOR</h1>
-                    </div>
-                    <nav class="main-nav">
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="shop.html">Shop</a></li>
-                            <li><a href="index.html#categories">Categories</a></li>
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </nav>
-                    <div class="header-actions">
-                        <div class="search-bar">
-                            <input type="text" placeholder="Search products..." id="search-input">
-                            <button><i class="fas fa-search"></i></button>
-                        </div>
-                        <div class="user-actions">
-                            <a href="account.html" class="user-icon"><i class="fas fa-user"></i></a>
-                            <a href="cart.html" class="cart-icon">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span class="cart-count">0</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Breadcrumb -->
-    <section class="breadcrumb">
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><span>Order Confirmation</span></li>
-                </ol>
-            </nav>
+            <div class="logo">
+                <h1><a href="index.html">IBREES LIL UTOOR</a></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="category.html">Shop</a></li>
+                <li><a href="cart.html">🛒 Cart</a></li>
+            </ul>
         </div>
-    </section>
+    </nav>
 
     <!-- Order Confirmation Page -->
-    <section class="order-confirmation">
+    <section class="confirmation-page">
         <div class="container">
-            <div class="confirmation-content">
-                <!-- Confirmation Message -->
-                <div class="confirmation-message">
-                    <div class="checkmark">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <h1>Order Confirmed!</h1>
-                    <p>Thank you for your purchase</p>
-                    <div class="order-number">
-                        <p>Order Number:</p>
-                        <h2>#QWS-2025-001234</h2>
-                    </div>
-                    <p class="expected-delivery">Expected delivery: <strong>Jan 10, 2025</strong></p>
+            <div class="confirmation-container">
+                <!-- Success Icon -->
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                
+
+                <!-- Header -->
+                <div class="confirmation-header">
+                    <h1>Order Placed Successfully!</h1>
+                    <p>Thank you for shopping with IBREES LIL UTOOR</p>
+                </div>
+
+                <!-- Order ID -->
+                <div class="order-id">
+                    <strong>Order ID: <span id="order-id">Loading...</span></strong>
+                </div>
+
                 <!-- Order Details -->
                 <div class="order-details">
-                    <h2>Order Details</h2>
-                    
-                    <!-- Items Ordered -->
-                    <div class="order-section">
-                        <h3>Items Ordered</h3>
-                        <div class="order-items" id="order-items">
-                            <!-- Items will be loaded dynamically -->
-                        </div>
+                    <h2>Order Summary</h2>
+                    <div class="detail-row">
+                        <span class="detail-label">Total Amount</span>
+                        <span class="detail-value" id="order-total">Rs 0.00</span>
                     </div>
-                    
-                    <!-- Shipping Address -->
-                    <div class="order-section">
-                        <h3>Shipping Address</h3>
-                        <div class="shipping-address" id="shipping-address">
-                            <!-- Address will be loaded dynamically -->
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Payment Method</span>
+                        <span class="detail-value" id="payment-method">Cash on Delivery</span>
                     </div>
-                    
-                    <!-- Payment Method -->
-                    <div class="order-section">
-                        <h3>Payment Method</h3>
-                        <div class="payment-method" id="payment-method">
-                            <!-- Payment method will be loaded dynamically -->
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Estimated Delivery</span>
+                        <span class="detail-value">3-5 Business Days</span>
                     </div>
-                    
-                    <!-- Order Summary -->
-                    <div class="order-section">
-                        <h3>Order Summary</h3>
-                        <div class="order-summary" id="order-summary">
-                            <!-- Summary will be loaded dynamically -->
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value" style="color: #ffc107;">⏳ Pending Confirmation</span>
                     </div>
                 </div>
-                
+
                 <!-- Next Steps -->
                 <div class="next-steps">
-                    <h2>Next Steps</h2>
-                    <div class="steps-content">
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-truck"></i>
-                            </div>
-                            <div class="step-content">
-                                <h3>Order Processing</h3>
-                                <p>Your order is being processed and will be shipped soon.</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-shipping-fast"></i>
-                            </div>
-                            <div class="step-content">
-                                <h3>Shipping</h3>
-                                <p>You'll receive a shipping confirmation email with tracking information.</p>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <div class="step-content">
-                                <h3>Delivery</h3>
-                                <p>Your package will be delivered to your specified address.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <h3>What Happens Next?</h3>
+                    <ul>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>You will receive an order confirmation email shortly</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-user-check"></i>
+                            <span>Our admin will review and confirm your order within 24 hours</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-box"></i>
+                            <span>Your order will be dispatched within 1-2 business days after confirmation</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-truck"></i>
+                            <span>Track your order status anytime using your Order ID</span>
+                        </li>
+                    </ul>
                 </div>
-                
-                <!-- Action Buttons -->
-                <div class="confirmation-actions">
-                    <a href="order-tracking.html" class="btn btn-primary">
-                        <i class="fas fa-map-marker-alt"></i> Track Order
-                    </a>
-                    <a href="index.html" class="btn btn-secondary">
-                        <i class="fas fa-shopping-bag"></i> Continue Shopping
-                    </a>
-                </div>
-                
-                <!-- Email Confirmation -->
-                <div class="email-confirmation">
-                    <p><i class="fas fa-envelope"></i> A confirmation email has been sent to <strong>customer@example.com</strong></p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Customer Support -->
-    <section class="customer-support">
-        <div class="container">
-            <div class="support-content">
-                <div class="support-info">
-                    <h3>Need help?</h3>
-                    <p>Our customer support team is here to assist you with your order.</p>
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fas fa-home"></i>
+                        Continue Shopping
+                    </a>
+                    <a href="category.html" class="btn btn-secondary">
+                        <i class="fas fa-shopping-bag"></i>
+                        Browse Products
+                    </a>
+                    <a href="#" class="btn btn-success" id="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i>
+                        Contact on WhatsApp
+                    </a>
                 </div>
-                <div class="support-actions">
-                    <a href="contact.html" class="btn btn-secondary">
-                        <i class="fas fa-headset"></i> Contact Support
-                    </a>
-                    <a href="faq.html" class="btn btn-outline">
-                        <i class="fas fa-question-circle"></i> Visit FAQ
-                    </a>
+
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <p>Need help? Contact us:</p>
+                    <p>📧 <a href="mailto:support@ibreeslilutoor.com" id="support-email">support@ibreeslilutoor.com</a></p>
+                    <p>📱 <a href="tel:+923001234567" id="support-phone">+92 300 1234567</a></p>
                 </div>
             </div>
         </div>
@@ -191,46 +343,94 @@
                 <div class="footer-section">
                     <h3>IBREES-LIL-UTOOR</h3>
                     <p>Premium products for every need. Quality guaranteed.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Return Policy</a></li>
-                        <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="category.html">Shop</a></li>
+                        <li><a href="cart.html">Cart</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Contact Info</h4>
-                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
-                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns Policy</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Newsletter</h4>
-                    <p>Subscribe to get special offers and updates</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your email address" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
+                        <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
+                        <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 IBREES-LIL-UTOOR. All rights reserved.</p>
+                <p>&copy; 2026 IBREES LIL UTOOR. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
-    <script src="js/order-confirmation.js"></script>
+    <script>
+        // Load order details from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const lastOrder = JSON.parse(localStorage.getItem('lastOrder'));
+            
+            if (!lastOrder) {
+                // No order found, redirect to home
+                alert('No order information found.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display order details
+            document.getElementById('order-id').textContent = lastOrder.orderId || 'N/A';
+            document.getElementById('order-total').textContent = `Rs ${lastOrder.total ? lastOrder.total.toFixed(2) : '0.00'}`;
+            
+            // Set payment method
+            const paymentMethodMap = {
+                'cash-on-delivery': 'Cash on Delivery',
+                'bank-transfer': 'Bank Transfer',
+                'jazzcash': 'JazzCash / EasyPaisa'
+            };
+            document.getElementById('payment-method').textContent = paymentMethodMap[lastOrder.paymentMethod] || 'Cash on Delivery';
+            
+            // Load store settings for contact
+            try {
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings'));
+                if (storeSettings) {
+                    if (storeSettings.email) {
+                        document.getElementById('support-email').textContent = storeSettings.email;
+                        document.getElementById('support-email').href = `mailto:${storeSettings.email}`;
+                        document.querySelector('#footer-email span').textContent = storeSettings.email;
+                    }
+                    if (storeSettings.phone) {
+                        document.getElementById('support-phone').textContent = storeSettings.phone;
+                        document.getElementById('support-phone').href = `tel:${storeSettings.phone.replace(/\s/g, '')}`;
+                        document.querySelector('#footer-phone span').textContent = storeSettings.phone;
+                        
+                        // Setup WhatsApp link
+                        const whatsappNumber = storeSettings.phone.replace(/\D/g, '');
+                        const whatsappMessage = `Hi! I just placed an order (${lastOrder.orderId}). Can you please confirm it?`;
+                        document.getElementById('whatsapp-link').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+                    }
+                    if (storeSettings.address) {
+                        document.querySelector('#footer-address span').textContent = storeSettings.address;
+                    }
+                }
+            } catch (e) {
+                console.log('Using default settings');
+            }
+            
+            // Clear order from localStorage after 30 seconds (optional)
+            setTimeout(() => {
+                localStorage.removeItem('lastOrder');
+            }, 30000);
+        });
+    </script>
 </body>
 </html>
