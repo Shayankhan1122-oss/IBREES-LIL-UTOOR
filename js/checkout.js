@@ -280,10 +280,29 @@
             const shipping = subtotal >= 5000 ? 0 : 200;
             const total = subtotal + shipping;
             
+            console.log('=== DEBUG: Order Processing ===');
+            console.log('checkoutState.shippingInfo:', checkoutState.shippingInfo);
+            console.log('firstName:', checkoutState.shippingInfo.firstName);
+            console.log('lastName:', checkoutState.shippingInfo.lastName);
+            
+            // Validate shipping info exists
+            if (!checkoutState.shippingInfo.firstName || !checkoutState.shippingInfo.email) {
+                throw new Error('Shipping information is incomplete. Please go back and fill all required fields.');
+            }
+            
             const orderData = {
                 orderId: 'ORD-' + Date.now(),
                 trackingToken: Math.random().toString(36).substr(2, 9).toUpperCase(),
-                customer: checkoutState.shippingInfo,
+                customer: {
+                    fullName: `${checkoutState.shippingInfo.firstName} ${checkoutState.shippingInfo.lastName}`,
+                    email: checkoutState.shippingInfo.email,
+                    phone: checkoutState.shippingInfo.phone,
+                    address: checkoutState.shippingInfo.address,
+                    city: checkoutState.shippingInfo.city,
+                    state: checkoutState.shippingInfo.state,
+                    zip: checkoutState.shippingInfo.zip,
+                    country: 'Pakistan'
+                },
                 items: cart,
                 paymentMethod: checkoutState.paymentMethod,
                 subtotal: subtotal,
@@ -292,6 +311,10 @@
                 status: 'pending',
                 createdAt: new Date().toISOString()
             };
+            
+            console.log('Order data being sent:', orderData);
+            console.log('Customer fullName:', orderData.customer.fullName);
+            console.log('Customer email:', orderData.customer.email);
             
             // Send order to API
             const response = await fetch('/api/admin/orders', {
@@ -303,6 +326,7 @@
             });
             
             const result = await response.json();
+            console.log('API Response:', result);
             
             if (result.success) {
                 // Save order info for confirmation page
