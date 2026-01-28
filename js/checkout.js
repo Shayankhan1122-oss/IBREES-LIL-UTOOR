@@ -1,4 +1,5 @@
-// Checkout Page JavaScript - Pakistan Only Version
+// Calculate delivery charges based on order amount
+    function calculateDeliveryCharges(subt// Checkout Page JavaScript - Pakistan Only Version
 (function() {
     'use strict';
 
@@ -56,14 +57,40 @@
         calculateAndDisplayTotals();
     }
 
+    // Calculate delivery charges based on order amount
+    function calculateDeliveryCharges(subtotal) {
+        if (subtotal < 500) {
+            return 0; // Will be validated before checkout
+        } else if (subtotal < 1000) {
+            return 0; // FREE - Special Offer
+        } else if (subtotal < 2000) {
+            return 200;
+        } else if (subtotal < 3000) {
+            return 300;
+        } else if (subtotal < 5000) {
+            return 400;
+        } else {
+            return 500;
+        }
+    }
+
     // Calculate and display totals
     function calculateAndDisplayTotals() {
         const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        const shipping = subtotal >= 5000 ? 0 : 200; // Free shipping over Rs 5000
+        const shipping = calculateDeliveryCharges(subtotal);
         const total = subtotal + shipping;
         
         const totalsContainer = document.getElementById('sidebar-order-totals');
         if (!totalsContainer) return;
+        
+        let shippingText = '';
+        if (subtotal < 500) {
+            shippingText = '<span style="color: #dc3545;">Minimum order: Rs 500</span>';
+        } else if (subtotal < 1000) {
+            shippingText = '<span style="color: #28a745; font-weight: 600;">FREE 🎉 Special Offer!</span>';
+        } else {
+            shippingText = `Rs ${shipping.toFixed(2)}`;
+        }
         
         totalsContainer.innerHTML = `
             <div class="summary-row">
@@ -71,10 +98,10 @@
                 <span>Rs ${subtotal.toFixed(2)}</span>
             </div>
             <div class="summary-row">
-                <span>Shipping</span>
-                <span>${shipping === 0 ? 'FREE' : 'Rs ' + shipping.toFixed(2)}</span>
+                <span>Delivery</span>
+                <span>${shippingText}</span>
             </div>
-            ${subtotal >= 5000 ? '<div class="summary-row free-shipping"><span>🎉 You got free shipping!</span></div>' : ''}
+            ${subtotal >= 500 && subtotal < 1000 ? '<div class="summary-row" style="color: #28a745; font-size: 12px;"><span colspan="2">🎉 Special offer: Free delivery for orders Rs 500-999!</span></div>' : ''}
             <div class="summary-row total">
                 <span>Total</span>
                 <span>Rs ${total.toFixed(2)}</span>
@@ -159,29 +186,22 @@
         // Load payment method
         const reviewPaymentContainer = document.getElementById('review-payment-method');
         if (reviewPaymentContainer) {
-            let paymentText = '';
-            switch(checkoutState.paymentMethod) {
-                case 'cash-on-delivery':
-                    paymentText = '💵 Cash on Delivery';
-                    break;
-                case 'bank-transfer':
-                    paymentText = '🏦 Bank Transfer';
-                    break;
-                case 'jazzcash':
-                    paymentText = '📱 JazzCash / EasyPaisa';
-                    break;
-                default:
-                    paymentText = '💵 Cash on Delivery';
-            }
-            reviewPaymentContainer.innerHTML = `<p>${paymentText}</p>`;
+            reviewPaymentContainer.innerHTML = `<p>💵 Cash on Delivery</p>`;
         }
         
         // Load order summary
         const reviewSummaryContainer = document.getElementById('review-order-summary');
         if (reviewSummaryContainer) {
             const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const shipping = subtotal >= 5000 ? 0 : 200;
+            const shipping = calculateDeliveryCharges(subtotal);
             const total = subtotal + shipping;
+            
+            let shippingText = '';
+            if (subtotal < 1000) {
+                shippingText = 'FREE 🎉 (Special Offer)';
+            } else {
+                shippingText = 'Rs ' + shipping.toFixed(2);
+            }
             
             reviewSummaryContainer.innerHTML = `
                 <div class="summary-row">
@@ -189,8 +209,8 @@
                     <span>Rs ${subtotal.toFixed(2)}</span>
                 </div>
                 <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>${shipping === 0 ? 'FREE' : 'Rs ' + shipping.toFixed(2)}</span>
+                    <span>Delivery</span>
+                    <span>${shippingText}</span>
                 </div>
                 <div class="summary-row total">
                     <span><strong>Total Amount</strong></span>
@@ -202,18 +222,92 @@
 
     // Setup checkout event listeners
     function setupCheckoutEventListeners() {
+        // Real-time email validation
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+            emailInput.addEventListener('input', function() {
+                // Convert to lowercase automatically
+                this.value = this.value.toLowerCase();
+            });
+            
+            emailInput.addEventListener('blur', function() {
+                const email = this.value.trim();
+                const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+                if (email && !emailRegex.test(email)) {
+                    this.setCustomValidity('Please enter a valid email address in lowercase');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+        
+        // Real-time phone validation
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function() {
+                // Remove any non-numeric characters except + at start
+                let value = this.value;
+                if (value.startsWith('+')) {
+                    value = '+' + value.slice(1).replace(/\D/g, '');
+                } else {
+                    value = value.replace(/\D/g, '');
+                }
+                this.value = value;
+            });
+            
+            phoneInput.addEventListener('blur', function() {
+                const phone = this.value.trim().replace(/\s/g, '');
+                const phoneRegex = /^(\+92|0)?[0-9]{10}$/;
+                if (phone && !phoneRegex.test(phone)) {
+                    this.setCustomValidity('Enter valid Pakistani phone: +923XXXXXXXXX or 03XXXXXXXXX');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+        
         // Shipping form - Continue to Payment
         const continueToPayment = document.getElementById('continue-to-payment');
         if (continueToPayment) {
             continueToPayment.addEventListener('click', function() {
+                // Check minimum order
+                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                if (subtotal < 500) {
+                    alert('❌ Minimum order amount is Rs 500. Your current cart total is Rs ' + subtotal.toFixed(2) + '. Please add more items to proceed.');
+                    return;
+                }
+                
                 const form = document.getElementById('shipping-form');
+                
+                // Additional validation for email and phone
+                const emailInput = document.getElementById('email');
+                const phoneInput = document.getElementById('phone');
+                
+                // Validate email (must be lowercase and valid format)
+                const email = emailInput.value.trim();
+                const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+                if (!emailRegex.test(email)) {
+                    alert('❌ Please enter a valid email address in lowercase format (e.g., john@example.com)');
+                    emailInput.focus();
+                    return;
+                }
+                
+                // Validate phone (Pakistani format)
+                const phone = phoneInput.value.trim().replace(/\s/g, '');
+                const phoneRegex = /^(\+92|0)?[0-9]{10}$/;
+                if (!phoneRegex.test(phone)) {
+                    alert('❌ Please enter a valid Pakistani phone number\nExamples: +923001234567 or 03001234567');
+                    phoneInput.focus();
+                    return;
+                }
+                
                 if (form.checkValidity()) {
                     const formData = new FormData(form);
                     checkoutState.shippingInfo = {
                         firstName: formData.get('firstName').trim(),
                         lastName: formData.get('lastName').trim(),
-                        email: formData.get('email').trim(),
-                        phone: formData.get('phone').trim(),
+                        email: email.toLowerCase(), // Force lowercase
+                        phone: phone,
                         address: formData.get('address').trim(),
                         city: formData.get('city').trim(),
                         state: formData.get('state'),
@@ -277,7 +371,13 @@
         try {
             // Prepare order data
             const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const shipping = subtotal >= 5000 ? 0 : 200;
+            
+            // Final check for minimum order
+            if (subtotal < 500) {
+                throw new Error('Minimum order amount is Rs 500');
+            }
+            
+            const shipping = calculateDeliveryCharges(subtotal);
             const total = subtotal + shipping;
             
             console.log('=== DEBUG: Order Processing ===');

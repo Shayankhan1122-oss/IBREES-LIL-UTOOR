@@ -76,11 +76,23 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Email Address *</label>
-                                <input type="email" id="email" name="email" required>
+                                <input type="email" id="email" name="email" 
+                                       placeholder="example@email.com" 
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                       title="Please enter a valid email address (lowercase only)"
+                                       style="text-transform: lowercase;"
+                                       required>
+                                <small style="color: #666; font-size: 12px;">Enter email in lowercase (e.g., john@example.com)</small>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number *</label>
-                                <input type="tel" id="phone" name="phone" placeholder="+92 300 1234567" required>
+                                <input type="tel" id="phone" name="phone" 
+                                       placeholder="+92 300 1234567 or 03001234567" 
+                                       pattern="(\+92|0)?[0-9]{10}"
+                                       title="Enter valid Pakistani phone number (e.g., +923001234567 or 03001234567)"
+                                       maxlength="13"
+                                       required>
+                                <small style="color: #666; font-size: 12px;">Pakistani format: +92XXXXXXXXXX or 03XXXXXXXXX</small>
                             </div>
                             <div class="form-group">
                                 <label for="address">Complete Address *</label>
@@ -114,9 +126,17 @@
                             <div class="shipping-info-box">
                                 <i class="fas fa-shipping-fast"></i>
                                 <div>
-                                    <strong>Delivery Information</strong>
-                                    <p>3-5 business days delivery across Pakistan</p>
-                                    <p>Free shipping on orders above Rs 5,000</p>
+                                    <strong>Delivery Charges</strong>
+                                    <p style="margin: 5px 0; font-size: 13px; line-height: 1.6;">
+                                        • Rs 500-999: <strong style="color: #28a745;">FREE 🎉 (Special Offer!)</strong><br>
+                                        • Rs 1,000-1,999: Rs 200<br>
+                                        • Rs 2,000-2,999: Rs 300<br>
+                                        • Rs 3,000-4,999: Rs 400<br>
+                                        • Rs 5,000+: Rs 500
+                                    </p>
+                                    <p style="margin-top: 10px; color: #dc3545; font-weight: 600; font-size: 14px;">
+                                        ⚠️ Minimum order: Rs 500
+                                    </p>
                                 </div>
                             </div>
                             
@@ -130,40 +150,21 @@
                         <form id="payment-form">
                             <div class="payment-options">
                                 <div class="payment-option">
-                                    <input type="radio" id="cash-on-delivery" name="payment" value="cash-on-delivery" checked>
+                                    <input type="radio" id="cash-on-delivery" name="payment" value="cash-on-delivery" checked disabled>
                                     <label for="cash-on-delivery">
                                         <div class="payment-header">
                                             <i class="fas fa-money-bill-wave"></i>
                                             <h3>Cash on Delivery</h3>
                                         </div>
                                         <p>Pay when you receive your order</p>
-                                    </label>
-                                </div>
-                                <div class="payment-option">
-                                    <input type="radio" id="bank-transfer" name="payment" value="bank-transfer">
-                                    <label for="bank-transfer">
-                                        <div class="payment-header">
-                                            <i class="fas fa-university"></i>
-                                            <h3>Bank Transfer</h3>
-                                        </div>
-                                        <p>Direct bank transfer (details will be provided)</p>
-                                    </label>
-                                </div>
-                                <div class="payment-option">
-                                    <input type="radio" id="jazzcash" name="payment" value="jazzcash">
-                                    <label for="jazzcash">
-                                        <div class="payment-header">
-                                            <i class="fas fa-mobile-alt"></i>
-                                            <h3>JazzCash / EasyPaisa</h3>
-                                        </div>
-                                        <p>Mobile wallet payment</p>
+                                        <p style="color: #28a745; font-weight: 600; margin-top: 5px;">✓ Only payment method available</p>
                                     </label>
                                 </div>
                             </div>
                             
                             <div class="secure-payment">
-                                <i class="fas fa-lock"></i>
-                                <span>Your order information is secure</span>
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Pay cash to our delivery person when your order arrives</span>
                             </div>
                             
                             <div class="form-actions">
