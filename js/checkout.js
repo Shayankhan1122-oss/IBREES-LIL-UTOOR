@@ -270,8 +270,12 @@
         const continueToPayment = document.getElementById('continue-to-payment');
         if (continueToPayment) {
             continueToPayment.addEventListener('click', function() {
+                console.log('=== Continue to Payment Clicked ===');
+                
                 // Check minimum order
                 const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                console.log('Cart subtotal:', subtotal);
+                
                 if (subtotal < 500) {
                     alert('❌ Minimum order amount is Rs 500. Your current cart total is Rs ' + subtotal.toFixed(2) + '. Please add more items to proceed.');
                     return;
@@ -285,23 +289,32 @@
                 
                 // Validate email (must be lowercase and valid format)
                 const email = emailInput.value.trim();
+                console.log('Email entered:', email);
+                
                 const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
                 if (!emailRegex.test(email)) {
+                    console.log('Email validation failed');
                     alert('❌ Please enter a valid email address in lowercase format (e.g., john@example.com)');
                     emailInput.focus();
                     return;
                 }
+                console.log('Email validation passed');
                 
                 // Validate phone (Pakistani format)
                 const phone = phoneInput.value.trim().replace(/\s/g, '');
+                console.log('Phone entered:', phone);
+                
                 const phoneRegex = /^(\+92|0)?[0-9]{10}$/;
                 if (!phoneRegex.test(phone)) {
+                    console.log('Phone validation failed');
                     alert('❌ Please enter a valid Pakistani phone number\nExamples: +923001234567 or 03001234567');
                     phoneInput.focus();
                     return;
                 }
+                console.log('Phone validation passed');
                 
                 if (form.checkValidity()) {
+                    console.log('Form is valid, proceeding...');
                     const formData = new FormData(form);
                     checkoutState.shippingInfo = {
                         firstName: formData.get('firstName').trim(),
@@ -315,8 +328,10 @@
                         country: 'Pakistan'
                     };
                     
+                    console.log('Shipping info saved:', checkoutState.shippingInfo);
                     showStep(2);
                 } else {
+                    console.log('Form validation failed');
                     form.reportValidity();
                 }
             });
