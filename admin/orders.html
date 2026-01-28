@@ -384,7 +384,8 @@
             <div class="controls">
                 <input type="text" id="search" placeholder="Search by order ID or customer..." onkeyup="filterOrders()">
                 <select id="status-filter" onchange="filterOrders()">
-                    <option value="">All Status</option>
+                    <option value="active">Active Orders</option>
+                    <option value="">All Orders</option>
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>
                     <option value="processing">Processing</option>
@@ -478,7 +479,15 @@
             filteredOrders = allOrders.filter(o => {
                 const matchSearch = o.orderId.toLowerCase().includes(search) || 
                                    (o.customer && o.customer.fullName && o.customer.fullName.toLowerCase().includes(search));
-                const matchStatus = !status || o.status === status;
+                
+                let matchStatus = true;
+                if (status === 'active') {
+                    // Show only active orders (not delivered or cancelled)
+                    matchStatus = o.status !== 'delivered' && o.status !== 'cancelled';
+                } else if (status) {
+                    matchStatus = o.status === status;
+                }
+                
                 return matchSearch && matchStatus;
             });
             
