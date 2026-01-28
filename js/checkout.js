@@ -1,5 +1,4 @@
-// Calculate delivery charges based on order amount
-    function calculateDeliveryCharges(subt// Checkout Page JavaScript - Pakistan Only Version
+// Checkout Page JavaScript - Pakistan Only Version
 (function() {
     'use strict';
 
@@ -38,6 +37,23 @@
         setupCheckoutEventListeners();
     });
 
+    // Calculate delivery charges based on order amount
+    function calculateDeliveryCharges(subtotal) {
+        if (subtotal < 500) {
+            return 0; // Will be validated before checkout
+        } else if (subtotal < 1000) {
+            return 0; // FREE - Special Offer
+        } else if (subtotal < 2000) {
+            return 200;
+        } else if (subtotal < 3000) {
+            return 300;
+        } else if (subtotal < 5000) {
+            return 400;
+        } else {
+            return 500;
+        }
+    }
+
     // Load cart items in sidebar
     function loadCartItemsInSidebar() {
         const sidebarItemsContainer = document.getElementById('sidebar-order-items');
@@ -55,23 +71,6 @@
         
         // Calculate and display totals
         calculateAndDisplayTotals();
-    }
-
-    // Calculate delivery charges based on order amount
-    function calculateDeliveryCharges(subtotal) {
-        if (subtotal < 500) {
-            return 0; // Will be validated before checkout
-        } else if (subtotal < 1000) {
-            return 0; // FREE - Special Offer
-        } else if (subtotal < 2000) {
-            return 200;
-        } else if (subtotal < 3000) {
-            return 300;
-        } else if (subtotal < 5000) {
-            return 400;
-        } else {
-            return 500;
-        }
     }
 
     // Calculate and display totals
@@ -341,10 +340,7 @@
         const continueToReview = document.getElementById('continue-to-review');
         if (continueToReview) {
             continueToReview.addEventListener('click', function() {
-                const selectedPayment = document.querySelector('input[name="payment"]:checked');
-                if (selectedPayment) {
-                    checkoutState.paymentMethod = selectedPayment.value;
-                }
+                checkoutState.paymentMethod = 'cash-on-delivery';
                 showStep(3);
             });
         }
@@ -419,7 +415,7 @@
                     country: 'Pakistan'
                 },
                 items: cart,
-                paymentMethod: checkoutState.paymentMethod,
+                paymentMethod: 'cash-on-delivery',
                 subtotal: subtotal,
                 shipping: shipping,
                 total: total,
@@ -449,7 +445,7 @@
                     orderId: orderData.orderId,
                     trackingToken: orderData.trackingToken,
                     total: total,
-                    paymentMethod: checkoutState.paymentMethod
+                    paymentMethod: 'cash-on-delivery'
                 }));
                 
                 // Clear cart
