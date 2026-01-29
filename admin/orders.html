@@ -634,25 +634,38 @@
             if (!confirm(confirmMessage[newStatus])) return;
             
             try {
-                // Update order status in memory
-                const orderIndex = allOrders.findIndex(o => o.orderId === orderId);
-                if (orderIndex !== -1) {
-                    allOrders[orderIndex].status = newStatus;
+                // Call API to update order status
+                const response = await fetch('/api/admin/orders', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        status: newStatus
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update local order array
+                    const orderIndex = allOrders.findIndex(o => o.orderId === orderId);
+                    if (orderIndex !== -1) {
+                        allOrders[orderIndex].status = newStatus;
+                        allOrders[orderIndex].updatedAt = new Date().toISOString();
+                    }
                     
                     alert(`✅ Order ${orderId} status updated to: ${capitalize(newStatus)}`);
                     
                     // Refresh display
                     closeModal();
                     filterOrders();
-                    
-                    // In production, this would call an API to update the database
-                    // await fetch('/api/admin/orders/update-status', {
-                    //     method: 'POST',
-                    //     body: JSON.stringify({ orderId, status: newStatus })
-                    // });
+                } else {
+                    throw new Error(result.error || 'Failed to update order status');
                 }
             } catch (error) {
-                alert('❌ Failed to update order status');
+                alert('❌ Failed to update order status: ' + error.message);
                 console.error(error);
             }
         }

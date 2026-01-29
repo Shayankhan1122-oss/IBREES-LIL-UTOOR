@@ -94,6 +94,56 @@ export default function handler(req, res) {
         });
     }
     
+    // PUT - Update order status
+    if (req.method === 'PUT') {
+        try {
+            const { orderId, status } = req.body;
+            
+            // Validate required fields
+            if (!orderId || !status) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Order ID and status are required'
+                });
+            }
+            
+            // Find order
+            const orderIndex = orders.findIndex(o => o.orderId === orderId);
+            
+            if (orderIndex === -1) {
+                return res.status(404).json({
+                    success: false,
+                    error: 'Order not found'
+                });
+            }
+            
+            // Update order status
+            orders[orderIndex].status = status;
+            orders[orderIndex].updatedAt = new Date().toISOString();
+            
+            // Log status change
+            console.log('=== ORDER STATUS UPDATED ===');
+            console.log('Order ID:', orderId);
+            console.log('New Status:', status);
+            console.log('Updated At:', orders[orderIndex].updatedAt);
+            console.log('==========================');
+            
+            // Return success
+            return res.status(200).json({
+                success: true,
+                message: 'Order status updated successfully',
+                order: orders[orderIndex]
+            });
+            
+        } catch (error) {
+            console.error('Order update error:', error);
+            return res.status(500).json({
+                success: false,
+                error: 'Failed to update order status'
+            });
+        }
+    }
+    
     // Method not allowed
     return res.status(405).json({
         success: false,
