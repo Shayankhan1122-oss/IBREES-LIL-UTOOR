@@ -6,6 +6,138 @@
     <title>IBREES LIL UTOOR - Premium Products</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* Header Section with Welcome Text and Navigation */
+        .top-header {
+            background: white;
+            padding: 30px 0 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .welcome-section h1 {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .welcome-section p {
+            font-size: 24px;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .navbar {
+            background: transparent;
+            padding: 0;
+            box-shadow: none;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            display: none;
+        }
+
+        .navbar .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar .nav-menu li a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .navbar .nav-menu li a:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Hero Section with Logo */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 0;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero .logo-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .hero .logo-container img {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+        }
+
+        .hero .logo-placeholder {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .hero .logo-placeholder h2 {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .hero .logo-placeholder p {
+            font-size: 20px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-section h1 {
+                font-size: 32px;
+            }
+            
+            .welcome-section p {
+                font-size: 18px;
+            }
+
+            .navbar .nav-menu {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .navbar .nav-menu li a {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            .hero {
+                padding: 50px 20px;
+                min-height: 300px;
+            }
+        }
+
         /* Mobile-Friendly Horizontal Categories */
         .categories {
             padding: 40px 0;
@@ -144,27 +276,42 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
+    <!-- Top Header with Welcome Text -->
+    <div class="top-header">
         <div class="container">
-            <div class="logo">
-                <h1><a href="index.html">IBREES LIL UTOOR</a></h1>
+            <div class="welcome-section">
+                <h1>Welcome to IBREES LIL UTOOR</h1>
+                <p>Premium Products for Every Need</p>
             </div>
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="category.html">Shop</a></li>
-                <li><a href="track-order.html">Track Order</a></li>
-                <li><a href="cart.html">🛒 Cart</a></li>
-            </ul>
+            
+            <!-- Navigation -->
+            <nav class="navbar">
+                <div class="container">
+                    <ul class="nav-menu">
+                        <li><a href="index.html">🏠 Home</a></li>
+                        <li><a href="category.html">🛍️ Shop</a></li>
+                        <li><a href="track-order.html">📦 Track Order</a></li>
+                        <li><a href="cart.html">🛒 Cart</a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
-    </nav>
+    </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Logo -->
     <section class="hero">
         <div class="container">
-            <h1>Welcome to IBREES LIL UTOOR</h1>
-            <p>Premium Products for Every Need</p>
-            <a href="category.html" class="btn-primary">Shop Now</a>
+            <div class="logo-container">
+                <!-- Replace this img src with your actual logo path -->
+                <img id="store-logo" src="images/logo.png" alt="IBREES LIL UTOOR Logo" 
+                     onerror="this.style.display='none'; document.querySelector('.logo-placeholder').style.display='block';">
+                
+                <!-- Placeholder if logo image not found -->
+                <div class="logo-placeholder" style="display: none;">
+                    <h2>IBREES LIL UTOOR</h2>
+                    <p>Your Premium Store</p>
+                </div>
+            </div>
         </div>
     </section>
 
