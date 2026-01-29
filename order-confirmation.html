@@ -312,6 +312,10 @@
 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
+                    <a href="#" class="btn btn-success" id="track-order-btn">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Track Your Order
+                    </a>
                     <a href="index.html" class="btn btn-primary">
                         <i class="fas fa-home"></i>
                         Continue Shopping
@@ -390,6 +394,12 @@
             // Display order details
             document.getElementById('order-id').textContent = lastOrder.orderId || 'N/A';
             document.getElementById('order-total').textContent = `Rs ${lastOrder.total ? lastOrder.total.toFixed(2) : '0.00'}`;
+            
+            // Setup track order button
+            const trackOrderBtn = document.getElementById('track-order-btn');
+            if (trackOrderBtn && lastOrder.orderId) {
+                trackOrderBtn.href = `track-order.html?order=${lastOrder.orderId}`;
+            }
             
             // Set payment method
             const paymentMethodMap = {
