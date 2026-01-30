@@ -1,4 +1,4 @@
-// Admin Management for IBREES-LIL-UTOOR
+// Admin Management for       IBREES-LIL-HUZAIFA
 // Ensures only one admin can be registered
 
 const User = require('../models/User');

@@ -1,4 +1,4 @@
-// Performance Optimization for IBREES-LIL-UTOOR
+// Performance Optimization for       IBREES-LIL-HUZAIFA
 // This file contains optimization techniques for the e-commerce website
 
 // 1. Image optimization functions
@@ -294,7 +294,7 @@ if (document.readyState === 'loading') {
 // Additional performance tips as comments:
 
 /*
-PERFORMANCE OPTIMIZATION TIPS FOR IBREES-LIL-UTOOR:
+PERFORMANCE OPTIMIZATION TIPS FOR       IBREES-LIL-HUZAIFA:
 
 1. IMAGE OPTIMIZATION:
    - Use WebP format for images (with fallbacks)

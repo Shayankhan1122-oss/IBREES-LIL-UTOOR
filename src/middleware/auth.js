@@ -1,4 +1,4 @@
-// Authentication Middleware for IBREES-LIL-UTOOR
+// Authentication Middleware for       IBREES-LIL-HUZAIFA
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');

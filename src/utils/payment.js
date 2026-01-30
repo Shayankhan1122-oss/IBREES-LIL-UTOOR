@@ -1,4 +1,4 @@
-// Payment Integration for IBREES-LIL-UTOOR
+// Payment Integration for       IBREES-LIL-HUZAIFA
 // This is a simplified version for demonstration purposes
 
 // Stripe payment integration

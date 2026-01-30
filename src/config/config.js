@@ -1,4 +1,4 @@
-// Configuration for IBREES-LIL-UTOOR
+// Configuration for       IBREES-LIL-HUZAIFA
 
 // Environment variables
 require('dotenv').config();

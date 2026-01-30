@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is **IBREES-LIL-UTOOR** - a serverless e-commerce webstore deployed on Vercel with a **guest checkout-only** model (no customer registration required). The project uses vanilla JavaScript frontend with Vercel serverless functions for the backend API.
+This is **      IBREES-LIL-HUZAIFA** - a serverless e-commerce webstore deployed on Vercel with a **guest checkout-only** model (no customer registration required). The project uses vanilla JavaScript frontend with Vercel serverless functions for the backend API.
 
 ## Development Commands
 

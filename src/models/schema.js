@@ -1,4 +1,4 @@
-// Database Schema for IBREES-LIL-UTOOR
+// Database Schema for       IBREES-LIL-HUZAIFA
 // This is a conceptual schema for MongoDB using Mongoose
 
 const mongoose = require('mongoose');

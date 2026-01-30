@@ -1,4 +1,4 @@
-// Main JavaScript file for IBREES-LIL-UTOOR
+// Main JavaScript file for       IBREES-LIL-HUZAIFA
 
 // Cart functionality
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
