@@ -180,9 +180,9 @@
             overflow: hidden;
             letter-spacing: 1px;
             text-transform: uppercase;
-            border: 2px solid transparent;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            border: 2px solid #d4af37;
+            background: white;
+            display: inline-block;
         }
 
         .navbar .nav-menu li a::before {
@@ -206,6 +206,11 @@
 
         .navbar .nav-menu li a:hover::before {
             left: 0;
+        }
+
+        .navbar .nav-menu li a span {
+            position: relative;
+            z-index: 1;
         }
 
         /* Hero Section with Logo */
