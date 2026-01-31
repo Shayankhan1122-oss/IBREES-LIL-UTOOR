@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout -       IBREES-LIL-HUZAIFA</title>
+    <title>Checkout - IBREES-LIL-HUZAIFA</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/checkout.css">
@@ -13,7 +13,7 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <h1><a href="index.html">IBREES LIL UTOOR</a></h1>
+                <h1><a href="index.html">IBREES LIL HUZAIFA</a></h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
@@ -86,12 +86,18 @@
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number *</label>
-                                <input type="tel" id="phone" name="phone" 
-                                       placeholder="+92 300 1234567 or 03001234567" 
-                                       title="Enter valid Pakistani phone number (e.g., +923001234567 or 03001234567)"
-                                       maxlength="13"
-                                       required>
-                                <small style="color: #666; font-size: 12px;">Pakistani format: +92XXXXXXXXXX or 03XXXXXXXXX</small>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <input type="text" value="+92" readonly 
+                                           style="width: 60px; background: #f0f0f0; text-align: center; font-weight: 600; border: 1px solid #ddd; padding: 10px; border-radius: 4px; font-size: 14px;">
+                                    <input type="tel" id="phone" name="phone" 
+                                           placeholder="3001234567" 
+                                           pattern="[0-9]{10}"
+                                           title="Enter 10 digit number (e.g., 3001234567)"
+                                           maxlength="10"
+                                           style="flex: 1;"
+                                           required>
+                                </div>
+                                <small style="color: #666; font-size: 12px;">Enter 10 digits without +92 (e.g., 3001234567)</small>
                             </div>
                             <div class="form-group">
                                 <label for="address">Complete Address *</label>
@@ -243,7 +249,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>      IBREES-LIL-HUZAIFA</h3>
+                    <h3>IBREES-LIL-HUZAIFA</h3>
                     <p>Premium products for every need. Quality guaranteed.</p>
                 </div>
                 <div class="footer-section">
@@ -267,7 +273,7 @@
                 <div class="footer-section">
                     <h4>Contact Us</h4>
                     <ul>
-                        <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
+                        <li id="footer-email">📧 <span>support@ibreeslilhuzaifa.com</span></li>
                         <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
                         <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
                         <li><a href="/admin/" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
@@ -275,7 +281,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 IBREES LIL UTOOR. All rights reserved.</p>
+                <p>&copy; 2026 IBREES LIL HUZAIFA. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -316,6 +322,56 @@
         
         .btn-place-order i {
             margin-right: 8px;
+        }
+
+        /* Quantity Selector Styles */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .quantity-selector button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .quantity-selector button:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .quantity-selector button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f0f0f0;
+        }
+
+        .quantity-selector input {
+            width: 60px;
+            height: 32px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .quantity-selector label {
+            font-size: 13px;
+            color: #666;
+            margin-right: 5px;
         }
     </style>
 
