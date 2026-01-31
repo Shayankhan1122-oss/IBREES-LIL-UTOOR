@@ -902,25 +902,64 @@
             }
         }
 
-        // Load featured products
+        // Load featured products (most ordered)
         async function loadFeaturedProducts() {
             try {
-                const response = await fetch('/api/admin/products');
-                const data = await response.json();
+                // Fetch both products and orders
+                const [productsResponse, ordersResponse] = await Promise.all([
+                    fetch('/api/admin/products'),
+                    fetch('/api/admin/orders')
+                ]);
                 
-                let products = [];
-                if (data.success && data.products) {
-                    products = data.products.slice(0, 4);
-                } else if (Array.isArray(data)) {
-                    products = data.slice(0, 4);
+                const productsData = await productsResponse.json();
+                const ordersData = await ordersResponse.json();
+                
+                // Get all products
+                let allProducts = [];
+                if (productsData.success && productsData.products) {
+                    allProducts = productsData.products;
+                } else if (Array.isArray(productsData)) {
+                    allProducts = productsData;
                 }
                 
+                // Get all orders
+                let allOrders = [];
+                if (ordersData.success && ordersData.orders) {
+                    allOrders = ordersData.orders;
+                } else if (Array.isArray(ordersData)) {
+                    allOrders = ordersData;
+                }
+                
+                // Calculate order count for each product
+                const productOrderCount = {};
+                allOrders.forEach(order => {
+                    if (order.items && Array.isArray(order.items)) {
+                        order.items.forEach(item => {
+                            const productId = item.id || item.productId;
+                            if (productId) {
+                                productOrderCount[productId] = (productOrderCount[productId] || 0) + (item.quantity || 1);
+                            }
+                        });
+                    }
+                });
+                
+                // Add order count to products and sort by most ordered
+                allProducts.forEach(product => {
+                    product.orderCount = productOrderCount[product.id] || 0;
+                });
+                
+                // Sort by order count (most ordered first) and get top 4
+                const featuredProducts = allProducts
+                    .sort((a, b) => b.orderCount - a.orderCount)
+                    .slice(0, 4);
+                
                 const grid = document.getElementById('featured-products-grid');
-                if (products.length > 0) {
-                    grid.innerHTML = products.map(product => `
+                if (featuredProducts.length > 0) {
+                    grid.innerHTML = featuredProducts.map(product => `
                         <div class="product-card">
                             <div class="image-container">
                                 <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22280%22 height=%22280%22%3E%3Crect fill=%22%23e0e0e0%22 width=%22280%22 height=%22280%22/%3E%3Ctext fill=%22%23999%22 font-family=%22Arial%22 font-size=%2216%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${product.name}%3C/text%3E%3C/svg%3E'">
+                                ${product.orderCount > 0 ? `<div style="position: absolute; top: 10px; right: 10px; background: #d4af37; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">🔥 ${product.orderCount} sold</div>` : ''}
                             </div>
                             <div class="content">
                                 <h3>${product.name}</h3>
