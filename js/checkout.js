@@ -1,4 +1,4 @@
-// Checkout Page JavaScript - Pakistan Only Version
+// Checkout Page JavaScript - Complete Version with Quantity Selectors
 (function() {
     'use strict';
 
@@ -8,7 +8,7 @@
     }
 
     // Use real cart data
-    const cart = getCartData();
+    let cart = getCartData();
 
     // Checkout state
     let checkoutState = {
@@ -18,388 +18,308 @@
         orderPlaced: false
     };
 
-    // DOM Content Loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check if cart is empty
-        if (cart.length === 0) {
-            alert('Your cart is empty!');
-            window.location.href = 'category.html';
-            return;
-        }
-        
-        // Load cart items in sidebar
-        loadCartItemsInSidebar();
-        
-        // Initialize checkout steps
-        initializeCheckoutSteps();
-        
-        // Setup event listeners
-        setupCheckoutEventListeners();
-    });
-
     // Calculate delivery charges based on order amount
     function calculateDeliveryCharges(subtotal) {
         if (subtotal < 500) {
-            return 0; // Will be validated before checkout
-        } else if (subtotal < 1000) {
-            return 0; // FREE - Special Offer
-        } else if (subtotal < 2000) {
-            return 200;
-        } else if (subtotal < 3000) {
-            return 300;
-        } else if (subtotal < 5000) {
-            return 400;
-        } else {
+            return 0; // Below minimum order
+        } else if (subtotal >= 500 && subtotal < 2000) {
+            return 250; // Rs 250 for Rs 500-1999
+        } else if (subtotal >= 2000 && subtotal < 3000) {
+            return 350;
+        } else if (subtotal >= 3000 && subtotal < 5000) {
             return 500;
+        } else {
+            return 0; // FREE for orders 5000+
         }
     }
 
-    // Load cart items in sidebar
-    function loadCartItemsInSidebar() {
-        const sidebarItemsContainer = document.getElementById('sidebar-order-items');
-        if (!sidebarItemsContainer) return;
+    // Calculate order totals
+    function calculateTotals() {
+        const subtotal = cart.reduce((sum, item) => {
+            return sum + (item.price * (item.quantity || 1));
+        }, 0);
         
-        sidebarItemsContainer.innerHTML = cart.map(item => `
-            <div class="sidebar-item">
-                <div class="sidebar-item-info">
-                    <span class="sidebar-item-name">${item.name}</span>
-                    <span class="sidebar-item-qty">x${item.quantity}</span>
+        const deliveryCharges = calculateDeliveryCharges(subtotal);
+        const total = subtotal + deliveryCharges;
+        
+        return { subtotal, deliveryCharges, total };
+    }
+
+    // Update product quantity in cart
+    window.updateProductQuantity = function(productId, change) {
+        const productIndex = cart.findIndex(item => item.id === productId);
+        
+        if (productIndex !== -1) {
+            cart[productIndex].quantity = (cart[productIndex].quantity || 1) + change;
+            
+            // Remove if quantity becomes 0
+            if (cart[productIndex].quantity <= 0) {
+                cart.splice(productIndex, 1);
+            }
+            
+            // Save cart
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Reload page to update everything
+            location.reload();
+        }
+    };
+
+    // Display order summary in sidebar
+    function displayOrderSummary() {
+        const sidebarItems = document.getElementById('sidebar-order-items');
+        const sidebarTotals = document.getElementById('sidebar-order-totals');
+        
+        if (!sidebarItems || !sidebarTotals) return;
+        
+        // Display items with quantity selectors
+        if (cart.length === 0) {
+            sidebarItems.innerHTML = '<p style="text-align: center; color: #999;">Your cart is empty</p>';
+            sidebarTotals.innerHTML = '';
+            return;
+        }
+        
+        sidebarItems.innerHTML = cart.map(item => `
+            <div class="summary-item" style="display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid #eee;">
+                <img src="${item.image}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;" 
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect fill=%22%23ddd%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E'">
+                <div style="flex: 1;">
+                    <h4 style="margin-bottom: 5px; font-size: 14px;">${item.name}</h4>
+                    <p style="color: #3498db; font-weight: 600; margin-bottom: 8px;">Rs ${item.price.toFixed(2)}</p>
+                    <div class="quantity-selector" style="display: flex; align-items: center; gap: 8px;">
+                        <label style="font-size: 13px; color: #666;">Qty:</label>
+                        <button onclick="updateProductQuantity(${item.id}, -1)" 
+                                ${(item.quantity || 1) <= 1 ? 'disabled' : ''}
+                                style="width: 28px; height: 28px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: 16px;">−</button>
+                        <input type="number" value="${item.quantity || 1}" readonly 
+                               style="width: 50px; height: 28px; text-align: center; border: 1px solid #ddd; border-radius: 4px; font-weight: 600;">
+                        <button onclick="updateProductQuantity(${item.id}, 1)" 
+                                style="width: 28px; height: 28px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: 16px;">+</button>
+                    </div>
                 </div>
-                <span class="sidebar-item-price">Rs ${(item.price * item.quantity).toFixed(2)}</span>
+                <div style="text-align: right;">
+                    <p style="font-weight: 600; color: #2c3e50;">Rs ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                </div>
             </div>
         `).join('');
         
-        // Calculate and display totals
-        calculateAndDisplayTotals();
-    }
-
-    // Calculate and display totals
-    function calculateAndDisplayTotals() {
-        const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        const shipping = calculateDeliveryCharges(subtotal);
-        const total = subtotal + shipping;
+        // Display totals
+        const { subtotal, deliveryCharges, total } = calculateTotals();
         
-        const totalsContainer = document.getElementById('sidebar-order-totals');
-        if (!totalsContainer) return;
-        
-        let shippingText = '';
-        if (subtotal < 500) {
-            shippingText = '<span style="color: #dc3545;">Minimum order: Rs 500</span>';
-        } else if (subtotal < 1000) {
-            shippingText = '<span style="color: #28a745; font-weight: 600;">FREE 🎉 Special Offer!</span>';
-        } else {
-            shippingText = `Rs ${shipping.toFixed(2)}`;
+        let deliveryText = `Rs ${deliveryCharges.toFixed(2)}`;
+        if (subtotal >= 5000) {
+            deliveryText = '<span style="color: #28a745; font-weight: 600;">FREE 🎉</span>';
         }
         
-        totalsContainer.innerHTML = `
-            <div class="summary-row">
-                <span>Subtotal</span>
-                <span>Rs ${subtotal.toFixed(2)}</span>
+        sidebarTotals.innerHTML = `
+            <div class="summary-row" style="display: flex; justify-content: space-between; padding: 10px 15px;">
+                <span>Subtotal:</span>
+                <span style="font-weight: 600;">Rs ${subtotal.toFixed(2)}</span>
             </div>
-            <div class="summary-row">
-                <span>Delivery</span>
-                <span>${shippingText}</span>
+            <div class="summary-row" style="display: flex; justify-content: space-between; padding: 10px 15px;">
+                <span>Delivery:</span>
+                <span style="font-weight: 600;">${deliveryText}</span>
             </div>
-            ${subtotal >= 500 && subtotal < 1000 ? '<div class="summary-row" style="color: #28a745; font-size: 12px;"><span colspan="2">🎉 Special offer: Free delivery for orders Rs 500-999!</span></div>' : ''}
-            <div class="summary-row total">
-                <span>Total</span>
-                <span>Rs ${total.toFixed(2)}</span>
+            <div class="summary-row total" style="display: flex; justify-content: space-between; padding: 15px; background: #f8f9fa; border-top: 2px solid #ddd; font-size: 18px; font-weight: 700;">
+                <span>Total:</span>
+                <span style="color: #3498db;">Rs ${total.toFixed(2)}</span>
             </div>
         `;
     }
 
-    // Initialize checkout steps
-    function initializeCheckoutSteps() {
-        // Show first step
-        showStep(1);
-    }
-
-    // Show specific step
-    function showStep(stepNumber) {
+    // Switch checkout step
+    function switchStep(step) {
         // Update step indicators
-        document.querySelectorAll('.step').forEach(step => {
-            const stepNum = parseInt(step.getAttribute('data-step'));
-            step.classList.remove('active');
-            if (stepNum === stepNumber) {
-                step.classList.add('active');
-            }
-        });
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
         
-        // Show step content
-        document.querySelectorAll('.checkout-step').forEach(step => {
-            step.classList.remove('active');
-        });
+        // Update form sections
+        document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('active'));
+        document.getElementById(`step-${step}`).classList.add('active');
         
-        const currentStep = document.getElementById(`step-${stepNumber}`);
-        if (currentStep) {
-            currentStep.classList.add('active');
-        }
-        
-        // Update checkout state
-        checkoutState.step = stepNumber;
-        
-        // Special handling for review step
-        if (stepNumber === 3) {
-            loadReviewData();
-        }
+        checkoutState.step = step;
         
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Load review data
-    function loadReviewData() {
-        // Load order items
-        const reviewItemsContainer = document.getElementById('review-order-items');
-        if (reviewItemsContainer) {
-            reviewItemsContainer.innerHTML = cart.map(item => `
-                <div class="order-item">
-                    <div class="order-item-image">
-                        <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect fill=%22%23ddd%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E'">
+    // Validate email format (lowercase)
+    function validateEmail(email) {
+        const emailLower = email.toLowerCase();
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+        return emailRegex.test(emailLower);
+    }
+
+    // Validate phone number (Pakistani format)
+    function validatePhone(phone) {
+        // Remove spaces and check if it's 10 digits
+        const cleanPhone = phone.replace(/\s/g, '');
+        const phoneRegex = /^[0-9]{10}$/;
+        return phoneRegex.test(cleanPhone);
+    }
+
+    // Step 1: Shipping Information
+    document.getElementById('continue-to-payment')?.addEventListener('click', function() {
+        const firstName = document.getElementById('first-name').value.trim();
+        const lastName = document.getElementById('last-name').value.trim();
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const phone = document.getElementById('phone').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value;
+        const zip = document.getElementById('zip').value.trim();
+        
+        // Validate all fields
+        if (!firstName || !lastName || !email || !phone || !address || !city || !state) {
+            alert('❌ Please fill in all required fields');
+            return;
+        }
+        
+        // Validate email
+        if (!validateEmail(email)) {
+            alert('❌ Please enter a valid email address in lowercase format (e.g., john@example.com)');
+            document.getElementById('email').focus();
+            return;
+        }
+        
+        // Validate phone
+        if (!validatePhone(phone)) {
+            alert('❌ Please enter a valid 10-digit phone number (e.g., 3001234567)');
+            document.getElementById('phone').focus();
+            return;
+        }
+        
+        // Check minimum order
+        const { subtotal } = calculateTotals();
+        if (subtotal < 500) {
+            alert(`❌ Minimum order amount is Rs 500. Your current cart total is Rs ${subtotal.toFixed(2)}. Please add more items to proceed.`);
+            return;
+        }
+        
+        // Save shipping info with +92 prefix for phone
+        checkoutState.shippingInfo = {
+            firstName,
+            lastName,
+            email,
+            phone: '+92' + phone, // Add +92 prefix
+            address,
+            city,
+            state,
+            zip,
+            country: 'Pakistan'
+        };
+        
+        switchStep(2);
+    });
+
+    // Step 2: Payment Method
+    document.getElementById('back-to-shipping')?.addEventListener('click', function() {
+        switchStep(1);
+    });
+
+    document.getElementById('continue-to-review')?.addEventListener('click', function() {
+        checkoutState.paymentMethod = 'cash-on-delivery';
+        displayReviewOrder();
+        switchStep(3);
+    });
+
+    // Display review order
+    function displayReviewOrder() {
+        // Display order items
+        const reviewItems = document.getElementById('review-order-items');
+        if (reviewItems) {
+            reviewItems.innerHTML = cart.map(item => `
+                <div style="display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid #eee;">
+                    <img src="${item.image}" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;"
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect fill=%22%23ddd%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E'">
+                    <div style="flex: 1;">
+                        <h4>${item.name}</h4>
+                        <p style="color: #666; margin: 5px 0;">Quantity: ${item.quantity || 1}</p>
+                        <p style="color: #3498db; font-weight: 600;">Rs ${item.price.toFixed(2)} × ${item.quantity || 1}</p>
                     </div>
-                    <div class="order-item-details">
-                        <div class="order-item-name">${item.name}</div>
-                        <div class="order-item-price">Rs ${item.price.toFixed(2)}</div>
-                        <div class="order-item-quantity">Quantity: ${item.quantity}</div>
+                    <div style="text-align: right; font-weight: 600;">
+                        Rs ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
                     </div>
-                    <div class="order-item-total">Rs ${(item.price * item.quantity).toFixed(2)}</div>
                 </div>
             `).join('');
         }
         
-        // Load shipping address
-        const reviewAddressContainer = document.getElementById('review-shipping-address');
-        if (reviewAddressContainer && checkoutState.shippingInfo) {
+        // Display shipping address
+        const reviewAddress = document.getElementById('review-shipping-address');
+        if (reviewAddress && checkoutState.shippingInfo) {
             const info = checkoutState.shippingInfo;
-            reviewAddressContainer.innerHTML = `
+            reviewAddress.innerHTML = `
                 <p><strong>${info.firstName} ${info.lastName}</strong></p>
                 <p>${info.address}</p>
-                <p>${info.city}, ${info.state}</p>
-                ${info.zip ? `<p>Postal Code: ${info.zip}</p>` : ''}
-                <p>Pakistan</p>
+                <p>${info.city}, ${info.state} ${info.zip}</p>
+                <p>${info.country}</p>
                 <p>📱 ${info.phone}</p>
                 <p>📧 ${info.email}</p>
             `;
         }
         
-        // Load payment method
-        const reviewPaymentContainer = document.getElementById('review-payment-method');
-        if (reviewPaymentContainer) {
-            reviewPaymentContainer.innerHTML = `<p>💵 Cash on Delivery</p>`;
+        // Display payment method
+        const reviewPayment = document.getElementById('review-payment-method');
+        if (reviewPayment) {
+            reviewPayment.innerHTML = `
+                <p><i class="fas fa-money-bill-wave"></i> <strong>Cash on Delivery</strong></p>
+                <p style="color: #666; margin-top: 5px;">Pay when you receive your order</p>
+            `;
         }
         
-        // Load order summary
-        const reviewSummaryContainer = document.getElementById('review-order-summary');
-        if (reviewSummaryContainer) {
-            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-            const shipping = calculateDeliveryCharges(subtotal);
-            const total = subtotal + shipping;
+        // Display order summary
+        const reviewSummary = document.getElementById('review-order-summary');
+        if (reviewSummary) {
+            const { subtotal, deliveryCharges, total } = calculateTotals();
             
-            let shippingText = '';
-            if (subtotal < 1000) {
-                shippingText = 'FREE 🎉 (Special Offer)';
-            } else {
-                shippingText = 'Rs ' + shipping.toFixed(2);
+            let deliveryText = `Rs ${deliveryCharges.toFixed(2)}`;
+            if (subtotal >= 5000) {
+                deliveryText = '<span style="color: #28a745; font-weight: 600;">FREE 🎉</span>';
             }
             
-            reviewSummaryContainer.innerHTML = `
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>Rs ${subtotal.toFixed(2)}</span>
+            reviewSummary.innerHTML = `
+                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                    <span>Subtotal:</span>
+                    <span style="font-weight: 600;">Rs ${subtotal.toFixed(2)}</span>
                 </div>
-                <div class="summary-row">
-                    <span>Delivery</span>
-                    <span>${shippingText}</span>
+                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                    <span>Delivery Charges:</span>
+                    <span style="font-weight: 600;">${deliveryText}</span>
                 </div>
-                <div class="summary-row total">
-                    <span><strong>Total Amount</strong></span>
-                    <span><strong>Rs ${total.toFixed(2)}</strong></span>
+                <div style="display: flex; justify-content: space-between; padding: 15px 0; border-top: 2px solid #ddd; font-size: 20px; font-weight: 700;">
+                    <span>Total:</span>
+                    <span style="color: #3498db;">Rs ${total.toFixed(2)}</span>
                 </div>
             `;
         }
     }
 
-    // Setup checkout event listeners
-    function setupCheckoutEventListeners() {
-        // Real-time email validation
-        const emailInput = document.getElementById('email');
-        if (emailInput) {
-            emailInput.addEventListener('input', function() {
-                // Convert to lowercase automatically
-                this.value = this.value.toLowerCase();
-            });
-            
-            emailInput.addEventListener('blur', function() {
-                const email = this.value.trim();
-                const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-                if (email && !emailRegex.test(email)) {
-                    this.setCustomValidity('Please enter a valid email address in lowercase');
-                } else {
-                    this.setCustomValidity('');
-                }
-            });
+    // Step 3: Review and Place Order
+    document.getElementById('back-to-payment')?.addEventListener('click', function() {
+        switchStep(2);
+    });
+
+    document.getElementById('place-order')?.addEventListener('click', function() {
+        const termsChecked = document.getElementById('terms').checked;
+        
+        if (!termsChecked) {
+            alert('❌ Please agree to the Terms & Conditions and Privacy Policy');
+            return;
         }
         
-        // Real-time phone validation
-        const phoneInput = document.getElementById('phone');
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function() {
-                // Remove any non-numeric characters except + at start
-                let value = this.value;
-                if (value.startsWith('+')) {
-                    value = '+' + value.slice(1).replace(/\D/g, '');
-                } else {
-                    value = value.replace(/\D/g, '');
-                }
-                this.value = value;
-            });
-            
-            phoneInput.addEventListener('blur', function() {
-                const phone = this.value.trim().replace(/\s/g, '');
-                const phoneRegex = /^(\+92|0)?[0-9]{10}$/;
-                if (phone && !phoneRegex.test(phone)) {
-                    this.setCustomValidity('Enter valid Pakistani phone: +923XXXXXXXXX or 03XXXXXXXXX');
-                } else {
-                    this.setCustomValidity('');
-                }
-            });
-        }
-        
-        // Shipping form - Continue to Payment
-        const continueToPayment = document.getElementById('continue-to-payment');
-        if (continueToPayment) {
-            continueToPayment.addEventListener('click', function() {
-                console.log('=== Continue to Payment Clicked ===');
-                
-                // Check minimum order
-                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-                console.log('Cart subtotal:', subtotal);
-                
-                if (subtotal < 500) {
-                    alert('❌ Minimum order amount is Rs 500. Your current cart total is Rs ' + subtotal.toFixed(2) + '. Please add more items to proceed.');
-                    return;
-                }
-                
-                const form = document.getElementById('shipping-form');
-                
-                // Additional validation for email and phone
-                const emailInput = document.getElementById('email');
-                const phoneInput = document.getElementById('phone');
-                
-                // Validate email (must be lowercase and valid format)
-                const email = emailInput.value.trim();
-                console.log('Email entered:', email);
-                
-                const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-                if (!emailRegex.test(email)) {
-                    console.log('Email validation failed');
-                    alert('❌ Please enter a valid email address in lowercase format (e.g., john@example.com)');
-                    emailInput.focus();
-                    return;
-                }
-                console.log('Email validation passed');
-                
-                // Validate phone (Pakistani format)
-                const phone = phoneInput.value.trim().replace(/\s/g, '');
-                console.log('Phone entered:', phone);
-                
-                const phoneRegex = /^(\+92|0)?[0-9]{10}$/;
-                if (!phoneRegex.test(phone)) {
-                    console.log('Phone validation failed');
-                    alert('❌ Please enter a valid Pakistani phone number\nExamples: +923001234567 or 03001234567');
-                    phoneInput.focus();
-                    return;
-                }
-                console.log('Phone validation passed');
-                
-                if (form.checkValidity()) {
-                    console.log('Form is valid, proceeding...');
-                    const formData = new FormData(form);
-                    checkoutState.shippingInfo = {
-                        firstName: formData.get('firstName').trim(),
-                        lastName: formData.get('lastName').trim(),
-                        email: email.toLowerCase(), // Force lowercase
-                        phone: phone,
-                        address: formData.get('address').trim(),
-                        city: formData.get('city').trim(),
-                        state: formData.get('state'),
-                        zip: formData.get('zip').trim(),
-                        country: 'Pakistan'
-                    };
-                    
-                    console.log('Shipping info saved:', checkoutState.shippingInfo);
-                    showStep(2);
-                } else {
-                    console.log('Form validation failed');
-                    form.reportValidity();
-                }
-            });
-        }
-        
-        // Payment form - Continue to Review
-        const continueToReview = document.getElementById('continue-to-review');
-        if (continueToReview) {
-            continueToReview.addEventListener('click', function() {
-                checkoutState.paymentMethod = 'cash-on-delivery';
-                showStep(3);
-            });
-        }
-        
-        // Back buttons
-        const backToShipping = document.getElementById('back-to-shipping');
-        if (backToShipping) {
-            backToShipping.addEventListener('click', () => showStep(1));
-        }
-        
-        const backToPayment = document.getElementById('back-to-payment');
-        if (backToPayment) {
-            backToPayment.addEventListener('click', () => showStep(2));
-        }
-        
-        // Place order button
-        const placeOrderBtn = document.getElementById('place-order');
-        if (placeOrderBtn) {
-            placeOrderBtn.addEventListener('click', function() {
-                const termsCheckbox = document.getElementById('terms');
-                if (!termsCheckbox.checked) {
-                    alert('Please agree to the Terms & Conditions to proceed.');
-                    return;
-                }
-                
-                processOrder();
-            });
-        }
-    }
+        processOrder();
+    });
 
     // Process order
     async function processOrder() {
-        const placeOrderBtn = document.getElementById('place-order');
-        const originalHTML = placeOrderBtn.innerHTML;
-        
-        placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        placeOrderBtn.disabled = true;
+        const btn = document.getElementById('place-order');
+        const originalText = btn.innerHTML;
         
         try {
-            // Prepare order data
-            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
             
-            // Final check for minimum order
-            if (subtotal < 500) {
-                throw new Error('Minimum order amount is Rs 500');
-            }
-            
-            const shipping = calculateDeliveryCharges(subtotal);
-            const total = subtotal + shipping;
-            
-            console.log('=== DEBUG: Order Processing ===');
-            console.log('checkoutState.shippingInfo:', checkoutState.shippingInfo);
-            console.log('firstName:', checkoutState.shippingInfo.firstName);
-            console.log('lastName:', checkoutState.shippingInfo.lastName);
-            
-            // Validate shipping info exists
-            if (!checkoutState.shippingInfo.firstName || !checkoutState.shippingInfo.email) {
-                throw new Error('Shipping information is incomplete. Please go back and fill all required fields.');
-            }
+            const { subtotal, deliveryCharges, total } = calculateTotals();
             
             const orderData = {
                 orderId: 'ORD-' + Date.now(),
@@ -407,27 +327,31 @@
                 customer: {
                     fullName: `${checkoutState.shippingInfo.firstName} ${checkoutState.shippingInfo.lastName}`,
                     email: checkoutState.shippingInfo.email,
-                    phone: checkoutState.shippingInfo.phone,
+                    phone: checkoutState.shippingInfo.phone
+                },
+                shippingAddress: {
                     address: checkoutState.shippingInfo.address,
                     city: checkoutState.shippingInfo.city,
                     state: checkoutState.shippingInfo.state,
                     zip: checkoutState.shippingInfo.zip,
-                    country: 'Pakistan'
+                    country: checkoutState.shippingInfo.country
                 },
-                items: cart,
-                paymentMethod: 'cash-on-delivery',
+                items: cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity || 1,
+                    image: item.image
+                })),
                 subtotal: subtotal,
-                shipping: shipping,
+                deliveryCharges: deliveryCharges,
                 total: total,
+                paymentMethod: 'Cash on Delivery',
                 status: 'pending',
                 createdAt: new Date().toISOString()
             };
             
-            console.log('Order data being sent:', orderData);
-            console.log('Customer fullName:', orderData.customer.fullName);
-            console.log('Customer email:', orderData.customer.email);
-            
-            // Send order to API
+            // Submit order to API
             const response = await fetch('/api/admin/orders', {
                 method: 'POST',
                 headers: {
@@ -436,34 +360,60 @@
                 body: JSON.stringify(orderData)
             });
             
-            const result = await response.json();
-            console.log('API Response:', result);
+            const data = await response.json();
             
-            if (result.success) {
-                // Save order info for confirmation page
-                localStorage.setItem('lastOrder', JSON.stringify({
-                    orderId: orderData.orderId,
-                    trackingToken: orderData.trackingToken,
-                    total: total,
-                    paymentMethod: 'cash-on-delivery'
-                }));
-                
+            if (data.success) {
                 // Clear cart
                 localStorage.removeItem('cart');
                 
-                // Update checkout state
-                checkoutState.orderPlaced = true;
-                
-                // Redirect to confirmation page
-                window.location.href = 'order-confirmation.html';
+                // Redirect to order confirmation
+                window.location.href = `order-confirmation.html?order=${orderData.orderId}&total=${total}&payment=cod`;
             } else {
-                throw new Error(result.error || 'Failed to place order');
+                throw new Error(data.error || 'Failed to place order');
             }
+            
         } catch (error) {
             console.error('Order processing error:', error);
-            alert('Failed to place order. Please try again or contact support.');
-            placeOrderBtn.innerHTML = originalHTML;
-            placeOrderBtn.disabled = false;
+            alert('❌ Failed to place order. Please try again.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }
     }
+
+    // Initialize checkout page
+    function init() {
+        // Check if cart is empty
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            window.location.href = 'category.html';
+            return;
+        }
+        
+        // Display order summary
+        displayOrderSummary();
+        
+        // Auto-convert email to lowercase as user types
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+            emailInput.addEventListener('input', function() {
+                this.value = this.value.toLowerCase();
+            });
+        }
+        
+        // Phone input - only allow numbers
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        }
+    }
+
+    // Run initialization
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
 })();
