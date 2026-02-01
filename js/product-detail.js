@@ -89,7 +89,8 @@ async function loadProduct(productId) {
 
         // Setup size/measure options based on category
         const sizeSelector = document.querySelector('.size-selector');
-        if (sizeSelector) {
+        const sizeOptionWrap = document.querySelector('.size-option-wrap');
+        if (sizeSelector && sizeOptionWrap) {
             // Clear existing
             sizeSelector.innerHTML = '';
 
@@ -100,13 +101,14 @@ async function loadProduct(productId) {
                     const btn = document.createElement('button');
                     btn.className = 'size-option' + (idx === 0 ? ' active' : '');
                     btn.setAttribute('data-value', s);
-                    btn.textContent = s + 'ml';
+                    btn.textContent = s + ' ml';
                     btn.addEventListener('click', function() {
                         document.querySelectorAll('.size-option').forEach(b => b.classList.remove('active'));
                         this.classList.add('active');
                     });
                     sizeSelector.appendChild(btn);
                 });
+                sizeOptionWrap.style.display = '';
             } else if (product.category === 'agricultural') {
                 // show gram options
                 const sizes = [250, 500, 1000];
@@ -121,9 +123,10 @@ async function loadProduct(productId) {
                     });
                     sizeSelector.appendChild(btn);
                 });
+                sizeOptionWrap.style.display = '';
             } else {
-                // clothes or home-textiles: hide size selector
-                sizeSelector.style.display = 'none';
+                // clothes or home-textiles: hide entire size option wrapper
+                sizeOptionWrap.style.display = 'none';
             }
         }
 
