@@ -401,7 +401,7 @@
     <script src="js/main.js"></script>
     <script src="js/product-detail.js"></script>
     <script>
-        // Load store settings (saved from admin/settings.html) and populate footer/contact links
+        // Load store settings from server (fallback to localStorage) and populate footer/contact links
         (function loadStoreSettings() {
             const defaults = {
                 storeName: 'IBREES LIL UTOOR',
@@ -410,12 +410,10 @@
                 storeAddress: 'Peshawar, Khyber Pakhtunkhwa, Pakistan'
             };
 
-            try {
-                const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
-
-                const phone = storeSettings.phone || defaults.storePhone;
-                const email = storeSettings.email || defaults.storeEmail;
-                const address = storeSettings.address || defaults.storeAddress;
+            function apply(store) {
+                const phone = store.phone || defaults.storePhone;
+                const email = store.email || defaults.storeEmail;
+                const address = store.address || defaults.storeAddress;
 
                 const phoneEl = document.getElementById('footer-phone');
                 const emailEl = document.getElementById('footer-email');
@@ -427,9 +425,23 @@
                     emailEl.href = `mailto:${email}`;
                 }
                 if (addrEl) addrEl.textContent = address;
-            } catch (e) {
-                console.warn('Failed to load store settings', e);
             }
+
+            fetch('/api/admin/settings').then(r => r.json()).then(data => {
+                if (data && data.success && data.settings) {
+                    const s = data.settings.storeSettings || {};
+                    apply(s);
+                    // Mirror to localStorage for legacy usage
+                    localStorage.setItem('storeSettings', JSON.stringify(s));
+                    return;
+                }
+
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
+                apply(storeSettings);
+            }).catch(() => {
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
+                apply(storeSettings);
+            });
         })();
     </script>
 </body>

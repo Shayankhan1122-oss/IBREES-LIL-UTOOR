@@ -77,8 +77,20 @@ You can request to view, update, or delete your personal data by contacting us.
 
 Contact: support@ibreeslilutoor.com`;
 
-        const content = localStorage.getItem('privacyPolicy') || defaultContent;
-        document.getElementById('content').textContent = content;
+        // Try server settings first
+        fetch('/api/admin/settings').then(r => r.json()).then(data => {
+            if (data && data.success && data.settings && data.settings.privacyPolicy) {
+                document.getElementById('content').textContent = data.settings.privacyPolicy;
+                // mirror to localStorage
+                localStorage.setItem('privacyPolicy', data.settings.privacyPolicy);
+                return;
+            }
+            const content = localStorage.getItem('privacyPolicy') || defaultContent;
+            document.getElementById('content').textContent = content;
+        }).catch(() => {
+            const content = localStorage.getItem('privacyPolicy') || defaultContent;
+            document.getElementById('content').textContent = content;
+        });
     </script>
 </body>
 </html>

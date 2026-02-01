@@ -70,8 +70,20 @@ A: Currently, we only ship within Pakistan. Contact us for international orders.
 Q: How can I contact customer support?
 A: Email us at support@ibreeslilutoor.com or call +92 300 1234567`;
 
-        const content = localStorage.getItem('faqContent') || defaultContent;
-        document.getElementById('content').textContent = content;
+        // Try server settings first
+        fetch('/api/admin/settings').then(r => r.json()).then(data => {
+            if (data && data.success && data.settings && data.settings.faqContent) {
+                document.getElementById('content').textContent = data.settings.faqContent;
+                // mirror to localStorage
+                localStorage.setItem('faqContent', data.settings.faqContent);
+                return;
+            }
+            const content = localStorage.getItem('faqContent') || defaultContent;
+            document.getElementById('content').textContent = content;
+        }).catch(() => {
+            const content = localStorage.getItem('faqContent') || defaultContent;
+            document.getElementById('content').textContent = content;
+        });
     </script>
 </body>
 </html>

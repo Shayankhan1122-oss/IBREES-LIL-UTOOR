@@ -422,34 +422,83 @@ Contact: support@ibreeslilutoor.com`
                 phone: document.getElementById('store-phone').value,
                 address: document.getElementById('store-address').value
             };
-            
+            // Save locally and to server
             localStorage.setItem('storeSettings', JSON.stringify(settings));
-            showSuccess('✅ Store information saved successfully!');
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ storeSettings: settings })
+            }).then(res => res.json()).then(data => {
+                if (data.success) showSuccess('✅ Store information saved successfully!');
+                else showSuccess('⚠️ Saved locally; server save failed');
+            }).catch(() => {
+                showSuccess('⚠️ Saved locally; server save failed');
+            });
         }
 
         function saveShippingInfo() {
-            localStorage.setItem('shippingPolicy', document.getElementById('shipping-content').value);
-            showSuccess('✅ Shipping information saved successfully!');
+            const val = document.getElementById('shipping-content').value;
+            localStorage.setItem('shippingPolicy', val);
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shippingPolicy: val })
+            }).then(res => res.json()).then(data => {
+                if (data.success) showSuccess('✅ Shipping information saved successfully!');
+                else showSuccess('⚠️ Saved locally; server save failed');
+            }).catch(() => showSuccess('⚠️ Saved locally; server save failed'));
         }
 
         function saveReturnsInfo() {
-            localStorage.setItem('returnsPolicy', document.getElementById('returns-content').value);
-            showSuccess('✅ Returns policy saved successfully!');
+            const val = document.getElementById('returns-content').value;
+            localStorage.setItem('returnsPolicy', val);
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ returnsPolicy: val })
+            }).then(res => res.json()).then(data => {
+                if (data.success) showSuccess('✅ Returns policy saved successfully!');
+                else showSuccess('⚠️ Saved locally; server save failed');
+            }).catch(() => showSuccess('⚠️ Saved locally; server save failed'));
         }
 
         function saveFAQ() {
-            localStorage.setItem('faqContent', document.getElementById('faq-content').value);
-            showSuccess('✅ FAQ saved successfully!');
+            const val = document.getElementById('faq-content').value;
+            localStorage.setItem('faqContent', val);
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ faqContent: val })
+            }).then(res => res.json()).then(data => {
+                if (data.success) showSuccess('✅ FAQ saved successfully!');
+                else showSuccess('⚠️ Saved locally; server save failed');
+            }).catch(() => showSuccess('⚠️ Saved locally; server save failed'));
         }
 
         function saveTerms() {
-            localStorage.setItem('termsConditions', document.getElementById('terms-content').value);
-            showSuccess('✅ Terms & Conditions saved successfully!');
+            const val = document.getElementById('terms-content').value;
+            localStorage.setItem('termsConditions', val);
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ termsConditions: val })
+            }).then(res => res.json()).then(data => {
+                if (data.success) showSuccess('✅ Terms & Conditions saved successfully!');
+                else showSuccess('⚠️ Saved locally; server save failed');
+            }).catch(() => showSuccess('⚠️ Saved locally; server save failed'));
         }
 
         function savePrivacy() {
-            localStorage.setItem('privacyPolicy', document.getElementById('privacy-content').value);
-            showSuccess('✅ Privacy Policy saved successfully!');
+            const val = document.getElementById('privacy-content').value;
+            localStorage.setItem('privacyPolicy', val);
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ privacyPolicy: val })
+            }).then(res => res.json()).then(data => {
+                if (data.success) showSuccess('✅ Privacy Policy saved successfully!');
+                else showSuccess('⚠️ Saved locally; server save failed');
+            }).catch(() => showSuccess('⚠️ Saved locally; server save failed'));
         }
 
         function changePassword(buttonElement) {
@@ -523,19 +572,56 @@ Contact: support@ibreeslilutoor.com`
 
         // Load saved settings on page load
         function loadSettings() {
-            // Store info
-            const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
-            document.getElementById('store-name').value = storeSettings.name || defaults.storeName;
-            document.getElementById('store-email').value = storeSettings.email || defaults.storeEmail;
-            document.getElementById('store-phone').value = storeSettings.phone || defaults.storePhone;
-            document.getElementById('store-address').value = storeSettings.address || defaults.storeAddress;
+            // Try server first, fall back to localStorage
+            fetch('/api/admin/settings').then(r => r.json()).then(data => {
+                if (data && data.success && data.settings) {
+                    const s = data.settings;
+                    const store = s.storeSettings || {};
+                    document.getElementById('store-name').value = store.name || defaults.storeName;
+                    document.getElementById('store-email').value = store.email || defaults.storeEmail;
+                    document.getElementById('store-phone').value = store.phone || defaults.storePhone;
+                    document.getElementById('store-address').value = store.address || defaults.storeAddress;
 
-            // Policies
-            document.getElementById('shipping-content').value = localStorage.getItem('shippingPolicy') || defaults.shipping;
-            document.getElementById('returns-content').value = localStorage.getItem('returnsPolicy') || defaults.returns;
-            document.getElementById('faq-content').value = localStorage.getItem('faqContent') || defaults.faq;
-            document.getElementById('terms-content').value = localStorage.getItem('termsConditions') || defaults.terms;
-            document.getElementById('privacy-content').value = localStorage.getItem('privacyPolicy') || defaults.privacy;
+                    document.getElementById('shipping-content').value = s.shippingPolicy || defaults.shipping;
+                    document.getElementById('returns-content').value = s.returnsPolicy || defaults.returns;
+                    document.getElementById('faq-content').value = s.faqContent || defaults.faq;
+                    document.getElementById('terms-content').value = s.termsConditions || defaults.terms;
+                    document.getElementById('privacy-content').value = s.privacyPolicy || defaults.privacy;
+                    // Mirror into localStorage for legacy pages
+                    localStorage.setItem('storeSettings', JSON.stringify(store));
+                    localStorage.setItem('shippingPolicy', s.shippingPolicy || '');
+                    localStorage.setItem('returnsPolicy', s.returnsPolicy || '');
+                    localStorage.setItem('faqContent', s.faqContent || '');
+                    localStorage.setItem('termsConditions', s.termsConditions || '');
+                    localStorage.setItem('privacyPolicy', s.privacyPolicy || '');
+                    return;
+                }
+
+                // fallback to localStorage
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
+                document.getElementById('store-name').value = storeSettings.name || defaults.storeName;
+                document.getElementById('store-email').value = storeSettings.email || defaults.storeEmail;
+                document.getElementById('store-phone').value = storeSettings.phone || defaults.storePhone;
+                document.getElementById('store-address').value = storeSettings.address || defaults.storeAddress;
+
+                document.getElementById('shipping-content').value = localStorage.getItem('shippingPolicy') || defaults.shipping;
+                document.getElementById('returns-content').value = localStorage.getItem('returnsPolicy') || defaults.returns;
+                document.getElementById('faq-content').value = localStorage.getItem('faqContent') || defaults.faq;
+                document.getElementById('terms-content').value = localStorage.getItem('termsConditions') || defaults.terms;
+                document.getElementById('privacy-content').value = localStorage.getItem('privacyPolicy') || defaults.privacy;
+            }).catch(() => {
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
+                document.getElementById('store-name').value = storeSettings.name || defaults.storeName;
+                document.getElementById('store-email').value = storeSettings.email || defaults.storeEmail;
+                document.getElementById('store-phone').value = storeSettings.phone || defaults.storePhone;
+                document.getElementById('store-address').value = storeSettings.address || defaults.storeAddress;
+
+                document.getElementById('shipping-content').value = localStorage.getItem('shippingPolicy') || defaults.shipping;
+                document.getElementById('returns-content').value = localStorage.getItem('returnsPolicy') || defaults.returns;
+                document.getElementById('faq-content').value = localStorage.getItem('faqContent') || defaults.faq;
+                document.getElementById('terms-content').value = localStorage.getItem('termsConditions') || defaults.terms;
+                document.getElementById('privacy-content').value = localStorage.getItem('privacyPolicy') || defaults.privacy;
+            });
 
             // Admin name
             try {
