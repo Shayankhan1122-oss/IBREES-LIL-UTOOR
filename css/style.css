@@ -480,3 +480,28 @@ img {
         grid-template-columns: 1fr;
     }
 }
+
+/* Small phones: force two items per row for categories and products */
+@media (max-width: 480px) {
+    .categories-grid,
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+    }
+
+    .category-card img {
+        height: 140px;
+    }
+
+    .product-image {
+        height: 140px;
+    }
+
+    .product-info h3 {
+        font-size: 16px;
+    }
+
+    .product-price {
+        font-size: 16px;
+    }
+}
