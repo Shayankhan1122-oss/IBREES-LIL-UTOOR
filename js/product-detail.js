@@ -61,6 +61,31 @@ async function loadProduct(productId) {
         if (addToCartBtn) {
             addToCartBtn.setAttribute('data-id', product.id);
         }
+
+        // Update Order Now button (add to cart and go to checkout)
+        const orderNowBtn = document.querySelector('.btn-order-now');
+        if (orderNowBtn) {
+            orderNowBtn.setAttribute('data-id', product.id);
+            orderNowBtn.addEventListener('click', function() {
+                // Add product to cart
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existing = cart.find(i => i.id === product.id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                        quantity: 1
+                    });
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                // Redirect to checkout
+                window.location.href = 'checkout.html';
+            });
+        }
         
         // Load related products
         loadRelatedProducts(products, product.category, product.id);
