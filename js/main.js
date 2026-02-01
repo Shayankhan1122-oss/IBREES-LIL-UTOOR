@@ -49,7 +49,7 @@ function loadFeaturedProducts() {
         return;
     }
     
-    featuredProductsContainer.innerHTML = featuredProducts.map(product => `
+    const featuredHtml = featuredProducts.map(product => `
         <div class="product-card">
             <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'">
             <h3>${product.name}</h3>
@@ -57,6 +57,12 @@ function loadFeaturedProducts() {
             <a href="product.html?id=${product.id}" class="btn-view">View Details</a>
         </div>
     `).join('');
+
+    // Debug: log featured products and generated HTML
+    console.log('loadFeaturedProducts - featuredProducts:', featuredProducts.map(p => ({ id: p.id, name: p.name }))); 
+    console.log('loadFeaturedProducts - featuredHtml preview:', featuredHtml.slice(0, 300));
+
+    featuredProductsContainer.innerHTML = featuredHtml;
 }
 
 // Get product by ID
