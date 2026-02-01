@@ -351,55 +351,39 @@
                 createdAt: new Date().toISOString()
             };
             
-            // Save order details to localStorage for confirmation page and tracking
-            const orderToSave = {
-                orderId: orderData.orderId,
-                total: orderData.total,
-                paymentMethod: 'cash-on-delivery',
-                customer: orderData.customer,
-                shippingAddress: orderData.shippingAddress,
-                items: orderData.items,
-                subtotal: orderData.subtotal,
-                deliveryCharges: orderData.deliveryCharges,
-                createdAt: orderData.createdAt,
-                status: 'pending'
-            };
+            // Submit order to API
+            const response = await fetch('/api/admin/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            });
             
-            // Save to localStorage
-            localStorage.setItem('lastOrder', JSON.stringify(orderToSave));
+            const data = await response.json();
             
-            // Also save all orders to an array in localStorage for tracking purposes
-            let allOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
-            allOrders.push(orderToSave);
-            localStorage.setItem('allOrders', JSON.stringify(allOrders));
-            
-            // Try to submit order to API (for admin dashboard), but don't fail if it fails
-            try {
-                const response = await fetch('/api/admin/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(orderData)
-                });
+            if (data.success) {
+                // Save order details to localStorage for confirmation page (use 'lastOrder' key to match confirmation page)
+                localStorage.setItem('lastOrder', JSON.stringify({
+                    orderId: orderData.orderId,
+                    total: orderData.total,
+                    paymentMethod: 'cash-on-delivery',
+                    customer: orderData.customer,
+                    shippingAddress: orderData.shippingAddress,
+                    items: orderData.items,
+                    subtotal: orderData.subtotal,
+                    deliveryCharges: orderData.deliveryCharges,
+                    createdAt: orderData.createdAt
+                }));
                 
-                const data = await response.json();
+                // Clear cart
+                localStorage.removeItem('cart');
                 
-                if (data.success) {
-                    console.log('Order saved to API successfully');
-                } else {
-                    console.warn('API response not successful:', data.error);
-                }
-            } catch (apiError) {
-                // API call failed, but order is still saved in localStorage
-                console.warn('Failed to submit order to API, but saved locally:', apiError);
+                // Redirect to order confirmation
+                window.location.href = `order-confirmation.html?order=${orderData.orderId}&total=${total}&payment=cod`;
+            } else {
+                throw new Error(data.error || 'Failed to place order');
             }
-            
-            // Clear cart
-            localStorage.removeItem('cart');
-            
-            // Redirect to order confirmation
-            window.location.href = `order-confirmation.html?order=${orderData.orderId}&total=${total}&payment=cod`;
             
         } catch (error) {
             console.error('Order processing error:', error);
