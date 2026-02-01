@@ -505,16 +505,24 @@
             orderDetails.classList.remove('show');
             
             try {
-                // Fetch orders from API
-                const response = await fetch('/api/admin/orders');
-                const data = await response.json();
+                let order = null;
                 
-                if (!data.success) {
-                    throw new Error('Failed to fetch orders');
+                // First, check localStorage for the order (local storage persists across sessions)
+                const allOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+                order = allOrders.find(o => o.orderId === orderId);
+                
+                // If not found in localStorage, try fetching from API
+                if (!order) {
+                    const response = await fetch('/api/admin/orders');
+                    const data = await response.json();
+                    
+                    if (!data.success) {
+                        throw new Error('Failed to fetch orders');
+                    }
+                    
+                    // Find the order
+                    order = data.orders.find(o => o.orderId === orderId);
                 }
-                
-                // Find the order
-                const order = data.orders.find(o => o.orderId === orderId);
                 
                 if (!order) {
                     throw new Error('Order not found. Please check your Order ID and try again.');
