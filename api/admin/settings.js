@@ -1,79 +1,142 @@
-import fs from 'fs';
-import path from 'path';
+// API endpoint for store settings
+// Stores settings in-memory (will reset on redeploy like orders)
+// For production, use a database
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
-
-const defaults = {
+let settings = {
     storeSettings: {
-        name: 'IBREES LIL UTOOR',
-        email: 'support@ibreeslilutoor.com',
+        name: 'IBREES LIL HUZAIFA',
+        email: 'support@ibreeslilhuzaifa.com',
         phone: '+92 300 1234567',
         address: 'Peshawar, Khyber Pakhtunkhwa, Pakistan'
     },
-    shippingPolicy: '',
-    returnsPolicy: '',
-    faqContent: '',
-    termsConditions: '',
-    privacyPolicy: ''
+    shippingPolicy: `We offer shipping across Pakistan.
+
+Delivery Time: 3-5 business days
+Shipping Charges: Variable based on order value
+Tracking: Available for all orders
+
+For questions, contact us at support@ibreeslilhuzaifa.com`,
+    returnsPolicy: `Return & Exchange Policy
+
+We accept returns within 7 days of delivery.
+
+Conditions:
+- Product must be unused and in original packaging
+- Return shipping costs are borne by the customer
+- Refund will be processed within 5-7 business days
+
+To initiate a return, contact us.`,
+    faqContent: `Frequently Asked Questions
+
+Q: How do I track my order?
+A: You will receive a tracking link via email after your order is confirmed.
+
+Q: What payment methods do you accept?
+A: We accept Cash on Delivery (COD).
+
+Q: Do you ship internationally?
+A: Currently, we only ship within Pakistan.`,
+    termsConditions: `Terms & Conditions
+
+By using our website and services, you agree to these terms.
+
+1. Product Information: We strive for accuracy.
+2. Pricing: All prices are in Pakistani Rupees (PKR).
+3. Orders: All orders are subject to availability.
+4. Payment: Payment must be completed before delivery.
+
+For questions, contact us.`,
+    privacyPolicy: `Privacy Policy
+
+We respect your privacy and protect your personal information.
+
+Information We Collect:
+- Name, email, phone number, and shipping address
+- Order history
+
+How We Use Your Information:
+- To process and fulfill your orders
+- To send order updates
+
+Your Rights:
+You can request to view, update, or delete your personal data.`
 };
 
-async function readSettings() {
-    try {
-        if (!fs.existsSync(SETTINGS_FILE)) return defaults;
-        const raw = await fs.promises.readFile(SETTINGS_FILE, 'utf-8');
-        const data = JSON.parse(raw || '{}');
-        return { ...defaults, ...data };
-    } catch (e) {
-        return defaults;
-    }
-}
-
-async function writeSettings(newData) {
-    try {
-        if (!fs.existsSync(DATA_DIR)) {
-            await fs.promises.mkdir(DATA_DIR, { recursive: true });
-        }
-        const current = await readSettings();
-        const merged = { ...current, ...newData };
-        await fs.promises.writeFile(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf-8');
-        return merged;
-    } catch (e) {
-        throw e;
-    }
-}
-
-export default async function handler(req, res) {
-    // CORS
+export default function handler(req, res) {
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
+    
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;
     }
 
+    // GET - Retrieve settings
     if (req.method === 'GET') {
-        try {
-            const settings = await readSettings();
-            return res.status(200).json({ success: true, settings });
-        } catch (e) {
-            return res.status(500).json({ success: false, error: 'Failed to read settings' });
-        }
+        return res.status(200).json({
+            success: true,
+            settings: settings
+        });
     }
 
+    // POST - Update settings
     if (req.method === 'POST') {
         try {
-            const body = req.body || {};
-            // Accept either top-level keys or explicit wrapper
-            const payload = body.settings || body;
-            const saved = await writeSettings(payload);
-            return res.status(200).json({ success: true, settings: saved });
-        } catch (e) {
-            return res.status(500).json({ success: false, error: 'Failed to save settings', message: e.message });
+            const updates = req.body;
+            
+            // Update settings object
+            if (updates.storeSettings) {
+                settings.storeSettings = {
+                    ...settings.storeSettings,
+                    ...updates.storeSettings
+                };
+            }
+            
+            if (updates.shippingPolicy !== undefined) {
+                settings.shippingPolicy = updates.shippingPolicy;
+            }
+            
+            if (updates.returnsPolicy !== undefined) {
+                settings.returnsPolicy = updates.returnsPolicy;
+            }
+            
+            if (updates.faqContent !== undefined) {
+                settings.faqContent = updates.faqContent;
+            }
+            
+            if (updates.termsConditions !== undefined) {
+                settings.termsConditions = updates.termsConditions;
+            }
+            
+            if (updates.privacyPolicy !== undefined) {
+                settings.privacyPolicy = updates.privacyPolicy;
+            }
+            
+            console.log('Settings updated successfully:', {
+                storeSettings: settings.storeSettings
+            });
+            
+            return res.status(200).json({
+                success: true,
+                message: 'Settings updated successfully',
+                settings: settings
+            });
+            
+        } catch (error) {
+            console.error('Settings update error:', error);
+            return res.status(500).json({
+                success: false,
+                error: 'Failed to update settings',
+                message: error.message
+            });
         }
     }
 
-    return res.status(405).json({ success: false, error: 'Method not allowed' });
+    return res.status(405).json({
+        success: false,
+        error: 'Method not allowed'
+    });
 }
