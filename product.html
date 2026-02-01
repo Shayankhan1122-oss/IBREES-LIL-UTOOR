@@ -371,17 +371,17 @@
                     <ul>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="contact.html">Contact</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Return Policy</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="returns.html">Return Policy</a></li>
                         <li><a href="admin/login.html" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Contact Info</h4>
-                    <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
-                    <p><i class="fas fa-envelope"></i> info@qariwebstore.com</p>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Store Street, City, Country</p>
+                    <p><i class="fas fa-phone"></i> <span id="footer-phone">+1 (123) 456-7890</span></p>
+                    <p><i class="fas fa-envelope"></i> <a id="footer-email" href="mailto:info@qariwebstore.com">info@qariwebstore.com</a></p>
+                    <p><i class="fas fa-map-marker-alt"></i> <span id="footer-address">123 Store Street, City, Country</span></p>
                 </div>
                 <div class="footer-section">
                     <h4>Newsletter</h4>
@@ -400,5 +400,37 @@
 
     <script src="js/main.js"></script>
     <script src="js/product-detail.js"></script>
+    <script>
+        // Load store settings (saved from admin/settings.html) and populate footer/contact links
+        (function loadStoreSettings() {
+            const defaults = {
+                storeName: 'IBREES LIL UTOOR',
+                storeEmail: 'support@ibreeslilutoor.com',
+                storePhone: '+92 300 1234567',
+                storeAddress: 'Peshawar, Khyber Pakhtunkhwa, Pakistan'
+            };
+
+            try {
+                const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
+
+                const phone = storeSettings.phone || defaults.storePhone;
+                const email = storeSettings.email || defaults.storeEmail;
+                const address = storeSettings.address || defaults.storeAddress;
+
+                const phoneEl = document.getElementById('footer-phone');
+                const emailEl = document.getElementById('footer-email');
+                const addrEl = document.getElementById('footer-address');
+
+                if (phoneEl) phoneEl.textContent = phone;
+                if (emailEl) {
+                    emailEl.textContent = email;
+                    emailEl.href = `mailto:${email}`;
+                }
+                if (addrEl) addrEl.textContent = address;
+            } catch (e) {
+                console.warn('Failed to load store settings', e);
+            }
+        })();
+    </script>
 </body>
 </html>
