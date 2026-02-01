@@ -170,12 +170,9 @@
                         </div>
                         <p class="product-price">Rs ${product.price.toLocaleString('en-PK', {minimumFractionDigits: 2})}</p>
                         <div class="product-actions">
-                            <button class="btn add-to-cart" data-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
-                                <i class="fas fa-shopping-cart"></i> ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
-                            </button>
-                            <button class="btn btn-order-now" data-id="${product.id}" ${product.stock === 0 ? 'disabled' : ''}>
-                                <i class="fas fa-bolt"></i> ${product.stock === 0 ? 'Out of Stock' : 'Order Now'}
-                            </button>
+                            <a href="product.html?id=${product.id}" class="btn btn-secondary btn-view-details">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -185,23 +182,8 @@
         // Setup pagination
         setupPagination();
         
-        // Add event listeners to Add to Cart buttons
-        document.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (!this.disabled) {
-                    addToCart(parseInt(this.dataset.id));
-                }
-            });
-        });
-        
-        // Add event listeners to Order Now buttons
-        document.querySelectorAll('.btn-order-now').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (!this.disabled) {
-                    orderNow(parseInt(this.dataset.id));
-                }
-            });
-        });
+        // No direct add-to-cart or order buttons on category cards anymore.
+        // Users should view product details and add to cart from the product page.
     }
 
     function generateStars(rating) {
