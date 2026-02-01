@@ -86,6 +86,77 @@ async function loadProduct(productId) {
                 window.location.href = 'checkout.html';
             });
         }
+
+        // Setup size/measure options based on category
+        const sizeSelector = document.querySelector('.size-selector');
+        if (sizeSelector) {
+            // Clear existing
+            sizeSelector.innerHTML = '';
+
+            if (product.category === 'fragrances') {
+                // show ml options
+                const sizes = [30, 50, 100];
+                sizes.forEach((s, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'size-option' + (idx === 0 ? ' active' : '');
+                    btn.setAttribute('data-value', s);
+                    btn.textContent = s + 'ml';
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.size-option').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                    sizeSelector.appendChild(btn);
+                });
+            } else if (product.category === 'agricultural') {
+                // show gram options
+                const sizes = [250, 500, 1000];
+                sizes.forEach((s, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'size-option' + (idx === 0 ? ' active' : '');
+                    btn.setAttribute('data-value', s);
+                    btn.textContent = s + ' gm';
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.size-option').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                    sizeSelector.appendChild(btn);
+                });
+            } else {
+                // clothes or home-textiles: hide size selector
+                sizeSelector.style.display = 'none';
+            }
+        }
+
+        // Override Add to Cart on product page to include selected size if any
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', function() {
+                const selectedSizeBtn = document.querySelector('.size-option.active');
+                const selectedSize = selectedSizeBtn ? selectedSizeBtn.getAttribute('data-value') : null;
+
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existing = cart.find(i => i.id === product.id && i.size === selectedSize);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    const item = {
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                        quantity: 1
+                    };
+                    if (selectedSize) item.size = selectedSize;
+                    cart.push(item);
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                // Update cart count if function available
+                if (window.updateCartCount) window.updateCartCount();
+                // Show confirmation
+                if (window.showNotification) {
+                    window.showNotification(`${product.name} added to cart!`, 'success');
+                }
+            });
+        }
         
         // Load related products
         loadRelatedProducts(products, product.category, product.id);
