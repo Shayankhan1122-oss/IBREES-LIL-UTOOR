@@ -363,6 +363,19 @@
             const data = await response.json();
             
             if (data.success) {
+                // Save order details to localStorage for confirmation page (use 'lastOrder' key to match confirmation page)
+                localStorage.setItem('lastOrder', JSON.stringify({
+                    orderId: orderData.orderId,
+                    total: orderData.total,
+                    paymentMethod: 'cash-on-delivery',
+                    customer: orderData.customer,
+                    shippingAddress: orderData.shippingAddress,
+                    items: orderData.items,
+                    subtotal: orderData.subtotal,
+                    deliveryCharges: orderData.deliveryCharges,
+                    createdAt: orderData.createdAt
+                }));
+                
                 // Clear cart
                 localStorage.removeItem('cart');
                 

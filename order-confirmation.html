@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmed - IBREES LIL UTOOR</title>
+    <title>Order Confirmed - IBREES LIL HUZAIFA</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -107,6 +107,45 @@
 
         .order-id strong {
             font-size: 18px;
+        }
+
+        /* Order Items Styles */
+        .order-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .order-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-details h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .order-item-details p {
+            color: #666;
+            font-size: 14px;
+            margin: 3px 0;
+        }
+
+        .order-item-price {
+            text-align: right;
+            font-weight: 600;
+            color: #3498db;
         }
 
         .next-steps {
@@ -228,6 +267,14 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .order-item {
+                flex-direction: column;
+            }
+
+            .order-item-price {
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -236,7 +283,7 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <h1><a href="index.html">IBREES LIL UTOOR</a></h1>
+                <h1><a href="index.html">IBREES LIL HUZAIFA</a></h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
@@ -258,12 +305,20 @@
                 <!-- Header -->
                 <div class="confirmation-header">
                     <h1>Order Placed Successfully!</h1>
-                    <p>Thank you for shopping with IBREES LIL UTOOR</p>
+                    <p>Thank you for shopping with IBREES LIL HUZAIFA</p>
                 </div>
 
                 <!-- Order ID -->
                 <div class="order-id">
                     <strong>Order ID: <span id="order-id">Loading...</span></strong>
+                </div>
+
+                <!-- Order Items (NEW - Shows BEFORE customer info) -->
+                <div class="order-details" id="order-items-section">
+                    <h2>Order Items</h2>
+                    <div id="order-items-list">
+                        <!-- Items will be loaded dynamically -->
+                    </div>
                 </div>
 
                 <!-- Order Details -->
@@ -333,7 +388,7 @@
                 <!-- Contact Info -->
                 <div class="contact-info">
                     <p>Need help? Contact us:</p>
-                    <p>📧 <a href="mailto:support@ibreeslilutoor.com" id="support-email">support@ibreeslilutoor.com</a></p>
+                    <p>📧 <a href="mailto:support@ibreeslilhuzaifa.com" id="support-email">support@ibreeslilhuzaifa.com</a></p>
                     <p>📱 <a href="tel:+923001234567" id="support-phone">+92 300 1234567</a></p>
                 </div>
             </div>
@@ -345,7 +400,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>      IBREES-LIL-HUZAIFA</h3>
+                    <h3>IBREES-LIL-HUZAIFA</h3>
                     <p>Premium products for every need. Quality guaranteed.</p>
                 </div>
                 <div class="footer-section">
@@ -367,14 +422,14 @@
                 <div class="footer-section">
                     <h4>Contact Us</h4>
                     <ul>
-                        <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
+                        <li id="footer-email">📧 <span>support@ibreeslilhuzaifa.com</span></li>
                         <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
                         <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 IBREES LIL UTOOR. All rights reserved.</p>
+                <p>&copy; 2026 IBREES LIL HUZAIFA. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -391,8 +446,31 @@
                 return;
             }
             
-            // Display order details
+            // Display order ID
             document.getElementById('order-id').textContent = lastOrder.orderId || 'N/A';
+            
+            // Display order items (NEW)
+            const orderItemsList = document.getElementById('order-items-list');
+            if (lastOrder.items && lastOrder.items.length > 0) {
+                orderItemsList.innerHTML = lastOrder.items.map(item => `
+                    <div class="order-item">
+                        <img src="${item.image}" alt="${item.name}" 
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect fill=%22%23ddd%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E'">
+                        <div class="order-item-details">
+                            <h4>${item.name}</h4>
+                            <p>Quantity: ${item.quantity || 1}</p>
+                            <p>Price: Rs ${(item.price || 0).toFixed(2)} × ${item.quantity || 1}</p>
+                        </div>
+                        <div class="order-item-price">
+                            Rs ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                orderItemsList.innerHTML = '<p style="color: #999;">No items found</p>';
+            }
+            
+            // Display order total
             document.getElementById('order-total').textContent = `Rs ${lastOrder.total ? lastOrder.total.toFixed(2) : '0.00'}`;
             
             // Setup track order button
