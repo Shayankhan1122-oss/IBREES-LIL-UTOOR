@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Management -       IBREES-LIL-HUZAIFA</title>
+    <title>Product Management - IBREES-LIL-HUZAIFA</title>
     
     <style>
         * {
@@ -227,6 +227,13 @@
             border-radius: 4px;
         }
 
+        .form-group small {
+            color: #666;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
         .form-actions {
             display: flex;
             gap: 10px;
@@ -247,13 +254,72 @@
         .pagination button {
             margin: 0 10px;
         }
+
+        /* Image Preview Styles */
+        .images-preview-container {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .preview-image-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-image-wrapper.main-image {
+            border-color: #3498db;
+            border-width: 3px;
+        }
+
+        .preview-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .main-image-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #3498db;
+            color: white;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1;
+            display: none;
+        }
+
+        .preview-image-wrapper:hover .remove-image-btn {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2>      IBREES-LIL-HUZAIFA</h2>
+            <h2>IBREES-LIL-HUZAIFA</h2>
             <a href="dashboard.html">📊 Dashboard</a>
             <a href="products.html" class="active">📦 Products</a>
             <a href="orders.html">🛒 Orders</a>
@@ -369,16 +435,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Main Image URL or Upload</label>
-                    <input type="text" id="image-url" placeholder="https://example.com/image.jpg">
-                    <input type="file" id="image-file" accept="image/*">
-                    <div id="image-preview" style="margin-top:8px;"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>Gallery Images (multiple) — upload files</label>
-                    <input type="file" id="gallery-files" accept="image/*" multiple>
-                    <div id="gallery-preview" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;"></div>
+                    <label>Product Images *</label>
+                    <small style="color: #3498db; font-weight: 600;">
+                        📌 Upload multiple images. The FIRST image will be the main image (shown on products page, cart & checkout).
+                        ALL images will be shown in product details gallery.
+                    </small>
+                    <input type="file" id="product-images" accept="image/*" multiple required>
+                    <div id="images-preview" class="images-preview-container"></div>
                 </div>
                 
                 <div class="form-actions">
@@ -394,8 +457,9 @@
         let filteredProducts = [];
         let currentPage = 1;
         const perPage = 10;
+        let uploadedImages = []; // Store uploaded images temporarily
 
-        // Category mapping - display names
+        // Category mapping
         const categoryNames = {
             'fragrances': 'Premium Attar & Perfumes',
             'clothes': 'Male & Female Fashion',
@@ -493,8 +557,8 @@
             document.getElementById('modal-title').textContent = 'Add New Product';
             document.getElementById('product-form').reset();
             document.getElementById('edit-id').value = '';
-            document.getElementById('image-preview').innerHTML = '';
-            document.getElementById('gallery-preview').innerHTML = '';
+            document.getElementById('images-preview').innerHTML = '';
+            uploadedImages = [];
             document.getElementById('product-modal').classList.add('show');
         }
 
@@ -515,31 +579,11 @@
             document.getElementById('stock').value = p.stock;
             document.getElementById('status').value = p.status;
             document.getElementById('description').value = p.description || '';
-            // Populate image and gallery previews if present
-            document.getElementById('image-url').value = p.image || '';
-            const imgPreview = document.getElementById('image-preview');
-            imgPreview.innerHTML = '';
-            if (p.image) {
-                const img = document.createElement('img');
-                img.src = p.image;
-                img.style.width = '80px';
-                img.style.height = '80px';
-                img.style.objectFit = 'cover';
-                imgPreview.appendChild(img);
-            }
-
-            const galleryPreview = document.getElementById('gallery-preview');
-            galleryPreview.innerHTML = '';
-            if (Array.isArray(p.gallery)) {
-                p.gallery.forEach(src => {
-                    const g = document.createElement('img');
-                    g.src = src;
-                    g.style.width = '60px';
-                    g.style.height = '60px';
-                    g.style.objectFit = 'cover';
-                    galleryPreview.appendChild(g);
-                });
-            }
+            
+            // Display existing images
+            uploadedImages = p.gallery || [p.image];
+            displayImagePreviews();
+            
             document.getElementById('product-modal').classList.add('show');
         }
 
@@ -561,20 +605,78 @@
             }
         }
 
+        // Image preview and handling
+        function displayImagePreviews() {
+            const container = document.getElementById('images-preview');
+            container.innerHTML = '';
+            
+            uploadedImages.forEach((src, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'preview-image-wrapper' + (index === 0 ? ' main-image' : '');
+                
+                const img = document.createElement('img');
+                img.src = src;
+                
+                const badge = document.createElement('div');
+                badge.className = 'main-image-badge';
+                badge.textContent = index === 0 ? 'MAIN' : `#${index + 1}`;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-image-btn';
+                removeBtn.textContent = '×';
+                removeBtn.type = 'button';
+                removeBtn.onclick = () => removeImage(index);
+                
+                wrapper.appendChild(img);
+                wrapper.appendChild(badge);
+                wrapper.appendChild(removeBtn);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImagePreviews();
+        }
+
+        // Handle file input change
+        document.getElementById('product-images').addEventListener('change', async function() {
+            const files = Array.from(this.files);
+            if (files.length === 0) return;
+            
+            const newImages = [];
+            for (const file of files) {
+                try {
+                    const dataURL = await readFileAsDataURL(file);
+                    newImages.push(dataURL);
+                } catch (err) {
+                    console.error('Error reading file:', err);
+                }
+            }
+            
+            uploadedImages = [...uploadedImages, ...newImages];
+            displayImagePreviews();
+        });
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(reader.error);
+                reader.readAsDataURL(file);
+            });
+        }
+
         async function saveProduct(e) {
             e.preventDefault();
             
-            const id = document.getElementById('edit-id').value;
-            // Helper to read a File as Data URL
-            function readFileAsDataURL(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = () => reject(reader.error);
-                    reader.readAsDataURL(file);
-                });
+            if (uploadedImages.length === 0) {
+                alert('Please upload at least one product image');
+                return;
             }
-
+            
+            const id = document.getElementById('edit-id').value;
+            
             const product = {
                 name: document.getElementById('name').value.trim(),
                 sku: document.getElementById('sku').value.trim(),
@@ -583,32 +685,9 @@
                 stock: parseInt(document.getElementById('stock').value),
                 status: document.getElementById('status').value,
                 description: document.getElementById('description').value.trim(),
-                // image & gallery handled below
+                image: uploadedImages[0], // First image is main
+                gallery: uploadedImages     // All images in gallery
             };
-
-            // Determine main image: prefer file upload, then URL, then fallback omitted
-            const imageFile = document.getElementById('image-file').files[0];
-            const imageUrl = document.getElementById('image-url').value.trim();
-            if (imageFile) {
-                try {
-                    product.image = await readFileAsDataURL(imageFile);
-                } catch (err) {
-                    console.warn('Image read failed', err);
-                }
-            } else if (imageUrl) {
-                product.image = imageUrl;
-            }
-
-            // Gallery files -> array of data URLs
-            const galleryFiles = Array.from(document.getElementById('gallery-files').files || []);
-            if (galleryFiles.length > 0) {
-                const galleryPromises = galleryFiles.map(f => readFileAsDataURL(f));
-                try {
-                    product.gallery = await Promise.all(galleryPromises);
-                } catch (err) {
-                    console.warn('Gallery read failed', err);
-                }
-            }
             
             try {
                 let res;
@@ -641,43 +720,6 @@
         }
 
         // Init
-        // Preview handlers for image inputs
-        document.getElementById('image-file').addEventListener('change', function() {
-            const file = this.files[0];
-            const preview = document.getElementById('image-preview');
-            preview.innerHTML = '';
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.width = '80px';
-                    img.style.height = '80px';
-                    img.style.objectFit = 'cover';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.getElementById('gallery-files').addEventListener('change', function() {
-            const files = Array.from(this.files || []);
-            const preview = document.getElementById('gallery-preview');
-            preview.innerHTML = '';
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.width = '60px';
-                    img.style.height = '60px';
-                    img.style.objectFit = 'cover';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
         loadProducts();
     </script>
 </body>
