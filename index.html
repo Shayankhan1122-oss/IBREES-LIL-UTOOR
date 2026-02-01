@@ -15,6 +15,15 @@
             box-sizing: border-box;
         }
 
+        /* Small phones: show two columns for categories and products */
+        @media (max-width: 480px) {
+            .category-grid,
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px;
+            }
+        }
+
         body {
             font-family: 'Cormorant Garamond', serif;
             color: #2c2c2c;
