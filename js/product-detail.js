@@ -55,6 +55,26 @@ async function loadProduct(productId) {
             mainImage.src = product.image;
             mainImage.alt = product.name;
         }
+
+        // Render thumbnail gallery from product.gallery if available
+        const thumbContainer = document.querySelector('.thumbnail-gallery');
+        if (thumbContainer) {
+            thumbContainer.innerHTML = '';
+            const sources = Array.isArray(product.gallery) && product.gallery.length > 0 ? product.gallery : [product.image];
+            sources.forEach((src, idx) => {
+                const div = document.createElement('div');
+                div.className = 'thumbnail' + (idx === 0 ? ' active' : '');
+                div.setAttribute('data-src', src);
+
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Thumbnail ${idx + 1}`;
+                img.onerror = function() { this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E' };
+
+                div.appendChild(img);
+                thumbContainer.appendChild(div);
+            });
+        }
         
         // Update add to cart button
         const addToCartBtn = document.querySelector('.add-to-cart');
