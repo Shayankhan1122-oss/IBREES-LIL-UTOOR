@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category -       IBREES-LIL-HUZAIFA</title>
+    <title>Category - IBREES-LIL-HUZAIFA</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -451,7 +451,7 @@
             margin-bottom: 20px;
         }
 
-        /* Mobile Responsive */
+        /* Mobile Responsive - FIXED FOR 2 PRODUCTS PER ROW */
         @media (max-width: 768px) {
             .category-banner h1 {
                 font-size: 28px;
@@ -480,30 +480,41 @@
                 justify-content: center;
             }
 
+            /* FIXED: 2 products per row on mobile */
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 12px;
             }
 
             .product-image {
-                height: 180px;
+                height: 160px;
             }
 
             .product-info {
-                padding: 15px;
+                padding: 12px;
             }
 
             .product-info h3 {
-                font-size: 14px;
-                height: 40px;
+                font-size: 13px;
+                height: 36px;
             }
 
             .product-price {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .product-actions {
                 flex-direction: column;
+                gap: 8px;
+            }
+
+            .product-actions .btn {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .products-grid.list-view {
+                grid-template-columns: 1fr;
             }
 
             .products-grid.list-view .product-card {
@@ -532,7 +543,7 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <h1><a href="index.html">IBREES LIL UTOOR</a></h1>
+                <h1><a href="index.html">IBREES LIL HUZAIFA</a></h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
@@ -621,7 +632,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>      IBREES-LIL-HUZAIFA</h3>
+                    <h3>IBREES-LIL-HUZAIFA</h3>
                     <p>Premium products for every need. Quality guaranteed.</p>
                 </div>
                 
@@ -649,21 +660,21 @@
                 <div class="footer-section">
                     <h4>Contact Us</h4>
                     <ul>
-                        <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
-                        <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
-                        <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
+                        <li id="footer-email">📧 <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9babcb9b9a6bbbd89a0abbbacacbaa5a0a5a1bcb3a8a0afa8e7aaa6a4">[email&#160;protected]</a></span></li>
+                        <li id="footer-phone">📱 <span>+92 334 8818200</span></li>
+                        <li id="footer-address">📍 <span>Peshawar Pakistan</span></li>
                         <li><a href="/admin/" style="color: #888; font-size: 0.85em;">Admin Access</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 IBREES LIL UTOOR. All rights reserved.</p>
+                <p>&copy; 2026 IBREES LIL HUZAIFA. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/category.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/category.js"></script>
     <script>
         // Load footer contact info from settings
         try {
@@ -676,12 +687,3 @@
                     document.querySelector('#footer-phone span').textContent = storeSettings.phone;
                 }
                 if (storeSettings.address) {
-                    document.querySelector('#footer-address span').textContent = storeSettings.address;
-                }
-            }
-        } catch (e) {
-            console.log('Using default footer settings');
-        }
-    </script>
-</body>
-</html>

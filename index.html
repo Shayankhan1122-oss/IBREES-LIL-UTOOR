@@ -687,7 +687,7 @@
             letter-spacing: 1px;
         }
 
-        /* Mobile Responsive */
+        /* Mobile Responsive - FIXED FOR 2 ITEMS PER ROW */
         @media (max-width: 768px) {
             .welcome-section h1 {
                 font-size: 42px;
@@ -714,10 +714,11 @@
                 font-size: 36px;
             }
 
+            /* FIXED: 2 items per row for categories and products */
             .category-grid,
             .products-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 15px;
             }
 
             .footer-content {
@@ -846,9 +847,9 @@
             <div class="footer-section">
                 <h4>Contact Us</h4>
                 <ul>
-                    <li id="footer-email">📧 <span>support@ibreeslilutoor.com</span></li>
-                    <li id="footer-phone">📱 <span>+92 300 1234567</span></li>
-                    <li id="footer-address">📍 <span>Peshawar, Pakistan</span></li>
+                    <li id="footer-email">📧 <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d2e282d2d322f291d343f2f38382e3134313528273c343b3c733e3230">[email&#160;protected]</a></span></li>
+                    <li id="footer-phone">📱 <span>+92 334 8818200</span></li>
+                    <li id="footer-address">📍 <span>Peshawar Pakistan</span></li>
                     <li><a href="/admin/" style="color: #666; font-size: 0.85em;">Admin Access</a></li>
                 </ul>
             </div>
@@ -859,7 +860,7 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js"></script>
     <script>
         // Create animated particles
         function createParticles() {
@@ -1005,14 +1006,3 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            loadFeaturedProducts();
-            loadFooterSettings();
-            updateCartCount();
-            reveal();
-        });
-
-        window.addEventListener('scroll', reveal);
-    </script>
-</body>
-</html>

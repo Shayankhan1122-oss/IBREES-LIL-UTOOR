@@ -5,9 +5,9 @@
 let settings = {
     storeSettings: {
         name: 'IBREES LIL HUZAIFA',
-        email: 'support@ibreeslilhuzaifa.com',
-        phone: '+92 300 1234567',
-        address: 'Peshawar, Khyber Pakhtunkhwa, Pakistan'
+        email: 'huzaifamadani95@gmail.com',
+        phone: '+92 334 8818200',
+        address: 'Peshawar Pakistan'
     },
     shippingPolicy: `We offer shipping across Pakistan.
 
@@ -15,7 +15,7 @@ Delivery Time: 3-5 business days
 Shipping Charges: Variable based on order value
 Tracking: Available for all orders
 
-For questions, contact us at support@ibreeslilhuzaifa.com`,
+For questions, contact us at huzaifamadani95@gmail.com`,
     returnsPolicy: `Return & Exchange Policy
 
 We accept returns within 7 days of delivery.
