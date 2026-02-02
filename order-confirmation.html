@@ -109,7 +109,6 @@
             font-size: 18px;
         }
 
-        /* Order Items Styles */
         .order-item {
             display: flex;
             gap: 15px;
@@ -313,7 +312,7 @@
                     <strong>Order ID: <span id="order-id">Loading...</span></strong>
                 </div>
 
-                <!-- Order Items (NEW - Shows BEFORE customer info) -->
+                <!-- Order Items -->
                 <div class="order-details" id="order-items-section">
                     <h2>Order Items</h2>
                     <div id="order-items-list">
@@ -396,8 +395,8 @@
                 <!-- Contact Info -->
                 <div class="contact-info">
                     <p>Need help? Contact us:</p>
-                    <p>📧 <a href="/cdn-cgi/l/email-protection#b5c6c0c5c5dac7c1f5dcd7c7d0d0c6d9dcd9ddc0cfd4dcd3d49bd6dad8" id="support-email"><span class="__cf_email__" data-cfemail="ec9f999c9c839e98ac858e9e89899f8085808499968d858a8dc28f8381">[email&#160;protected]</span></a></p>
-                    <p>📱 <a href="tel:+923001234567" id="support-phone">+92 334 8818200</a></p>
+                    <p>📧 <a href="mailto:huzaifamadani95@gmail.com" id="support-email">huzaifamadani95@gmail.com</a></p>
+                    <p>📱 <a href="tel:+923348818200" id="support-phone">+92 334 8818200</a></p>
                 </div>
             </div>
         </div>
@@ -408,7 +407,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>IBREES-LIL-HUZAIFA</h3>
+                    <h3>IBREES LIL HUZAIFA</h3>
                     <p>Premium products for every need. Quality guaranteed.</p>
                 </div>
                 <div class="footer-section">
@@ -430,7 +429,7 @@
                 <div class="footer-section">
                     <h4>Contact Us</h4>
                     <ul>
-                        <li id="footer-email">📧 <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3f4c4a4f4f504d4b7f565d4d5a5a4c535653574a455e56595e115c5052">[email&#160;protected]</a></span></li>
+                        <li id="footer-email">📧 <span>huzaifamadani95@gmail.com</span></li>
                         <li id="footer-phone">📱 <span>+92 334 8818200</span></li>
                         <li id="footer-address">📍 <span>Peshawar Pakistan</span></li>
                     </ul>
@@ -442,13 +441,11 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Load order details from localStorage
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const lastOrder = JSON.parse(localStorage.getItem('lastOrder'));
             
             if (!lastOrder) {
-                // No order found, redirect to home
                 alert('No order information found.');
                 window.location.href = 'index.html';
                 return;
@@ -457,23 +454,12 @@
             // Display order ID
             document.getElementById('order-id').textContent = lastOrder.orderId || 'N/A';
             
-            // Display order items (NEW)
+            // Display order items
             const orderItemsList = document.getElementById('order-items-list');
             if (lastOrder.items && lastOrder.items.length > 0) {
-                orderItemsList.innerHTML = lastOrder.items.map(item => `
-                    <div class="order-item">
-                        <img src="${item.image}" alt="${item.name}" 
-                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect fill=%22%23ddd%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E'">
-                        <div class="order-item-details">
-                            <h4>${item.name}</h4>
-                            <p>Quantity: ${item.quantity || 1}</p>
-                            <p>Price: Rs ${(item.price || 0).toFixed(2)} × ${item.quantity || 1}</p>
-                        </div>
-                        <div class="order-item-price">
-                            Rs ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
-                        </div>
-                    </div>
-                `).join('');
+                orderItemsList.innerHTML = lastOrder.items.map(function(item) {
+                    return '<div class="order-item"><img src="' + item.image + '" alt="' + item.name + '" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22%3E%3Crect fill=%22%23ddd%22 width=%2280%22 height=%2280%22/%3E%3C/svg%3E\'"><div class="order-item-details"><h4>' + item.name + '</h4><p>Quantity: ' + (item.quantity || 1) + '</p><p>Price: Rs ' + (item.price || 0).toFixed(2) + ' × ' + (item.quantity || 1) + '</p></div><div class="order-item-price">Rs ' + ((item.price || 0) * (item.quantity || 1)).toFixed(2) + '</div></div>';
+                }).join('');
             } else {
                 orderItemsList.innerHTML = '<p style="color: #999;">No items found</p>';
             }
@@ -481,25 +467,18 @@
             // Display shipping address
             const shippingAddressDisplay = document.getElementById('shipping-address-display');
             if (lastOrder.customer && lastOrder.shippingAddress) {
-                shippingAddressDisplay.innerHTML = `
-                    <p><strong>${lastOrder.customer.fullName || 'N/A'}</strong></p>
-                    <p>${lastOrder.shippingAddress.address || ''}</p>
-                    <p>${lastOrder.shippingAddress.city || ''}, ${lastOrder.shippingAddress.state || ''} ${lastOrder.shippingAddress.zip || ''}</p>
-                    <p>${lastOrder.shippingAddress.country || 'Pakistan'}</p>
-                    <p>📱 ${lastOrder.customer.phone || ''}</p>
-                    <p>📧 ${lastOrder.customer.email || ''}</p>
-                `;
+                shippingAddressDisplay.innerHTML = '<p><strong>' + (lastOrder.customer.fullName || 'N/A') + '</strong></p><p>' + (lastOrder.shippingAddress.address || '') + '</p><p>' + (lastOrder.shippingAddress.city || '') + ', ' + (lastOrder.shippingAddress.state || '') + ' ' + (lastOrder.shippingAddress.zip || '') + '</p><p>' + (lastOrder.shippingAddress.country || 'Pakistan') + '</p><p>📱 ' + (lastOrder.customer.phone || '') + '</p><p>📧 ' + (lastOrder.customer.email || '') + '</p>';
             } else {
                 shippingAddressDisplay.innerHTML = '<p style="color: #999;">No address information available</p>';
             }
             
             // Display order total
-            document.getElementById('order-total').textContent = `Rs ${lastOrder.total ? lastOrder.total.toFixed(2) : '0.00'}`;
+            document.getElementById('order-total').textContent = 'Rs ' + (lastOrder.total ? lastOrder.total.toFixed(2) : '0.00');
             
             // Setup track order button
             const trackOrderBtn = document.getElementById('track-order-btn');
             if (trackOrderBtn && lastOrder.orderId) {
-                trackOrderBtn.href = `track-order.html?order=${lastOrder.orderId}`;
+                trackOrderBtn.href = 'track-order.html?order=' + lastOrder.orderId;
             }
             
             // Set payment method
@@ -510,24 +489,11 @@
             };
             document.getElementById('payment-method').textContent = paymentMethodMap[lastOrder.paymentMethod] || 'Cash on Delivery';
             
-            // Load store settings for contact
-            try {
-                const storeSettings = JSON.parse(localStorage.getItem('storeSettings'));
-                if (storeSettings) {
-                    if (storeSettings.email) {
-                        document.getElementById('support-email').textContent = storeSettings.email;
-                        document.getElementById('support-email').href = `mailto:${storeSettings.email}`;
-                        document.querySelector('#footer-email span').textContent = storeSettings.email;
-                    }
-                    if (storeSettings.phone) {
-                        document.getElementById('support-phone').textContent = storeSettings.phone;
-                        document.getElementById('support-phone').href = `tel:${storeSettings.phone.replace(/\s/g, '')}`;
-                        document.querySelector('#footer-phone span').textContent = storeSettings.phone;
-                        
-                        // Setup WhatsApp link
-                        const whatsappNumber = storeSettings.phone.replace(/\D/g, '');
-                        const whatsappMessage = `Hi! I just placed an order (${lastOrder.orderId}). Can you please confirm it?`;
-                        document.getElementById('whatsapp-link').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-                    }
-                    if (storeSettings.address) {
-                        document.querySelector('#footer-address span').textContent = st
+            // Setup WhatsApp link
+            const whatsappNumber = '923348818200';
+            const whatsappMessage = 'Hi! I just placed an order (' + lastOrder.orderId + '). Can you please confirm it?';
+            document.getElementById('whatsapp-link').href = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(whatsappMessage);
+        });
+    </script>
+</body>
+</html>
