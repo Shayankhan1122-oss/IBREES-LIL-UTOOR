@@ -176,94 +176,69 @@
                         <h3>Customer Reviews</h3>
                         <div class="reviews-summary">
                             <div class="rating-overview">
-                                <div class="overall-rating">4.5</div>
-                                <div class="stars-large">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
+                                <div class="overall-rating" id="overall-rating">0.0</div>
+                                <div class="stars-large" id="stars-large">
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
                                 </div>
-                                <p>Based on 128 reviews</p>
+                                <p id="review-count-text">No reviews yet</p>
                             </div>
-                            <div class="rating-breakdown">
+                            <div class="rating-breakdown" id="rating-breakdown">
                                 <div class="rating-bar">
                                     <span>5 stars</span>
                                     <div class="bar">
-                                        <div class="fill" style="width: 70%;"></div>
+                                        <div class="fill" style="width: 0%;"></div>
                                     </div>
-                                    <span>89</span>
+                                    <span>0</span>
                                 </div>
                                 <div class="rating-bar">
                                     <span>4 stars</span>
                                     <div class="bar">
-                                        <div class="fill" style="width: 15%;"></div>
+                                        <div class="fill" style="width: 0%;"></div>
                                     </div>
-                                    <span>19</span>
+                                    <span>0</span>
                                 </div>
                                 <div class="rating-bar">
                                     <span>3 stars</span>
                                     <div class="bar">
-                                        <div class="fill" style="width: 8%;"></div>
+                                        <div class="fill" style="width: 0%;"></div>
                                     </div>
-                                    <span>10</span>
+                                    <span>0</span>
                                 </div>
                                 <div class="rating-bar">
                                     <span>2 stars</span>
                                     <div class="bar">
-                                        <div class="fill" style="width: 3%;"></div>
+                                        <div class="fill" style="width: 0%;"></div>
                                     </div>
-                                    <span>4</span>
+                                    <span>0</span>
                                 </div>
                                 <div class="rating-bar">
                                     <span>1 star</span>
                                     <div class="bar">
-                                        <div class="fill" style="width: 2%;"></div>
+                                        <div class="fill" style="width: 0%;"></div>
                                     </div>
-                                    <span>3</span>
+                                    <span>0</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="reviews-list">
-                            <div class="review">
-                                <div class="review-header">
-                                    <div class="reviewer">John D.</div>
-                                    <div class="review-date">October 15, 2024</div>
-                                    <div class="review-rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <h4>Amazing fragrance!</h4>
-                                <p>This perfume is absolutely wonderful. The scent lasts all day and the quality is exceptional. Will definitely buy again.</p>
-                            </div>
-                            
-                            <div class="review">
-                                <div class="review-header">
-                                    <div class="reviewer">Sarah M.</div>
-                                    <div class="review-date">October 10, 2024</div>
-                                    <div class="review-rating">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                </div>
-                                <h4>Great value for money</h4>
-                                <p>I've tried many perfumes but this one stands out. The scent is unique and not overpowering. Perfect for daily use.</p>
-                            </div>
+                        <div class="reviews-list" id="reviews-list">
+                            <!-- Reviews will be loaded dynamically -->
+                            <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
                         </div>
                         
                         <div class="add-review">
                             <h3>Add Your Review</h3>
-                            <form class="review-form">
+                            <form class="review-form" id="review-form">
                                 <div class="form-group">
-                                    <label for="review-rating">Your Rating</label>
+                                    <label for="reviewer-name">Your Name *</label>
+                                    <input type="text" id="reviewer-name" placeholder="Enter your name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-rating">Your Rating *</label>
                                     <div class="rating-input">
                                         <i class="far fa-star" data-rating="1"></i>
                                         <i class="far fa-star" data-rating="2"></i>
@@ -271,14 +246,15 @@
                                         <i class="far fa-star" data-rating="4"></i>
                                         <i class="far fa-star" data-rating="5"></i>
                                     </div>
+                                    <input type="hidden" id="selected-rating" value="0">
                                 </div>
                                 <div class="form-group">
-                                    <label for="review-title">Review Title</label>
-                                    <input type="text" id="review-title" placeholder="Give your review a title">
+                                    <label for="review-title">Review Title *</label>
+                                    <input type="text" id="review-title" placeholder="Give your review a title" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="review-text">Your Review</label>
-                                    <textarea id="review-text" rows="5" placeholder="Share your experience with this product"></textarea>
+                                    <label for="review-text">Your Review *</label>
+                                    <textarea id="review-text" rows="5" placeholder="Share your experience with this product" required></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit Review</button>
                             </form>
