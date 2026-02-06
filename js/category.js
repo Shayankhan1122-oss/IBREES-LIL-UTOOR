@@ -1,4 +1,4 @@
-// Category Page JavaScript - Bulletproof Version
+// Category Page JavaScript - Bulletproof Version with Watches Category
 (function() {
     'use strict';
     
@@ -95,7 +95,8 @@
             'fragrances': { name: 'Premium Attar & Perfumes', desc: 'Discover our exclusive fragrance collection' },
             'clothes': { name: 'Male & Female Fashion', desc: 'Stylish clothing for everyone' },
             'agricultural': { name: 'Fresh Agricultural Products', desc: 'Quality farm-fresh products' },
-            'home-textiles': { name: 'Quality Home Essentials', desc: 'Premium textiles for your home' }
+            'home-textiles': { name: 'Quality Home Essentials', desc: 'Premium textiles for your home' },
+            'watches': { name: 'Premium Watches', desc: 'Timeless pieces for every wrist' }
         };
         
         let info;
@@ -170,7 +171,7 @@
                         </div>
                         <p class="product-price">Rs ${product.price.toLocaleString('en-PK', {minimumFractionDigits: 2})}</p>
                         <div class="product-actions">
-                            <a href="product.html?id=${product.id}" class="btn btn-secondary btn-view-details">
+                            <a href="product.html?id=${product.id}" class="btn btn-secondary btn-view">
                                 <i class="fas fa-eye"></i> View Details
                             </a>
                         </div>
@@ -181,9 +182,6 @@
         
         // Setup pagination
         setupPagination();
-        
-        // No direct add-to-cart or order buttons on category cards anymore.
-        // Users should view product details and add to cart from the product page.
     }
 
     function generateStars(rating) {
@@ -210,7 +208,8 @@
             'fragrances': 'Premium Attar & Perfumes',
             'clothes': 'Male & Female Fashion',
             'agricultural': 'Fresh Agricultural Products',
-            'home-textiles': 'Quality Home Essentials'
+            'home-textiles': 'Quality Home Essentials',
+            'watches': 'Premium Watches'
         };
         return names[category] || 'Products';
     }
@@ -335,73 +334,6 @@
         filteredProducts = sorted;
         currentPage = 1;
         displayProducts();
-    }
-
-    function addToCart(productId) {
-        const product = allProducts.find(p => p.id === productId);
-        if (!product) {
-            console.error('Product not found:', productId);
-            return;
-        }
-        
-        // Get existing cart
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        
-        // Check if product already in cart
-        const existingItem = cart.find(item => item.id === productId);
-        
-        if (existingItem) {
-            existingItem.quantity += 1;
-            console.log(`Updated quantity for "${product.name}": ${existingItem.quantity}`);
-        } else {
-            cart.push({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                image: product.image,
-                quantity: 1
-            });
-            console.log(`Added "${product.name}" to cart`);
-        }
-        
-        // Save cart
-        localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // Update cart count in navbar
-        updateCartCount();
-        
-        // Show success message
-        showSuccessMessage(`${product.name} added to cart!`);
-    }
-
-    function orderNow(productId) {
-        const product = allProducts.find(p => p.id === productId);
-        if (!product) {
-            console.error('Product not found:', productId);
-            return;
-        }
-        
-        // Add to cart
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const existingItem = cart.find(item => item.id === productId);
-        
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                image: product.image,
-                quantity: 1
-            });
-        }
-        
-        // Save cart
-        localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // Redirect to checkout
-        window.location.href = 'checkout.html';
     }
 
     function updateCartCount() {
