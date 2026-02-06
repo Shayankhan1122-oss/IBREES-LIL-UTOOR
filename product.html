@@ -263,16 +263,54 @@
                     
                     <div class="tab-pane" id="shipping">
                         <h3>Shipping Information</h3>
-                        <p>We offer multiple shipping options to meet your needs:</p>
+                        <p><strong>Delivery Coverage:</strong> We offer shipping across Pakistan only.</p>
+                        
+                        <h4>Delivery Charges:</h4>
+                        <table class="spec-table" style="width: 100%; margin: 15px 0;">
+                            <tr>
+                                <td><strong>Order Amount</strong></td>
+                                <td><strong>Delivery Charges</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Rs 500 - Rs 1,999</td>
+                                <td>Rs 250</td>
+                            </tr>
+                            <tr>
+                                <td>Rs 2,000 - Rs 2,999</td>
+                                <td>Rs 350</td>
+                            </tr>
+                            <tr>
+                                <td>Rs 3,000 - Rs 4,999</td>
+                                <td>Rs 500</td>
+                            </tr>
+                            <tr>
+                                <td>Rs 5,000 and above</td>
+                                <td><strong style="color: #28a745;">FREE DELIVERY</strong></td>
+                            </tr>
+                        </table>
+                        
+                        <h4>Delivery Time:</h4>
                         <ul>
-                            <li><strong>Standard Shipping:</strong> 3-5 business days, FREE on orders over $50</li>
-                            <li><strong>Express Shipping:</strong> 1-2 business days, $10</li>
-                            <li><strong>Same Day Delivery:</strong> Available in select areas, $20</li>
+                            <li><strong>Standard Delivery:</strong> 3-5 business days</li>
+                            <li><strong>Order Tracking:</strong> Available for all orders</li>
                         </ul>
                         
-                        <h3>Return Policy</h3>
-                        <p>You may return most new, unopened items within 30 days of delivery for a full refund. Items must be in original packaging and in the same condition as received.</p>
-                        <p>To initiate a return, please contact our customer service team with your order number and reason for return.</p>
+                        <p><strong>Note:</strong> Minimum order amount is Rs 500.</p>
+                        
+                        <h3 style="margin-top: 30px;">Returns Policy</h3>
+                        <p>We accept returns within <strong>7 days of delivery</strong>.</p>
+                        
+                        <h4>Return Conditions:</h4>
+                        <ul>
+                            <li>Product must be unused and in original packaging</li>
+                            <li>Return shipping costs are borne by the customer</li>
+                            <li>Refund will be processed within 5-7 business days</li>
+                        </ul>
+                        
+                        <h4>How to Return:</h4>
+                        <p>To initiate a return, please contact us at <a href="mailto:support@ibreeslilutoor.com" id="shipping-email">support@ibreeslilutoor.com</a> with your order details.</p>
+                        
+                        <p style="margin-top: 20px;"><strong>For any questions about shipping or returns, please contact our customer service team.</strong></p>
                     </div>
                 </div>
             </div>
@@ -370,14 +408,35 @@
                     apply(s);
                     // Mirror to localStorage for legacy usage
                     localStorage.setItem('storeSettings', JSON.stringify(s));
+                    
+                    // Update shipping email if present
+                    const shippingEmail = document.getElementById('shipping-email');
+                    if (shippingEmail && s.email) {
+                        shippingEmail.textContent = s.email;
+                        shippingEmail.href = `mailto:${s.email}`;
+                    }
                     return;
                 }
 
                 const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
                 apply(storeSettings);
+                
+                // Update shipping email
+                const shippingEmail = document.getElementById('shipping-email');
+                if (shippingEmail && storeSettings.email) {
+                    shippingEmail.textContent = storeSettings.email;
+                    shippingEmail.href = `mailto:${storeSettings.email}`;
+                }
             }).catch(() => {
                 const storeSettings = JSON.parse(localStorage.getItem('storeSettings') || '{}');
                 apply(storeSettings);
+                
+                // Update shipping email
+                const shippingEmail = document.getElementById('shipping-email');
+                if (shippingEmail && storeSettings.email) {
+                    shippingEmail.textContent = storeSettings.email;
+                    shippingEmail.href = `mailto:${storeSettings.email}`;
+                }
             });
         })();
     </script>
